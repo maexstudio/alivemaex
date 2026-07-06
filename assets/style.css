@@ -44,11 +44,12 @@ section{ position:relative; }
 .nav a::after{ content:""; position:absolute; left:0; bottom:-4px; width:100%; height:1px; background:var(--gold); transform:scaleX(0); transform-origin:left; transition:transform .4s var(--ease); }
 .nav a:hover{ opacity:1; } .nav a:hover::after{ transform:scaleX(1); }
 .nav a.on{ color:var(--gold); opacity:1; }
-.brand{ font-weight:700; letter-spacing:.18em; }
+.brand{ font-weight:700; letter-spacing:.18em; display:inline-flex; align-items:center; gap:9px; }
+.brandmark{ width:20px; height:20px; object-fit:contain; flex:0 0 auto; }
 
 /* Subpage-Kopf */
-.pagehead{ position:sticky; top:0; z-index:40; display:flex; justify-content:space-between; align-items:center; gap:18px 26px; flex-wrap:wrap;
-  padding:20px clamp(20px,5vw,56px); background:rgba(10,28,32,.72); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid rgba(244,236,218,.08); }
+.pagehead{ position:relative; z-index:40; display:flex; justify-content:space-between; align-items:center; gap:18px 26px; flex-wrap:wrap;
+  padding:24px clamp(20px,5vw,56px); background:transparent; }
 
 /* Subpage-Titelkopf */
 .page-head{ padding:clamp(70px,12vw,150px) 0 clamp(30px,5vw,60px); }
@@ -106,8 +107,12 @@ section{ position:relative; }
 .release .rfoot{ display:flex; justify-content:space-between; align-items:flex-end; }
 .release .rdate{ font-size:.72rem; opacity:.8; }
 .release .play{ font-size:.72rem; letter-spacing:.12em; padding:6px 12px; border:1px solid rgba(244,236,218,.55); border-radius:2px; transition:.35s; }
+.release .rinfo{ position:absolute; inset:0; z-index:6; display:flex; flex-direction:column; justify-content:flex-end; gap:10px; padding:20px; background:linear-gradient(180deg, transparent 34%, rgba(18,10,4,.92)); opacity:0; transform:translateY(8px); transition:opacity .45s var(--ease), transform .45s var(--ease); }
+.release:hover .rinfo{ opacity:1; transform:none; }
+.release .ri-t{ font-family:var(--disp); font-size:clamp(1.2rem,2.2vw,1.6rem); line-height:1; text-transform:uppercase; letter-spacing:.01em; }
+.release .ri-meta{ display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:.72rem; letter-spacing:.08em; opacity:.9; }
+.release .ri-play{ color:var(--gold); white-space:nowrap; }
 .release:hover{ transform:translateY(-6px); }
-.release:hover .play{ background:var(--gold); border-color:var(--gold); color:var(--mondblau); }
 .release:hover .grade{ opacity:.85; }
 
 /* ===================== FRAGMENT ===================== */
@@ -126,7 +131,14 @@ section{ position:relative; }
 .tile:hover .grade{ opacity:.8; }
 
 /* ===================== LIEBE ÜBER ANGST (Manifest + Signup) ===================== */
-.manifest{ padding:clamp(120px,20vw,280px) 0; text-align:center; background:#2a2521; }
+.manifest{ padding:clamp(120px,20vw,280px) 0; text-align:center; background:#2a2521; overflow:hidden; }
+.manifest .wrap{ position:relative; z-index:1; }
+.mannequin{ position:absolute; left:-1%; bottom:0; height:min(88%,640px); width:auto; opacity:.15; pointer-events:none; z-index:0; filter:contrast(.9); }
+@media(max-width:680px){ .mannequin{ opacity:.09; height:56%; left:-14%; } }
+.about-page{ position:relative; overflow:hidden; }
+.about-page > .wrap{ position:relative; z-index:1; }
+.mannequin-tr{ position:absolute; right:-1%; top:10px; height:min(80%,720px); width:auto; opacity:.28; pointer-events:none; z-index:0; transform:scaleX(-1); filter:contrast(.95); }
+@media(max-width:680px){ .mannequin-tr{ opacity:.16; height:50%; right:-14%; } }
 .manifest h2{ font-size:clamp(2.8rem,13vw,9rem); line-height:.95; }
 .manifest h2 .of{ color:var(--orange); }
 .manifest .sub{ margin:30px auto 34px; max-width:32ch; opacity:.72; font-size:1rem; }
@@ -204,6 +216,25 @@ footer{ background:#2a2521; padding:60px 0 46px; border-top:1px solid rgba(244,2
 .soundtoggle.playing .eq i:nth-child(4){ animation-delay:.52s; }
 @keyframes eq{ 0%,100%{height:3px} 50%{height:14px} }
 
+/* ===================== INTRO / ABTAUCHEN (erster Besuch) ===================== */
+.intro{ position:fixed; inset:0; z-index:200; overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; cursor:pointer;
+  background:radial-gradient(130% 110% at 50% -15%, #7b6748 0%, #3a3128 34%, #221c17 66%, #140f0b 100%);
+  transition:transform 1.4s var(--ease), opacity 1.2s ease; }
+.intro.dive{ transform:translateY(-10%) scale(1.05); opacity:0; }
+.intro-caust{ position:absolute; inset:0; mix-blend-mode:soft-light; opacity:.5; pointer-events:none;
+  background:radial-gradient(60% 40% at 30% 18%, rgba(255,240,200,.5), transparent 60%), radial-gradient(50% 40% at 72% 8%, rgba(255,240,200,.4), transparent 60%);
+  animation:in-caust 3s ease-in-out infinite alternate; }
+@keyframes in-caust{ 0%{transform:translateY(0)} 100%{transform:translateY(34px)} }
+.intro-bubbles{ position:absolute; inset:0; pointer-events:none; }
+.intro-bubbles i{ position:absolute; bottom:-30px; border-radius:50%; background:radial-gradient(circle at 35% 30%, rgba(244,236,218,.6), rgba(200,170,120,.15) 60%, transparent 70%); animation:in-bub linear forwards; }
+@keyframes in-bub{ 0%{transform:translateY(0) scale(1); opacity:0} 15%{opacity:.7} 100%{transform:translateY(-108vh) scale(1.2); opacity:0} }
+.intro-badge{ width:56px; height:56px; opacity:0; animation:in-badge 2.2s var(--ease) both .1s; }
+.intro-word{ font-family:var(--disp); text-transform:lowercase; letter-spacing:.02em; color:var(--creme); font-size:clamp(2.2rem,8vw,5rem); opacity:0; animation:in-word 2.4s var(--ease) both .2s; text-shadow:0 4px 40px rgba(0,0,0,.4); }
+.intro-hint{ position:absolute; bottom:44px; font-size:.72rem; letter-spacing:.24em; text-transform:uppercase; color:rgba(244,236,218,.5); animation:in-hint 2s ease both 1s; }
+@keyframes in-word{ 0%{opacity:0; transform:translateY(26px) scale(.94); filter:blur(10px)} 45%{opacity:1; filter:blur(0)} 100%{opacity:1; transform:none} }
+@keyframes in-badge{ 0%{opacity:0; transform:translateY(-14px) rotate(-8deg)} 60%{opacity:1} 100%{opacity:.95; transform:none} }
+@keyframes in-hint{ 0%,55%{opacity:0} 100%{opacity:1} }
+
 /* ===================== COOKIE-BANNER ===================== */
 .cookie{ position:fixed; z-index:80; left:16px; right:16px; bottom:16px; max-width:640px; margin:0 auto;
   display:flex; gap:12px 22px; align-items:center; justify-content:space-between; flex-wrap:wrap;
@@ -224,11 +255,42 @@ footer{ background:#2a2521; padding:60px 0 46px; border-top:1px solid rgba(244,2
 @keyframes crtroll{ 0%{transform:translateY(0)} 100%{transform:translateY(560%)} }
 
 /* Stärkerer Röhren-TV-Screen im Hero (oben deutlich, animiertes Video dahinter) */
-.tvscreen{ position:absolute; inset:0; z-index:4; pointer-events:none; overflow:hidden; }
-.tvscreen .lines{ position:absolute; inset:0; background:repeating-linear-gradient(0deg, rgba(0,0,0,.26) 0 1px, transparent 1px 3px); mix-blend-mode:multiply; opacity:.6; }
-.tvscreen .curve{ position:absolute; inset:0; border-radius:min(3vw,42px); box-shadow:inset 0 0 175px 34px rgba(12,5,0,.6), inset 0 0 48px rgba(0,0,0,.45); }
-.tvscreen .bar{ position:absolute; left:0; right:0; height:12%; top:-12%; background:linear-gradient(180deg, transparent, rgba(255,238,206,.07), transparent); animation:tvroll 6.5s linear infinite; }
-@keyframes tvroll{ 0%{transform:translateY(0)} 100%{transform:translateY(950%)} }
+.tvscreen{ position:absolute; inset:0; z-index:4; pointer-events:none; overflow:hidden; animation:tvflick 3.2s steps(22) infinite; }
+.tvscreen .lines{ position:absolute; inset:0; background:repeating-linear-gradient(0deg, rgba(0,0,0,.46) 0 1px, rgba(0,0,0,.06) 1px 2px, transparent 2px 4px); mix-blend-mode:multiply; opacity:.95; }
+.tvscreen .curve{ position:absolute; inset:0; border-radius:min(4vw,54px); box-shadow:inset 0 0 260px 66px rgba(8,3,0,.86), inset 0 0 100px rgba(0,0,0,.6), inset 3px 0 30px rgba(255,60,60,.10), inset -3px 0 30px rgba(60,140,255,.12); }
+.tvscreen .bar{ position:absolute; left:0; right:0; height:16%; top:-16%; background:linear-gradient(180deg, transparent, rgba(255,240,210,.16), transparent); animation:tvroll 5.5s linear infinite; }
+@keyframes tvroll{ 0%{transform:translateY(0)} 100%{transform:translateY(760%)} }
+@keyframes tvflick{ 0%,100%{opacity:1} 45%{opacity:.9} 47%{opacity:1} 68%{opacity:.86} 70%{opacity:1} 92%{opacity:.94} }
+
+/* ===================== HAUPT-REITER (music / video) ===================== */
+.maintabs{ display:flex; gap:26px; margin-bottom:34px; border-bottom:1px solid rgba(244,236,218,.12); }
+.maintab{ font-family:var(--disp); font-size:clamp(1.1rem,2.4vw,1.5rem); text-transform:uppercase; letter-spacing:.02em; background:none; border:none; color:rgba(244,236,218,.45); padding:4px 2px 14px; cursor:pointer; position:relative; transition:color .3s; }
+.maintab::after{ content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:var(--orange); transform:scaleX(0); transform-origin:left; transition:transform .3s var(--ease); }
+.maintab:hover{ color:var(--creme); }
+.maintab.active{ color:var(--creme); }
+.maintab.active::after{ transform:scaleX(1); }
+.panel[hidden]{ display:none; }
+.vgrid{ display:grid; grid-template-columns:1fr; gap:20px; }
+
+/* ===================== YOUTUBE-VIDEO (TV-Rahmen) ===================== */
+.videoft{ padding:clamp(50px,8vw,100px) 0; }
+.tvframe{ position:relative; max-width:900px; margin:0 auto; aspect-ratio:16/9; overflow:hidden; border-radius:min(2vw,18px); background:#000; box-shadow:0 24px 70px rgba(0,0,0,.5); border:1px solid rgba(244,236,218,.1); }
+.tvframe iframe, .tvframe img{ position:absolute; inset:0; width:100%; height:100%; border:0; object-fit:cover; }
+.tvframe .playbtn{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:3; width:74px; height:74px; border-radius:50%; background:rgba(42,37,33,.55); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); border:1px solid rgba(244,236,218,.5); transition:.3s; }
+.tvframe .playbtn::after{ content:""; position:absolute; left:54%; top:50%; transform:translate(-50%,-50%); border-style:solid; border-width:11px 0 11px 19px; border-color:transparent transparent transparent var(--creme); }
+.ytlink:hover .playbtn{ background:var(--orange); border-color:var(--orange); transform:translate(-50%,-50%) scale(1.08); }
+.ytlink:hover img{ transform:scale(1.03); transition:transform 1s var(--ease); }
+.tvframe .lines{ position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(0deg,rgba(0,0,0,.24) 0 1px,transparent 1px 3px); mix-blend-mode:multiply; opacity:.4; }
+.tvframe .curve{ position:absolute; inset:0; pointer-events:none; border-radius:min(2vw,18px); box-shadow:inset 0 0 90px 16px rgba(12,5,0,.42); }
+
+/* ===================== CANVAS-VIDEOS (transmissions) ===================== */
+.canvas{ padding:clamp(70px,11vw,150px) 0; background:var(--ink); }
+.canvas .row{ display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(12px,2vw,22px); max-width:540px; margin:0 auto; }
+.canvasclip{ position:relative; aspect-ratio:9/16; overflow:hidden; border-radius:min(2.5vw,20px); background:#000; box-shadow:0 24px 70px rgba(0,0,0,.5); border:1px solid rgba(244,236,218,.10); }
+.canvasclip video{ width:100%; height:100%; object-fit:cover; filter:contrast(.98) saturate(.97); }
+.canvasclip .lines{ position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(0deg, rgba(0,0,0,.34) 0 1px, transparent 1px 3px); mix-blend-mode:multiply; opacity:.7; }
+.canvasclip .curve{ position:absolute; inset:0; pointer-events:none; border-radius:min(2.5vw,20px); box-shadow:inset 0 0 110px 20px rgba(12,5,0,.62), inset 2px 0 20px rgba(255,60,60,.08), inset -2px 0 20px rgba(60,140,255,.09); }
+.canvasclip .bar{ position:absolute; left:0; right:0; height:18%; top:-18%; pointer-events:none; background:linear-gradient(180deg,transparent,rgba(255,240,210,.10),transparent); animation:tvroll 5.5s linear infinite; }
 
 /* ===================== INTERAKTION: Wasser-Ripple beim Klick ===================== */
 .ripple{ position:fixed; z-index:56; pointer-events:none; border-radius:50%; transform:translate(-50%,-50%); border:1px solid rgba(140,190,180,.55); box-shadow:0 0 26px rgba(201,154,58,.28), inset 0 0 26px rgba(140,190,180,.18); mix-blend-mode:screen; animation:rippleout 1.5s var(--ease) forwards; }

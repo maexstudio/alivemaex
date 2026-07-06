@@ -7,10 +7,15 @@
    Cover der alten Releases kommen direkt von Spotify. ---------- */
 const RELEASES = [
   { title:"Boys Never Bleed", date:"2026", url:"https://open.spotify.com/artist/0aiBlkcHQ2Nqta7K7JBS3d", cover:"assets/web/cover-bnb.jpg", archived:false },
+  { title:"never the same", date:"2025", url:"https://open.spotify.com/album/5qL9vhStf41vYH2zvFYCzu", cover:"https://i.scdn.co/image/ab67616d0000b273854402ba7938f3e7b088d719", archived:true },
+  { title:"herz rast", date:"2025", url:"https://open.spotify.com/album/5KpB5d7gyNJkHqXS8Ey9h1", cover:"https://i.scdn.co/image/ab67616d0000b2738cd408b6678ff1278b75d24b", archived:true },
   { title:"Betonwüstengrau", date:"2025", url:"https://open.spotify.com/album/6lFcxZ2FgCguVVCg1ShYwg", cover:"https://i.scdn.co/image/ab67616d0000b2737180861b2f03cb3af73fc18f", archived:true },
   { title:"Jemals", date:"2025", url:"https://open.spotify.com/album/0Dj3D5Lyq865JfzHwhNWIV", cover:"https://i.scdn.co/image/ab67616d0000b2730adc4391fb79e0b2fbad0c33", archived:true },
+  { title:"I Hate Myself", date:"2025", url:"https://open.spotify.com/album/6tti53zmDBJ3eZbSvaAGoC", cover:"https://i.scdn.co/image/ab67616d0000b273738b31b28e687392d03bc302", archived:true },
   { title:"Kleine Dinge", date:"2024", url:"https://open.spotify.com/album/4eVZKoCeqqqZzgWlvLjESs", cover:"https://i.scdn.co/image/ab67616d0000b273dac592acb2201020a766858b", archived:true },
   { title:"Mehr Blau als Sonnenlicht", date:"2024", url:"https://open.spotify.com/album/75NZLMXHMgBq0fCuAAjPCK", cover:"https://i.scdn.co/image/ab67616d0000b2730f6a0592fee2dea82e825d09", archived:true },
+  { title:"Demons", date:"2024", url:"https://open.spotify.com/album/21h2xggsTXqgpZo7lZMO6n", cover:"https://i.scdn.co/image/ab67616d0000b27385c83fbd996bfb748cb0e270", archived:true },
+  { title:"Electronic Catwalk", date:"2020", url:"https://open.spotify.com/album/28mVvpQzvpqicj95ue8Qop", cover:"https://i.scdn.co/image/ab67616d0000b2737b7e94eade9f66ebc2850b4b", archived:true },
 ];
 
 /* ---------- globale Ebenen injizieren ---------- */
@@ -74,13 +79,12 @@ const RELEASES = [
     const cov = r.cover
       ? `<img src="${r.cover}" alt="${r.title}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />`
       : '';
-    const title = r.cover ? '' : `<span class="rt display">${r.title}</span>`;
     return `
     <a class="release reveal" data-cat="${r.archived ? 'archiv' : 'aktuell'}" ${r.archived ? 'style="display:none;background:'+r.accent+'"' : 'style="background:'+r.accent+'"'} href="${r.url}" target="_blank" rel="noopener">
       <div class="cov">${cov}</div>
-      <div class="meta">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start"><span class="rname lower">alivemaex</span>${title}</div>
-        <div class="rfoot"><span class="rdate lower">${r.date}</span><span class="play lower">listen</span></div>
+      <div class="rinfo">
+        <span class="ri-t">${r.title}</span>
+        <span class="ri-meta lower"><span>${r.date}</span><span class="ri-play">listen on spotify ↗</span></span>
       </div>
     </a>`; }).join('');
 
@@ -117,6 +121,47 @@ const RELEASES = [
   document.querySelectorAll('#social').forEach(box=>{
     box.innerHTML = SOCIAL.map(x=>`<a href="${x.u}" target="_blank" rel="noopener" aria-label="${x.n}"><img src="https://cdn.simpleicons.org/${x.s}/F4ECDA" width="22" height="22" alt="${x.n}" loading="lazy"></a>`).join('');
   });
+})();
+
+/* ---------- Marken-Badge (dein Stern) + Favicon ---------- */
+(function badge(){
+  const fav=document.createElement('link'); fav.rel='icon'; fav.type='image/png'; fav.href='assets/web/favicon.png'; document.head.appendChild(fav);
+  document.querySelectorAll('.brand').forEach(b=>{
+    if(b.querySelector('.brandmark')) return;
+    const img=document.createElement('img'); img.className='brandmark'; img.src='assets/web/badge.png'; img.alt=''; img.setAttribute('aria-hidden','true');
+    b.prepend(img);
+  });
+})();
+
+/* ---------- YouTube-Facade: Thumbnail sichtbar, Klick spielt inline ---------- */
+(function ytfacade(){
+  document.querySelectorAll('.ytfacade').forEach(el=>{
+    el.style.cursor='pointer';
+    const load=()=>{
+      const id=el.dataset.yt; if(!id || el.dataset.loaded) return; el.dataset.loaded='1';
+      const ifr=document.createElement('iframe');
+      ifr.src='https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&playsinline=1';
+      ifr.title='ALIVEMAEX — Betonwüstengrau';
+      ifr.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+      ifr.setAttribute('allowfullscreen','');
+      const img=el.querySelector('img'); const pb=el.querySelector('.playbtn');
+      if(img) img.remove(); if(pb) pb.remove();
+      el.prepend(ifr);
+    };
+    el.addEventListener('click',load);
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); load(); } });
+  });
+})();
+
+/* ---------- Haupt-Reiter music / video ---------- */
+(function maintabs(){
+  const tabs=document.querySelectorAll('.maintab'); if(!tabs.length) return;
+  tabs.forEach(t=>t.addEventListener('click',()=>{
+    tabs.forEach(x=>x.classList.remove('active')); t.classList.add('active');
+    const id=t.dataset.panel;
+    document.querySelectorAll('.panel').forEach(p=>{ p.hidden = (p.id!==id); });
+    document.querySelectorAll('.panel:not([hidden]) .reveal').forEach(el=>el.classList.add('in'));
+  }));
 })();
 
 /* ---------- Reveal ---------- */
@@ -196,11 +241,29 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   ['touchstart','pointerdown','scroll','click'].forEach(ev=>addEventListener(ev, play, {once:true, passive:true}));
 })();
 
+/* ---------- Alle Videos bei erster Interaktion anstoßen (Handy-Fallback) ---------- */
+(function playVideos(){
+  const go=()=>document.querySelectorAll('video').forEach(v=>{ try{ v.muted=true; const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }catch(e){} });
+  ['touchstart','pointerdown','scroll'].forEach(ev=>addEventListener(ev, go, {once:true, passive:true}));
+})();
+
+/* ---------- Intro: beim ersten Besuch abtauchen ---------- */
+(function intro(){
+  try{ if(sessionStorage.getItem('amx_dived')) return; sessionStorage.setItem('amx_dived','1'); }catch(e){}
+  const o=document.createElement('div'); o.className='intro';
+  let bub=''; for(let i=0;i<16;i++){ const s=4+Math.random()*14,l=Math.random()*100,d=1.4+Math.random()*1.6,dl=Math.random()*1.2; bub+=`<i style="left:${l}%;width:${s}px;height:${s}px;animation-duration:${d}s;animation-delay:${dl}s"></i>`; }
+  o.innerHTML='<div class="intro-caust"></div><div class="intro-bubbles">'+bub+'</div><img class="intro-badge" src="assets/web/badge.png" alt=""><div class="intro-word">alivemaex</div><div class="intro-hint">tauch ein</div>';
+  document.body.appendChild(o); document.body.style.overflow='hidden';
+  const done=()=>{ o.classList.add('dive'); document.body.style.overflow=''; setTimeout(()=>{ if(o.parentNode) o.remove(); },1400); };
+  const t=setTimeout(done,2600);
+  o.addEventListener('click',()=>{ clearTimeout(t); done(); });
+})();
+
 /* ---------- Cookie-Banner ---------- */
 (function cookie(){
   try{ if(localStorage.getItem('amx_cookie')) return; }catch(e){}
-  const c=document.createElement('div'); c.className='cookie lower';
-  c.innerHTML='<p>diese seite verwendet nur technisch notwendige cookies und anonyme statistik. mit der weiteren nutzung stimmst du zu. <a href="impressum.html">impressum</a></p><button type="button">okay</button>';
+  const c=document.createElement('div'); c.className='cookie';
+  c.innerHTML='<p>Diese Seite verwendet nur technisch notwendige Cookies und anonyme Statistik. Mit der weiteren Nutzung stimmst du zu. <a href="impressum.html">Impressum</a></p><button type="button">Okay</button>';
   document.body.appendChild(c);
   requestAnimationFrame(()=>requestAnimationFrame(()=>c.classList.add('in')));
   c.querySelector('button').addEventListener('click',()=>{ try{ localStorage.setItem('amx_cookie','1'); }catch(e){} c.classList.remove('in'); setTimeout(()=>{ if(c.parentNode) c.parentNode.removeChild(c); },600); });
