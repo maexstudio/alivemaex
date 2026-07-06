@@ -37,22 +37,19 @@
 <!-- ================= HERO ================= -->
 <header class="hero" id="top">
   <div class="hero-photo">
-    <video class="hero-media" autoplay muted loop playsinline poster="assets/web/hero-poster.jpg">
+    <video class="hero-media" autoplay muted loop playsinline webkit-playsinline preload="auto" poster="assets/web/hero-poster.jpg">
       <source src="assets/web/hero.mp4" type="video/mp4">
     </video>
   </div>
+  <div class="tvscreen"><div class="lines"></div><div class="curve"></div><div class="bar"></div></div>
 
   <div class="topbar">
+    <a class="brand lower" href="index.html">alivemaex</a>
     <nav class="nav lower">
-      <a href="index.html" class="on">home</a>
       <a href="releases.html">releases</a>
       <a href="shop.html">shop</a>
       <a href="about.html">about</a>
     </nav>
-  </div>
-
-  <div class="hero-center">
-    <h1 class="hero-title weightless">alivemaex</h1>
   </div>
 
   <div class="hero-foot">
@@ -94,16 +91,10 @@
 
 <footer>
   <div class="wrap foot">
-    <div class="links lower">
-      <a href="https://www.instagram.com/alivemaex" target="_blank" rel="noopener">instagram</a>
-      <a href="https://www.tiktok.com/@alivemaex" target="_blank" rel="noopener">tiktok</a>
-      <a href="https://open.spotify.com/artist/0aiBlkcHQ2Nqta7K7JBS3d" target="_blank" rel="noopener">spotify</a>
-      <a href="https://www.youtube.com/@ALIVEMAEX" target="_blank" rel="noopener">youtube</a>
-      <a href="https://soundcloud.com/alivemaex" target="_blank" rel="noopener">soundcloud</a>
-    </div>
+    <div class="links" id="social"></div>
     <div class="fine lower">
       booking · press: <a href="mailto:info@alivemaex.com">info@alivemaex.com</a><br>
-      © <span id="yr"></span> alivemaex · liebe über angst · imprint
+      © <span id="yr"></span> alivemaex · liebe über angst · <a href="impressum.html">imprint</a>
     </div>
   </div>
 </footer>
