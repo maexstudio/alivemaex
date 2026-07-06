@@ -2,9 +2,15 @@
    Läuft auf jeder Seite. Injiziert die globalen Ebenen (Korn, Dichte,
    Lichtbrechungs-Filter, Sound) und startet nur, was die Seite braucht. */
 
-/* ---------- RELEASES: Datenfile (RAUMRISS speist hier ein / hier editieren) ---------- */
+/* ---------- RELEASES: Datenfile (RAUMRISS speist hier ein / hier editieren)
+   latest = neu (archived:false) · archive = Back-Katalog (archived:true)
+   Cover der alten Releases kommen direkt von Spotify. ---------- */
 const RELEASES = [
-  { title:"Boys Never Bleed", date:"2026", url:"https://open.spotify.com/artist/0aiBlkcHQ2Nqta7K7JBS3d", accent:"#1E74D9", archived:false, cover:"assets/web/cover-bnb.jpg" },
+  { title:"Boys Never Bleed", date:"2026", url:"https://open.spotify.com/artist/0aiBlkcHQ2Nqta7K7JBS3d", cover:"assets/web/cover-bnb.jpg", archived:false },
+  { title:"Betonwüstengrau", date:"2025", url:"https://open.spotify.com/album/6lFcxZ2FgCguVVCg1ShYwg", cover:"https://i.scdn.co/image/ab67616d0000b2737180861b2f03cb3af73fc18f", archived:true },
+  { title:"Jemals", date:"2025", url:"https://open.spotify.com/album/0Dj3D5Lyq865JfzHwhNWIV", cover:"https://i.scdn.co/image/ab67616d0000b2730adc4391fb79e0b2fbad0c33", archived:true },
+  { title:"Kleine Dinge", date:"2024", url:"https://open.spotify.com/album/4eVZKoCeqqqZzgWlvLjESs", cover:"https://i.scdn.co/image/ab67616d0000b273dac592acb2201020a766858b", archived:true },
+  { title:"Mehr Blau als Sonnenlicht", date:"2024", url:"https://open.spotify.com/album/75NZLMXHMgBq0fCuAAjPCK", cover:"https://i.scdn.co/image/ab67616d0000b2730f6a0592fee2dea82e825d09", archived:true },
 ];
 
 /* ---------- globale Ebenen injizieren ---------- */
@@ -44,6 +50,12 @@ const RELEASES = [
     const d=document.createElement('div'); d.className='density';
     d.innerHTML='<div class="tint"></div><div class="milk"></div><div class="press"></div>';
     document.body.appendChild(d);
+  }
+  // CRT / Röhren-TV
+  if(!document.querySelector('.crt')){
+    const c=document.createElement('div'); c.className='crt';
+    c.innerHTML='<div class="lines"></div><div class="roll"></div><div class="glow"></div>';
+    document.body.appendChild(c);
   }
   // Sound-Toggle + Audio
   if(!document.getElementById('soundtoggle')){
@@ -93,6 +105,20 @@ const RELEASES = [
     </div>`).join('');
 })();
 
+/* ---------- Social-Icons (offizielle Logos) rendern ---------- */
+(function social(){
+  const SOCIAL=[
+    {n:'instagram', u:'https://www.instagram.com/alivemaex', s:'instagram'},
+    {n:'tiktok', u:'https://www.tiktok.com/@alivemaex', s:'tiktok'},
+    {n:'spotify', u:'https://open.spotify.com/artist/0aiBlkcHQ2Nqta7K7JBS3d', s:'spotify'},
+    {n:'youtube', u:'https://www.youtube.com/@ALIVEMAEX', s:'youtube'},
+    {n:'soundcloud', u:'https://soundcloud.com/alivemaex', s:'soundcloud'},
+  ];
+  document.querySelectorAll('#social').forEach(box=>{
+    box.innerHTML = SOCIAL.map(x=>`<a href="${x.u}" target="_blank" rel="noopener" aria-label="${x.n}"><img src="https://cdn.simpleicons.org/${x.s}/F4ECDA" width="22" height="22" alt="${x.n}" loading="lazy"></a>`).join('');
+  });
+})();
+
 /* ---------- Reveal ---------- */
 const io=new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }); },{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
@@ -126,6 +152,16 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   (function loop(){ x+=(tx-x)*0.08; y+=(ty-y)*0.08; dl.style.transform=`translate(${x}px,${y}px)`; requestAnimationFrame(loop); })();
 })();
 
+/* ---------- Interaktion: Wasser-Ripple beim Klick/Tap ---------- */
+(function ripple(){
+  addEventListener('pointerdown', e=>{
+    const r=document.createElement('div'); r.className='ripple';
+    r.style.left=e.clientX+'px'; r.style.top=e.clientY+'px';
+    document.body.appendChild(r);
+    setTimeout(()=>{ if(r.parentNode) r.parentNode.removeChild(r); }, 1500);
+  }, {passive:true});
+})();
+
 /* ---------- Sound-Toggle (sitewide) ---------- */
 (function sound(){
   const track=document.getElementById('track'), btn=document.getElementById('soundtoggle');
@@ -147,11 +183,27 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   });
 })();
 
-/* ---------- Hero-Video langsamer (nur Startseite) ---------- */
-(function heroSpeed(){
+/* ---------- Hero-Video: robuster Autoplay-Loop (auch mobil) ---------- */
+(function heroVideo(){
   const v=document.querySelector('.hero-media'); if(!v) return;
-  const set=()=>{ try{ v.playbackRate=0.6; }catch(e){} };
-  set(); v.addEventListener('loadedmetadata',set); v.addEventListener('play',set);
+  v.muted = true; v.defaultMuted = true; v.setAttribute('muted','');
+  const rate=()=>{ try{ v.playbackRate=0.6; }catch(e){} };
+  const play=()=>{ const p=v.play(); if(p&&p.catch) p.catch(()=>{}); rate(); };
+  v.addEventListener('loadedmetadata', play);
+  v.addEventListener('canplay', play);
+  play();
+  // Fallback für Handys (z. B. iOS Energiesparmodus): spätestens bei erster Interaktion starten
+  ['touchstart','pointerdown','scroll','click'].forEach(ev=>addEventListener(ev, play, {once:true, passive:true}));
+})();
+
+/* ---------- Cookie-Banner ---------- */
+(function cookie(){
+  try{ if(localStorage.getItem('amx_cookie')) return; }catch(e){}
+  const c=document.createElement('div'); c.className='cookie lower';
+  c.innerHTML='<p>diese seite verwendet nur technisch notwendige cookies und anonyme statistik. mit der weiteren nutzung stimmst du zu. <a href="impressum.html">impressum</a></p><button type="button">okay</button>';
+  document.body.appendChild(c);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>c.classList.add('in')));
+  c.querySelector('button').addEventListener('click',()=>{ try{ localStorage.setItem('amx_cookie','1'); }catch(e){} c.classList.remove('in'); setTimeout(()=>{ if(c.parentNode) c.parentNode.removeChild(c); },600); });
 })();
 
 /* ---------- Jahr im Footer ---------- */
