@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ALIVEMAEX</title>
+<meta name="description" content="ALIVEMAEX — new electronic psychedelia. liebe über angst." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+<div class="grain"></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="caustic">
+    <feTurbulence type="fractalNoise" baseFrequency="0.010 0.016" numOctaves="2" seed="7" result="n">
+      <animate attributeName="baseFrequency" dur="52s" values="0.010 0.016;0.016 0.024;0.010 0.016" repeatCount="indefinite"/>
+    </feTurbulence>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.78  0 0 0 0 0.94  0 0 0 0 0.9  0 0 0 0.9 0"/>
+  </filter>
+  <filter id="refract">
+    <feTurbulence type="fractalNoise" baseFrequency="0.006 0.011" numOctaves="2" seed="4" result="w">
+      <animate attributeName="baseFrequency" dur="34s" values="0.006 0.011;0.010 0.017;0.006 0.011" repeatCount="indefinite"/>
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" in2="w" scale="20" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="refract-soft">
+    <feTurbulence type="fractalNoise" baseFrequency="0.008 0.014" numOctaves="2" seed="9" result="w">
+      <animate attributeName="baseFrequency" dur="28s" values="0.008 0.014;0.013 0.02;0.008 0.014" repeatCount="indefinite"/>
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" in2="w" scale="9" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+<div class="density"><div class="tint"></div><div class="milk"></div><div class="press"></div></div>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <div class="hero-photo">
+    <video class="hero-media" autoplay muted loop playsinline poster="assets/web/hero-poster.jpg">
+      <source src="assets/web/hero.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="topbar">
+    <nav class="nav lower">
+      <a href="index.html" class="on">home</a>
+      <a href="releases.html">releases</a>
+      <a href="shop.html">shop</a>
+      <a href="about.html">about</a>
+    </nav>
+  </div>
+
+  <div class="hero-center">
+    <h1 class="hero-title weightless">alivemaex</h1>
+  </div>
+
+  <div class="hero-foot">
+    <div class="hero-release lower">
+      <span>boys never bleed · out now</span>
+      <a class="btn-listen" href="https://open.spotify.com/artist/0aiBlkcHQ2Nqta7K7JBS3d" target="_blank" rel="noopener">listen</a>
+    </div>
+    <a class="scrollcue lower" href="#liebe"><span class="arrow">↓</span></a>
+  </div>
+</header>
+
+<!-- ================= FRAGMENT ================= -->
+<section class="fragment">
+  <div class="caustics" style="opacity:.10"><svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><rect width="100%" height="100%" filter="url(#caustic)"/></svg></div>
+  <div class="wrap reveal">
+    <p class="lower">standing too close to someone <span class="sm">you still can't touch.</span></p>
+  </div>
+</section>
+
+<!-- ================= VISUALS ================= -->
+<section class="frag" id="fragmente">
+  <div class="wrap">
+    <div class="fgrid reveal" id="fragTiles"></div>
+  </div>
+</section>
+
+<!-- ================= LIEBE ÜBER ANGST (Manifest + Signup) ================= -->
+<section class="manifest" id="liebe">
+  <div class="caustics" style="opacity:.10"><svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><rect width="100%" height="100%" filter="url(#caustic)"/></svg></div>
+  <div class="wrap reveal">
+    <h2 class="display lower weightless">liebe <span class="of">über</span> angst</h2>
+    <p class="sub lower">a signal from the world behind the songs.</p>
+    <form class="signup" onsubmit="return false;">
+      <input type="email" placeholder="your email" aria-label="your email" />
+      <button type="submit" class="lower">step inside</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div class="links lower">
+      <a href="https://www.instagram.com/alivemaex" target="_blank" rel="noopener">instagram</a>
+      <a href="https://www.tiktok.com/@alivemaex" target="_blank" rel="noopener">tiktok</a>
+      <a href="https://open.spotify.com/artist/0aiBlkcHQ2Nqta7K7JBS3d" target="_blank" rel="noopener">spotify</a>
+      <a href="https://www.youtube.com/@ALIVEMAEX" target="_blank" rel="noopener">youtube</a>
+      <a href="https://soundcloud.com/alivemaex" target="_blank" rel="noopener">soundcloud</a>
+    </div>
+    <div class="fine lower">
+      booking · press: <a href="mailto:info@alivemaex.com">info@alivemaex.com</a><br>
+      © <span id="yr"></span> alivemaex · liebe über angst · imprint
+    </div>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

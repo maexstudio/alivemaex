@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ALIVEMAEX — About & Press</title>
+<meta name="description" content="ALIVEMAEX — about, bio, press kit and contact. New electronic psychedelia from Berlin." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+<div class="grain"></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="caustic">
+    <feTurbulence type="fractalNoise" baseFrequency="0.010 0.016" numOctaves="2" seed="7" result="n">
+      <animate attributeName="baseFrequency" dur="52s" values="0.010 0.016;0.016 0.024;0.010 0.016" repeatCount="indefinite"/>
+    </feTurbulence>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.78  0 0 0 0 0.94  0 0 0 0 0.9  0 0 0 0.9 0"/>
+  </filter>
+  <filter id="refract">
+    <feTurbulence type="fractalNoise" baseFrequency="0.006 0.011" numOctaves="2" seed="4" result="w">
+      <animate attributeName="baseFrequency" dur="34s" values="0.006 0.011;0.010 0.017;0.006 0.011" repeatCount="indefinite"/>
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" in2="w" scale="20" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="refract-soft">
+    <feTurbulence type="fractalNoise" baseFrequency="0.008 0.014" numOctaves="2" seed="9" result="w">
+      <animate attributeName="baseFrequency" dur="28s" values="0.008 0.014;0.013 0.02;0.008 0.014" repeatCount="indefinite"/>
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" in2="w" scale="9" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+<div class="density"><div class="tint"></div><div class="milk"></div><div class="press"></div></div>
+
+<header class="pagehead">
+  <a class="brand lower" href="index.html">alivemaex</a>
+  <nav class="nav lower">
+    <a href="index.html">home</a>
+    <a href="releases.html">releases</a>
+    <a href="shop.html">shop</a>
+    <a href="about.html" class="on">about</a>
+  </nav>
+</header>
+
+<main class="musik">
+  <div class="wrap">
+
+    <div class="page-head reveal">
+      <h1 class="display">About</h1>
+      <p class="sub lower">the world, the sound, and everything press & bookers need.</p>
+    </div>
+
+    <!-- WORLD / BIO -->
+    <section class="reveal" style="padding:clamp(20px,4vw,50px) 0">
+      <div class="eyebrow">the world</div>
+      <p class="lede">An old soul speaking from inside a modern body.</p>
+      <div class="about-cols" style="margin-top:44px">
+        <p class="prose">ALIVEMAEX makes New Electronic Psychedelia — a warm, analog world between 70s memories, Berlin underground rhythm, intimate vocals and the modern nervous system. It lives somewhere between 70s psychedelia, post-punk melancholy and dark bedroom-pop intimacy. The songs feel like old photographs that started breathing again — soft around the edges, slightly damaged, full of longing.</p>
+        <p class="prose">At the center is the human need for connection: the way we protect ourselves, the way we hide, the way we still hope someone sees through it. Built around one principle — <em>liebe über angst</em>, love over fear — the project explores shame, longing, self-protection and closeness. Not nostalgia. An old soul, speaking from inside a modern body.</p>
+      </div>
+    </section>
+
+    <!-- SOUND -->
+    <section class="reveal" style="padding:clamp(30px,6vw,70px) 0">
+      <div class="eyebrow">the sound</div>
+      <p class="prose" style="max-width:62ch">The sound of ALIVEMAEX is dry, close and analog. Dark vocals sit in broken echo rooms. Drums stay physical and direct. Synths and guitars drift through tape, slapback, phaser and warm imperfections. Nothing is polished until it loses its skin. The music moves like a night drive through Berlin after summer rain — electronic, psychedelic, intimate, slightly unstable, but always human. No plastic. No clean escape. Only warmth, friction and the feeling of something real trying to come through.</p>
+    </section>
+
+    <!-- PRESS PHOTOS -->
+    <section class="reveal" style="padding:clamp(30px,6vw,70px) 0">
+      <div class="eyebrow">press photos</div>
+      <div class="press-grid">
+        <div class="tile"><img class="bg" src="assets/web/ph-239.jpg" alt="ALIVEMAEX press photo" loading="lazy" /></div>
+        <div class="tile"><img class="bg" src="assets/web/ph-497.jpg" alt="ALIVEMAEX press photo" loading="lazy" /></div>
+        <div class="tile"><img class="bg" src="assets/web/ph-574.jpg" alt="ALIVEMAEX press photo" loading="lazy" /></div>
+      </div>
+      <div class="kit">
+        <a href="mailto:info@alivemaex.com?subject=Press%20kit%20request">request press kit</a>
+        <a href="mailto:info@alivemaex.com?subject=Hi-res%20photos">hi-res photos</a>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="reveal" style="padding:clamp(30px,6vw,70px) 0 clamp(20px,4vw,40px)">
+      <div class="eyebrow">contact</div>
+      <div class="contact-rows">
+        <div>
+          <h3>booking</h3>
+          <a href="mailto:info@alivemaex.com">info@alivemaex.com</a>
+        </div>
+        <div>
+          <h3>press</h3>
+          <a href="mailto:info@alivemaex.com">info@alivemaex.com</a>
+        </div>
+        <div>
+          <h3>label / mgmt</h3>
+          <p class="lower" style="opacity:.6">independent</p>
+        </div>
+        <div>
+          <h3>follow</h3>
+          <div class="nav lower" style="gap:16px">
+            <a href="https://www.instagram.com/alivemaex" target="_blank" rel="noopener">instagram</a>
+            <a href="https://www.youtube.com/@ALIVEMAEX" target="_blank" rel="noopener">youtube</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="links lower">
+      <a href="https://www.instagram.com/alivemaex" target="_blank" rel="noopener">instagram</a>
+      <a href="https://www.tiktok.com/@alivemaex" target="_blank" rel="noopener">tiktok</a>
+      <a href="https://open.spotify.com/artist/0aiBlkcHQ2Nqta7K7JBS3d" target="_blank" rel="noopener">spotify</a>
+      <a href="https://www.youtube.com/@ALIVEMAEX" target="_blank" rel="noopener">youtube</a>
+      <a href="https://soundcloud.com/alivemaex" target="_blank" rel="noopener">soundcloud</a>
+    </div>
+    <div class="fine lower">
+      booking · press: <a href="mailto:info@alivemaex.com">info@alivemaex.com</a><br>
+      © <span id="yr"></span> alivemaex · liebe über angst · imprint
+    </div>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
