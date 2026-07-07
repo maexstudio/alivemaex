@@ -220,8 +220,9 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   },{passive:true});
 })();
 
-/* ---------- Cursor-Taucherlicht ---------- */
+/* ---------- Cursor-Taucherlicht (nur mit echter Maus) ---------- */
 (function diver(){
+  if(window.matchMedia && matchMedia('(hover:none)').matches) return;
   const dl=document.createElement('div'); dl.className='diverlight'; document.body.appendChild(dl);
   let tx=innerWidth/2, ty=innerHeight/2, x=tx, y=ty, on=false;
   addEventListener('mousemove',e=>{ tx=e.clientX; ty=e.clientY; if(!on){on=true; dl.style.opacity='1';} },{passive:true});
@@ -316,7 +317,12 @@ const SFX_TARGETS = ['releases.html','shop.html','about.html'];
 (function intro(){
   try{ if(sessionStorage.getItem('amx_dived')) return; sessionStorage.setItem('amx_dived','1'); }catch(e){}
   const o=document.createElement('div'); o.className='intro';
-  const layers=[
+  const touch = !!(window.matchMedia && matchMedia('(hover:none)').matches);
+  const layers = touch ? [
+    {cls:'far',  n:10, min:2, max:6,  dmin:11, dmax:18, px:0},
+    {cls:'mid',  n:8,  min:5, max:11, dmin:8,  dmax:13, px:0},
+    {cls:'near', n:4,  min:9, max:18, dmin:6,  dmax:10, px:0},
+  ] : [
     {cls:'far',  n:24, min:2,  max:6,  dmin:10, dmax:18, px:6},
     {cls:'mid',  n:16, min:5,  max:12, dmin:7,  dmax:12, px:14},
     {cls:'near', n:9,  min:10, max:22, dmin:5,  dmax:9,  px:26},
@@ -333,7 +339,7 @@ const SFX_TARGETS = ['releases.html','shop.html','about.html'];
     }
     return `<div class="intro-field ${L.cls}" data-px="${L.px}">${s}</div>`;
   }).join('');
-  o.innerHTML='<div class="intro-rays"></div>'+fields+'<img class="intro-badge" src="assets/web/badge.png" alt=""><div class="intro-word">alivemaex</div><div class="intro-hint">tauch ein</div>';
+  o.innerHTML='<div class="intro-rays"></div>'+fields+'<img class="intro-badge" src="assets/web/badge.png" alt="ALIVEMAEX">';
   document.body.appendChild(o); document.body.style.overflow='hidden';
   // Intro-Soundeffekt (Neon) — versucht sofort, sonst beim ersten Kontakt
   const isfx=new Audio('assets/web/sfx-intro.mp3'); isfx.volume=0.85;
@@ -346,7 +352,7 @@ const SFX_TARGETS = ['releases.html','shop.html','about.html'];
   const done=()=>{ o.classList.add('dive'); document.body.style.overflow=''; o.removeEventListener('mousemove',onMove);
     try{ let v=isfx.volume; const f=setInterval(()=>{ v-=0.12; if(v<=0){ try{ isfx.pause(); }catch(_){ } clearInterval(f); } else isfx.volume=Math.max(0,v); },40); }catch(e){}
     setTimeout(()=>{ if(o.parentNode) o.remove(); },1700); };
-  const t=setTimeout(done,3200);
+  const t=setTimeout(done,1900);
   o.addEventListener('click',()=>{ clearTimeout(t); done(); });
 })();
 

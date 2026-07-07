@@ -150,8 +150,17 @@ section{ position:relative; }
 /* ===================== LIEBE ÜBER ANGST (Manifest + Signup) ===================== */
 .manifest{ padding:clamp(120px,20vw,280px) 0; text-align:center; background:#2a2521; overflow:hidden; }
 .manifest .wrap{ position:relative; z-index:1; }
-.mannequin{ position:absolute; left:-1%; bottom:0; height:min(88%,640px); width:auto; opacity:.15; pointer-events:none; z-index:0; filter:contrast(.9); }
+.mannequin{ position:absolute; left:-1%; bottom:0; height:min(88%,640px); width:auto; opacity:.15; pointer-events:none; z-index:0; filter:contrast(.9);
+  transform-origin:50% 60%; animation:mq-fly-l 20s ease-in-out infinite; will-change:transform; }
+@keyframes mq-fly-l{
+  0%   { transform:translate3d(0,0,0) rotate(-2deg); }
+  25%  { transform:translate3d(9px,-18px,0) rotate(1.5deg); }
+  50%  { transform:translate3d(-5px,-32px,0) rotate(3deg); }
+  75%  { transform:translate3d(6px,-14px,0) rotate(1deg); }
+  100% { transform:translate3d(0,0,0) rotate(-2deg); }
+}
 @media(max-width:680px){ .mannequin{ opacity:.09; height:56%; left:-14%; } }
+@media (prefers-reduced-motion:reduce){ .mannequin{ animation:none; } }
 .about-page{ position:relative; overflow:hidden; }
 .about-page > .wrap{ position:relative; z-index:1; }
 .mannequin-tr{ position:absolute; right:2%; top:60px; height:min(64%,560px); width:auto; opacity:.22; pointer-events:none; z-index:0; filter:contrast(.95);
@@ -265,7 +274,7 @@ footer{ background:#2a2521; padding:60px 0 46px; border-top:1px solid rgba(244,2
 .intro-field.far i{ filter:blur(1.6px); opacity:.5; }
 .intro-field.near i{ box-shadow:0 0 12px rgba(200,235,228,.35); }
 @keyframes in-rise{ 0%{ transform:translateY(0) translateX(0) scale(1); opacity:0 } 12%{opacity:.7} 86%{opacity:.5} 100%{ transform:translateY(-120vh) translateX(var(--dx,0)) scale(1.15); opacity:0 } }
-.intro-badge{ position:relative; z-index:2; width:56px; height:56px; opacity:0; animation:in-badge 2.6s var(--ease) both .2s; }
+.intro-badge{ position:relative; z-index:2; width:78px; height:78px; opacity:0; animation:in-badge 1.4s var(--ease) both .05s; }
 .intro-word{ position:relative; z-index:2; font-family:var(--disp); text-transform:lowercase; letter-spacing:.02em; color:#eaf6f2; font-size:clamp(2.2rem,8vw,5rem); opacity:0; animation:in-word 2.8s var(--ease) both .3s; text-shadow:0 4px 55px rgba(0,24,28,.6); }
 .intro-hint{ position:absolute; bottom:46px; z-index:2; font-size:.72rem; letter-spacing:.28em; text-transform:uppercase; color:rgba(224,245,240,.42); animation:in-hint 2.2s ease both 1.2s; }
 @keyframes in-word{ 0%{opacity:0; transform:translateY(28px) scale(.94); filter:blur(12px)} 50%{opacity:1; filter:blur(0)} 100%{opacity:1; transform:none} }
@@ -338,7 +347,16 @@ footer{ background:#2a2521; padding:60px 0 46px; border-top:1px solid rgba(244,2
 
 @media (prefers-reduced-motion:reduce){ *{ animation:none !important; transition:none !important; } .reveal{ opacity:1; transform:none; } }
 @media (max-width:680px){ .nav{ gap:14px; font-size:.8rem; } .crt .lines{ opacity:.3; } }
-/* Touch-Geräte: SVG-Lichtbrechung vom Video nehmen (iOS spielt sonst nicht ab) */
+/* Touch-Geräte: schwere Effekte drosseln → flüssig, kein Flackern, kein Sound-Ruckeln */
 @media (hover:none){
   .hero-photo video, .hero-photo img{ filter:contrast(.96) brightness(1.03) saturate(.96); }
+  .tvscreen{ animation:none; }              /* kein Heller/Dunkler-Flackern mehr */
+  .tvscreen .bar{ display:none; }
+  .tvscreen .lines{ opacity:.5; }
+  .crt{ display:none; }                     /* globalen CRT-Overlay sparen */
+  .grain{ animation:none; opacity:.13; }    /* Korn statisch statt teuer animiert */
+  .caustics{ display:none; }                /* animierte SVG-Kaustik ist zu schwer */
+  .manifest h2{ filter:none; }              /* SVG-Displacement vom Text nehmen */
+  .diverlight{ display:none; }
+  .canvasclip .lines, .canvasclip .curve{ opacity:.5; }
 }
