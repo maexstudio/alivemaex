@@ -62,12 +62,12 @@ const RELEASES = [
     c.innerHTML='<div class="lines"></div><div class="roll"></div><div class="glow"></div>';
     document.body.appendChild(c);
   }
-  // Sound-Toggle + Audio
-  if(!document.getElementById('soundtoggle')){
-    const btn=document.createElement('button'); btn.id='soundtoggle'; btn.className='soundtoggle lower'; btn.setAttribute('aria-label','toggle sound');
-    btn.innerHTML='<span class="eq"><i></i><i></i><i></i><i></i></span><span class="lbl">sound</span>';
+  // Sound-Toggle + Audio — NUR auf der Startseite (Hero vorhanden)
+  if(document.querySelector('.hero') && !document.getElementById('soundtoggle')){
+    const btn=document.createElement('button'); btn.id='soundtoggle'; btn.className='soundtoggle'; btn.setAttribute('aria-label','Sound stummschalten');
+    btn.innerHTML='<svg class="hp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5a9 9 0 0 1 18 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path><line class="slash" x1="3" y1="3" x2="21" y2="21"></line></svg>';
     document.body.appendChild(btn);
-    const au=document.createElement('audio'); au.id='track'; au.src='assets/web/boys-never-bleed.mp3'; au.loop=true; au.preload='none';
+    const au=document.createElement('audio'); au.id='track'; au.src='assets/web/website-sound.mp3'; au.loop=true; au.preload='auto';
     document.body.appendChild(au);
   }
 })();
@@ -107,6 +107,37 @@ const RELEASES = [
       <img class="bg" src="${src}" alt="" loading="lazy" />
       <div class="grade" style="background:radial-gradient(60% 50% at 50% 30%, rgba(201,154,58,.5), transparent 70%)"></div>
     </div>`).join('');
+})();
+
+/* ---------- Instagram-Feed (neueste Posts, auto-update über Feed-JSON) ----------
+   Für echte Auto-Aktualisierung: kostenlosen Feed bei behold.so anlegen (IG verbinden)
+   und die JSON-URL unten in INSTA_FEED eintragen. Ohne Feed erscheint der stilvolle
+   Fallback (verlinkt auf das Profil). ---------- */
+const INSTA_FEED = 'https://feeds.behold.so/tfyT8O5SjAcHSeTaE7zT';
+(function instagram(){
+  const box=document.getElementById('instafeed'); if(!box) return;
+  const N=6;
+  const fallback=()=>{
+    box.innerHTML = Array.from({length:N}).map(()=>`
+      <a class="ig-tile ig-empty" href="https://www.instagram.com/alivemaex" target="_blank" rel="noopener" aria-label="alivemaex auf instagram">
+        <span class="ig-mark"></span>
+      </a>`).join('');
+  };
+  if(!INSTA_FEED){ fallback(); return; }
+  fetch(INSTA_FEED).then(r=>r.json()).then(data=>{
+    const posts=(Array.isArray(data)?data:(data.posts||[])).slice(0,N);
+    if(!posts.length){ fallback(); return; }
+    box.innerHTML = posts.map(p=>{
+      const sz=p.sizes||{};
+      const szUrl=(sz.medium&&sz.medium.mediaUrl)||(sz.small&&sz.small.mediaUrl)||(sz.large&&sz.large.mediaUrl)||'';
+      const isVid=(p.mediaType||'').toString().toUpperCase()==='VIDEO';
+      const img=isVid ? (p.thumbnailUrl||szUrl||p.mediaUrl) : (szUrl||p.mediaUrl||p.thumbnailUrl||'');
+      const link=p.permalink||p.url||'https://www.instagram.com/alivemaex';
+      const cap=(p.prunedCaption||p.caption||'').toString().slice(0,80).replace(/"/g,'&quot;');
+      if(!img) return '';
+      return `<a class="ig-tile" href="${link}" target="_blank" rel="noopener" aria-label="${cap||'instagram post'}"><img src="${img}" alt="" loading="lazy"><span class="ig-hover">view ↗</span></a>`;
+    }).join('');
+  }).catch(fallback);
 })();
 
 /* ---------- Social-Icons (offizielle Logos) rendern ---------- */
@@ -207,25 +238,59 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   }, {passive:true});
 })();
 
-/* ---------- Sound-Toggle (sitewide) ---------- */
+/* ---------- Navigations-Soundeffekt: sofort wechseln, Effekt auf der Unterseite spielen ---------- */
+const SFX_NAV = 'assets/web/sfx-nav.mp3';
+const SFX_TARGETS = ['releases.html','shop.html','about.html'];
+(function navSfx(){
+  // 1) Klick auf eine Unterseite: Flag setzen, dann ganz normal (sofort) navigieren
+  document.querySelectorAll('a[href]').forEach(a=>{
+    const href=a.getAttribute('href')||'';
+    if(!SFX_TARGETS.some(k=>href.endsWith(k))) return;
+    a.addEventListener('click',()=>{ try{ sessionStorage.setItem('amx_playsfx','1'); }catch(e){} });
+  });
+  // 2) Auf der Unterseite angekommen (kein Hero): Effekt-Sound abspielen
+  if(!document.querySelector('.hero')){
+    let should=false; try{ should=sessionStorage.getItem('amx_playsfx')==='1'; sessionStorage.removeItem('amx_playsfx'); }catch(e){}
+    if(should){
+      const au=new Audio(SFX_NAV); au.volume=0.8;
+      const tryit=()=>{ const p=au.play(); if(p&&p.catch) p.catch(()=>{}); };
+      tryit();
+      addEventListener('pointerdown', tryit, {once:true, passive:true}); // Fallback falls Browser blockt
+    }
+  }
+})();
+
+/* ---------- Sound: durchgehender Loop, Autostart, Kopfhörer-Mute (nur Startseite) ---------- */
 (function sound(){
   const track=document.getElementById('track'), btn=document.getElementById('soundtoggle');
   if(!track||!btn) return;
-  const lbl=btn.querySelector('.lbl');
-  let fadeTimer=null;
+  let muted=false; try{ muted = localStorage.getItem('amx_muted')==='1'; }catch(e){}
+  let fadeTimer=null, started=false;
+  // Ton über Seitenwechsel fortführen (Multipage): Position merken & fortsetzen
+  let savedTime=0, timeApplied=false;
+  try{ savedTime=parseFloat(sessionStorage.getItem('amx_sound_time'))||0; }catch(e){}
+  function applyTime(){ if(timeApplied) return; if(savedTime>0 && isFinite(savedTime) && track.duration && savedTime<track.duration-0.2){ try{ track.currentTime=savedTime; }catch(e){} } timeApplied=true; }
+  if(track.readyState>=1) applyTime(); else track.addEventListener('loadedmetadata', applyTime, {once:true});
+  addEventListener('pagehide',()=>{ try{ sessionStorage.setItem('amx_sound_time', String(track.currentTime||0)); }catch(e){} }, {passive:true});
+  function setMuted(m){ muted=m; btn.classList.toggle('muted', m); btn.setAttribute('aria-label', m?'Sound einschalten':'Sound stummschalten'); try{ localStorage.setItem('amx_muted', m?'1':'0'); }catch(e){} }
   function fadeTo(target){
     clearInterval(fadeTimer);
     fadeTimer=setInterval(()=>{
-      const step=0.04, d=target-track.volume;
-      if(Math.abs(d)<=step){ track.volume=target; clearInterval(fadeTimer); if(target===0) track.pause(); }
-      else track.volume+=Math.sign(d)*step;
-    },40);
+      const step=0.05, d=target-track.volume;
+      if(Math.abs(d)<=step){ track.volume=Math.max(0,Math.min(1,target)); clearInterval(fadeTimer); if(target===0) track.pause(); }
+      else track.volume=Math.max(0,Math.min(1,track.volume+Math.sign(d)*step));
+    },50);
   }
-  btn.addEventListener('click',()=>{
-    if(track.paused){
-      track.volume=0; track.play().then(()=>{ fadeTo(0.7); btn.classList.add('playing'); lbl.textContent='sound on'; }).catch(()=>{});
-    } else { fadeTo(0); btn.classList.remove('playing'); lbl.textContent='sound'; }
-  });
+  function playOn(){ applyTime(); track.volume=0; const p=track.play(); if(p&&p.catch) p.catch(()=>{}); fadeTo(0.55); btn.classList.add('playing'); }
+  function silence(){ fadeTo(0); btn.classList.remove('playing'); }
+  btn.classList.toggle('muted', muted);
+  // sofort versuchen; verweigert der Browser, dann beim allerersten Kontakt
+  function tryStart(){ if(started||muted) return; applyTime(); track.volume=0; const p=track.play(); if(p&&p.then){ p.then(()=>{ started=true; fadeTo(0.55); btn.classList.add('playing'); }).catch(()=>{}); } }
+  tryStart();
+  const kick=(e)=>{ if(started||muted) return; if(e&&e.target&&e.target.closest&&e.target.closest('#soundtoggle')) return; started=true; playOn(); };
+  ['pointerdown','keydown','touchstart'].forEach(ev=>addEventListener(ev,kick,{passive:true}));
+  addEventListener('scroll',kick,{once:true,passive:true});
+  btn.addEventListener('click',()=>{ started=true; if(muted){ setMuted(false); playOn(); } else { setMuted(true); silence(); } });
 })();
 
 /* ---------- Hero-Video: robuster Autoplay-Loop (auch mobil) ---------- */
@@ -247,15 +312,41 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   ['touchstart','pointerdown','scroll'].forEach(ev=>addEventListener(ev, go, {once:true, passive:true}));
 })();
 
-/* ---------- Intro: beim ersten Besuch abtauchen ---------- */
+/* ---------- Intro: beim ersten Besuch langsam abtauchen ---------- */
 (function intro(){
   try{ if(sessionStorage.getItem('amx_dived')) return; sessionStorage.setItem('amx_dived','1'); }catch(e){}
   const o=document.createElement('div'); o.className='intro';
-  let bub=''; for(let i=0;i<16;i++){ const s=4+Math.random()*14,l=Math.random()*100,d=1.4+Math.random()*1.6,dl=Math.random()*1.2; bub+=`<i style="left:${l}%;width:${s}px;height:${s}px;animation-duration:${d}s;animation-delay:${dl}s"></i>`; }
-  o.innerHTML='<div class="intro-caust"></div><div class="intro-bubbles">'+bub+'</div><img class="intro-badge" src="assets/web/badge.png" alt=""><div class="intro-word">alivemaex</div><div class="intro-hint">tauch ein</div>';
+  const layers=[
+    {cls:'far',  n:24, min:2,  max:6,  dmin:10, dmax:18, px:6},
+    {cls:'mid',  n:16, min:5,  max:12, dmin:7,  dmax:12, px:14},
+    {cls:'near', n:9,  min:10, max:22, dmin:5,  dmax:9,  px:26},
+  ];
+  const fields = layers.map(L=>{
+    let s='';
+    for(let i=0;i<L.n;i++){
+      const sz=(L.min+Math.random()*(L.max-L.min)).toFixed(1);
+      const l=(Math.random()*100).toFixed(1);
+      const dur=(L.dmin+Math.random()*(L.dmax-L.dmin)).toFixed(1);
+      const dl=(-Math.random()*dur).toFixed(1);
+      const dx=(Math.random()*70-35).toFixed(0)+'px';
+      s+=`<i style="left:${l}%;width:${sz}px;height:${sz}px;animation-duration:${dur}s;animation-delay:${dl}s;--dx:${dx}"></i>`;
+    }
+    return `<div class="intro-field ${L.cls}" data-px="${L.px}">${s}</div>`;
+  }).join('');
+  o.innerHTML='<div class="intro-rays"></div>'+fields+'<img class="intro-badge" src="assets/web/badge.png" alt=""><div class="intro-word">alivemaex</div><div class="intro-hint">tauch ein</div>';
   document.body.appendChild(o); document.body.style.overflow='hidden';
-  const done=()=>{ o.classList.add('dive'); document.body.style.overflow=''; setTimeout(()=>{ if(o.parentNode) o.remove(); },1400); };
-  const t=setTimeout(done,2600);
+  // Intro-Soundeffekt (Neon) — versucht sofort, sonst beim ersten Kontakt
+  const isfx=new Audio('assets/web/sfx-intro.mp3'); isfx.volume=0.85;
+  const playIsfx=()=>{ const p=isfx.play(); if(p&&p.catch) p.catch(()=>{}); };
+  playIsfx();
+  addEventListener('pointerdown', playIsfx, {once:true, passive:true});
+  const flds=o.querySelectorAll('.intro-field');
+  const onMove=e=>{ const cx=(e.clientX/innerWidth-.5), cy=(e.clientY/innerHeight-.5); flds.forEach(f=>{ const px=+f.dataset.px; f.style.transform=`translate(${(cx*px).toFixed(1)}px,${(cy*px).toFixed(1)}px)`; }); };
+  o.addEventListener('mousemove', onMove, {passive:true});
+  const done=()=>{ o.classList.add('dive'); document.body.style.overflow=''; o.removeEventListener('mousemove',onMove);
+    try{ let v=isfx.volume; const f=setInterval(()=>{ v-=0.12; if(v<=0){ try{ isfx.pause(); }catch(_){ } clearInterval(f); } else isfx.volume=Math.max(0,v); },40); }catch(e){}
+    setTimeout(()=>{ if(o.parentNode) o.remove(); },1700); };
+  const t=setTimeout(done,3200);
   o.addEventListener('click',()=>{ clearTimeout(t); done(); });
 })();
 
