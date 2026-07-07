@@ -116,9 +116,25 @@ section{ position:relative; }
 .release:hover .grade{ opacity:.85; }
 
 /* ===================== FRAGMENT ===================== */
-.fragment{ position:relative; overflow:hidden; padding:clamp(130px,24vw,300px) 0; background:linear-gradient(180deg,#2a2521 0%,#4a2c18 100%); }
-.fragment p{ font-size:clamp(1.9rem,6vw,4.6rem); font-weight:500; line-height:1.1; max-width:15ch; letter-spacing:-.01em; }
+.fragment{ position:relative; overflow:hidden; padding:clamp(70px,12vw,150px) 0; background:linear-gradient(180deg,#2a2521 0%,#4a2c18 100%); text-align:center; }
+.fragment p{ font-size:clamp(1.25rem,3.2vw,2.4rem); font-weight:500; line-height:1.15; max-width:22ch; letter-spacing:-.01em; margin:0 auto; }
 .fragment .sm{ color:var(--gold); }
+/* TV-Static: harter Sende-Noise, der immer mal wieder über dem Fragment aufblitzt */
+.fragment .static{ position:absolute; inset:0; z-index:2; pointer-events:none; opacity:0; mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:140px; animation:st-shift .24s steps(3) infinite, st-burst 8.5s steps(1) infinite; }
+.fragment .wrap{ position:relative; z-index:3; }
+@keyframes st-shift{ 0%{background-position:0 0} 33%{background-position:-70px 45px} 66%{background-position:60px -55px} 100%{background-position:-30px -30px} }
+@keyframes st-burst{ 0%,100%{opacity:0} 6%{opacity:.55} 7.5%{opacity:0} 8.5%{opacity:.7} 10%{opacity:0} 37%{opacity:.4} 38%{opacity:0} 63%{opacity:.75} 65.5%{opacity:0} 66.5%{opacity:.35} 67.5%{opacity:0} }
+/* Text zuckt im selben Takt kurz mit (Versatz + Chroma-Bleed) */
+.fragment p{ animation:st-glitch 8.5s steps(1) infinite; }
+@keyframes st-glitch{ 0%,100%{ transform:none; text-shadow:none; }
+  6%{ transform:translateX(3px) skewX(-1.5deg); text-shadow:-3px 0 rgba(255,60,60,.55), 3px 0 rgba(60,140,255,.55); }
+  7.5%{ transform:none; text-shadow:none; }
+  8.5%{ transform:translateX(-4px); text-shadow:3px 0 rgba(255,60,60,.5), -3px 0 rgba(60,140,255,.5); }
+  10%{ transform:none; text-shadow:none; }
+  63%{ transform:translateX(2px) skewX(1deg); text-shadow:-2px 0 rgba(255,60,60,.5), 2px 0 rgba(60,140,255,.5); }
+  65.5%{ transform:none; text-shadow:none; } }
 
 /* ===================== VISUALS ===================== */
 .frag{ padding:clamp(30px,5vw,60px) 0 clamp(90px,13vw,150px); background:#37302a; }
@@ -131,7 +147,7 @@ section{ position:relative; }
 .tile:hover .grade{ opacity:.8; }
 
 /* ===================== INSTAGRAM ===================== */
-.insta{ padding:clamp(50px,7vw,90px) 0 clamp(90px,13vw,150px); background:var(--ink2); }
+.insta{ padding:clamp(50px,7vw,90px) 0 clamp(90px,13vw,150px); background:var(--ink); }
 .insta .eyebrow{ transition:color .3s; }
 .insta a.eyebrow:hover{ color:var(--creme); }
 .ig-grid{ display:grid; grid-template-columns:repeat(6,1fr); gap:clamp(8px,1.1vw,14px); }
