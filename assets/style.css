@@ -359,4 +359,8 @@ footer{ background:#2a2521; padding:60px 0 46px; border-top:1px solid rgba(244,2
   .manifest h2{ filter:none; }              /* SVG-Displacement vom Text nehmen */
   .diverlight{ display:none; }
   .canvasclip .lines, .canvasclip .curve{ opacity:.5; }
+  .page-head h1{ filter:none; }             /* SVG-Displacement auch von Unterseiten-Titeln nehmen */
+  .reveal{ filter:none; transform:translateY(26px); transition:opacity 1.2s var(--ease), transform 1.2s var(--ease); } /* Blur-Animation ist auf Mobile teuer → nur Fade+Move */
+  .density .tint{ display:none; }           /* Fullscreen-Blend-Layer sparen */
+  .soundtoggle, .cookie{ backdrop-filter:none; -webkit-backdrop-filter:none; } /* Live-Blur kostet auf Mobile */
 }

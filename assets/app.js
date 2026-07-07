@@ -18,14 +18,21 @@ const RELEASES = [
   { title:"Electronic Catwalk", date:"2020", url:"https://open.spotify.com/album/28mVvpQzvpqicj95ue8Qop", cover:"https://i.scdn.co/image/ab67616d0000b2737b7e94eade9f66ebc2850b4b", archived:true },
 ];
 
+/* ---------- Geräte-Erkennung: Touch = Mobile-Pfad (leichte Effekte, kleine Medien) ---------- */
+const TOUCH = !!(window.matchMedia && matchMedia('(hover:none)').matches);
+
 /* ---------- globale Ebenen injizieren ---------- */
 (function inject(){
   // Filmkorn
   if(!document.querySelector('.grain')){
     const g=document.createElement('div'); g.className='grain'; document.body.appendChild(g);
   }
-  // SVG-Filter (Kaustik + Lichtbrechung)
-  if(!document.getElementById('caustic')){
+  // SVG-Filter (Kaustik + Lichtbrechung) — auf Touch nicht injizieren (CSS nutzt sie dort nicht)
+  if(TOUCH){
+    // vorhandene SMIL-Animationen (inline auf index) stoppen — laufen sonst unsichtbar weiter und kosten CPU
+    document.querySelectorAll('filter animate').forEach(a=>a.remove());
+  }
+  if(!TOUCH && !document.getElementById('caustic')){
     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
     svg.setAttribute('width','0'); svg.setAttribute('height','0'); svg.setAttribute('aria-hidden','true');
     svg.style.position='absolute';
@@ -67,7 +74,7 @@ const RELEASES = [
     const btn=document.createElement('button'); btn.id='soundtoggle'; btn.className='soundtoggle'; btn.setAttribute('aria-label','Sound stummschalten');
     btn.innerHTML='<svg class="hp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5a9 9 0 0 1 18 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path><line class="slash" x1="3" y1="3" x2="21" y2="21"></line></svg>';
     document.body.appendChild(btn);
-    const au=document.createElement('audio'); au.id='track'; au.src='assets/web/website-sound.mp3'; au.loop=true; au.preload='auto';
+    const au=document.createElement('audio'); au.id='track'; au.src='assets/web/website-sound.mp3'; au.loop=true; au.preload=TOUCH?'none':'auto'; // Mobile: 1,7 MB erst laden, wenn der Sound wirklich startet
     document.body.appendChild(au);
   }
 })();
@@ -201,6 +208,7 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 /* ---------- Hero-Parallax (nur Startseite) ---------- */
 (function parallax(){
+  if(TOUCH) return; // Mobile: Scroll-Parallax spart Jank beim Scrollen
   const hc=document.querySelector('.hero-center'); if(!hc) return;
   addEventListener('scroll',()=>{ const y=scrollY; if(y<innerHeight){ hc.style.transform=`translateY(${y*0.16}px)`; hc.style.opacity=String(Math.max(0,1-y/760)); } },{passive:true});
 })();
@@ -254,9 +262,12 @@ const SFX_TARGETS = ['releases.html','shop.html','about.html'];
     let should=false; try{ should=sessionStorage.getItem('amx_playsfx')==='1'; sessionStorage.removeItem('amx_playsfx'); }catch(e){}
     if(should){
       const au=new Audio(SFX_NAV); au.volume=0.8;
-      const tryit=()=>{ const p=au.play(); if(p&&p.catch) p.catch(()=>{}); };
-      tryit();
-      addEventListener('pointerdown', tryit, {once:true, passive:true}); // Fallback falls Browser blockt
+      let done=false;
+      const tryit=()=>{ if(done) return; const p=au.play(); if(p&&p.then){ p.then(()=>{ done=true; }).catch(()=>{}); } else done=true; };
+      // erst spielen, wenn die Seite fertig geladen ist (Mobile: nicht mit dem Rendern konkurrieren)
+      const arm=()=>{ tryit(); addEventListener('pointerdown', tryit, {once:true, passive:true}); }; // Fallback nur, wenn der erste Versuch geblockt wurde (done-Guard verhindert Doppel-Play)
+      if(document.readyState==='complete') arm();
+      else addEventListener('load', ()=>setTimeout(arm, TOUCH?200:0), {once:true});
     }
   }
 })();
@@ -270,12 +281,18 @@ const SFX_TARGETS = ['releases.html','shop.html','about.html'];
   // Ton über Seitenwechsel fortführen (Multipage): Position merken & fortsetzen
   let savedTime=0, timeApplied=false;
   try{ savedTime=parseFloat(sessionStorage.getItem('amx_sound_time'))||0; }catch(e){}
+  if(TOUCH) savedTime=0; // Mobile: MP3-Seek beim Zurückkommen stockt (Range-Request + Decode) → lieber sauber von vorn starten
   function applyTime(){ if(timeApplied) return; if(savedTime>0 && isFinite(savedTime) && track.duration && savedTime<track.duration-0.2){ try{ track.currentTime=savedTime; }catch(e){} } timeApplied=true; }
   if(track.readyState>=1) applyTime(); else track.addEventListener('loadedmetadata', applyTime, {once:true});
   addEventListener('pagehide',()=>{ try{ sessionStorage.setItem('amx_sound_time', String(track.currentTime||0)); }catch(e){} }, {passive:true});
   function setMuted(m){ muted=m; btn.classList.toggle('muted', m); btn.setAttribute('aria-label', m?'Sound einschalten':'Sound stummschalten'); try{ localStorage.setItem('amx_muted', m?'1':'0'); }catch(e){} }
   function fadeTo(target){
     clearInterval(fadeTimer);
+    if(TOUCH){ // iOS ignoriert programmatische volume-Änderungen → Fade läuft ins Leere und pause() käme NIE. Hart schalten:
+      try{ track.volume=Math.max(0,Math.min(1,target)); }catch(e){}
+      if(target===0) track.pause();
+      return;
+    }
     fadeTimer=setInterval(()=>{
       const step=0.05, d=target-track.volume;
       if(Math.abs(d)<=step){ track.volume=Math.max(0,Math.min(1,target)); clearInterval(fadeTimer); if(target===0) track.pause(); }
@@ -294,9 +311,16 @@ const SFX_TARGETS = ['releases.html','shop.html','about.html'];
   btn.addEventListener('click',()=>{ started=true; if(muted){ setMuted(false); playOn(); } else { setMuted(true); silence(); } });
 })();
 
-/* ---------- Hero-Video: robuster Autoplay-Loop (auch mobil) ---------- */
+/* ---------- Videos: passende Größe je Gerät laden (data-src / data-src-mobile) ----------
+   Hero lädt sofort; Canvas-Clips (preload="none") erst kurz bevor sie ins Bild kommen. */
+function pickSrc(v){
+  if(v.src) return;
+  const src = (TOUCH && v.dataset.srcMobile) ? v.dataset.srcMobile : v.dataset.src;
+  if(src) v.src = src;
+}
 (function heroVideo(){
   const v=document.querySelector('.hero-media'); if(!v) return;
+  pickSrc(v);
   v.muted = true; v.defaultMuted = true; v.setAttribute('muted','');
   const rate=()=>{ try{ v.playbackRate=0.6; }catch(e){} };
   const play=()=>{ const p=v.play(); if(p&&p.catch) p.catch(()=>{}); rate(); };
@@ -307,9 +331,18 @@ const SFX_TARGETS = ['releases.html','shop.html','about.html'];
   ['touchstart','pointerdown','scroll','click'].forEach(ev=>addEventListener(ev, play, {once:true, passive:true}));
 })();
 
-/* ---------- Alle Videos bei erster Interaktion anstoßen (Handy-Fallback) ---------- */
+/* ---------- Lazy-Videos: erst laden & starten, wenn sie fast sichtbar sind ---------- */
+(function lazyVideos(){
+  const vids=[...document.querySelectorAll('video[data-src]:not(.hero-media)')]; if(!vids.length) return;
+  const start=v=>{ pickSrc(v); v.muted=true; const p=v.play(); if(p&&p.catch) p.catch(()=>{}); };
+  if(!('IntersectionObserver' in window)){ vids.forEach(start); return; }
+  const vio=new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting){ start(e.target); vio.unobserve(e.target); } }); },{rootMargin:'300px'});
+  vids.forEach(v=>vio.observe(v));
+})();
+
+/* ---------- Alle bereits geladenen Videos bei erster Interaktion anstoßen (Handy-Fallback) ---------- */
 (function playVideos(){
-  const go=()=>document.querySelectorAll('video').forEach(v=>{ try{ v.muted=true; const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }catch(e){} });
+  const go=()=>document.querySelectorAll('video[src]').forEach(v=>{ try{ v.muted=true; const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }catch(e){} });
   ['touchstart','pointerdown','scroll'].forEach(ev=>addEventListener(ev, go, {once:true, passive:true}));
 })();
 
