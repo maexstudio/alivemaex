@@ -1,5 +1,13 @@
 /* ALIVEMAEX — shared styles */
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
+/* Fonts — lokal gehostet (kein Google-Fonts-Request, DSGVO) */
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/inter-latin-400-normal.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/inter-latin-500-normal.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/inter-latin-700-normal.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:900;font-display:swap;src:url('fonts/inter-latin-900-normal.woff2') format('woff2')}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/oswald-latin-400-normal.woff2') format('woff2')}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/oswald-latin-500-normal.woff2') format('woff2')}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/oswald-latin-600-normal.woff2') format('woff2')}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/oswald-latin-700-normal.woff2') format('woff2')}
 :root{
   --blau:#1E74D9; --mondblau:#12244A; --gold:#C99A3A; --orange:#C4622E;
   --creme:#F4ECDA; --tabak:#3A2A1C; --terra:#B4553C; --lila:#8C7AA0;
@@ -308,6 +316,9 @@ footer{ background:#2a2521; padding:60px 0 46px; border-top:1px solid rgba(244,2
 .cookie p a{ border-bottom:1px solid rgba(244,236,218,.35); }
 .cookie button{ font-family:inherit; font-size:.8rem; letter-spacing:.08em; cursor:pointer; border-radius:40px; padding:10px 22px; border:none; background:var(--gold); color:#2a2521; transition:.3s; }
 .cookie button:hover{ background:var(--orange); color:var(--creme); }
+.cookie .c-btns{ display:flex; gap:10px; align-items:center; flex-shrink:0; }
+.cookie button.c-no{ background:none; border:1px solid rgba(244,236,218,.25); color:var(--creme); }
+.cookie button.c-no:hover{ background:none; border-color:rgba(244,236,218,.5); color:var(--creme); }
 
 /* ===================== CRT / RÖHREN-TV ===================== */
 .crt{ position:fixed; inset:0; z-index:59; pointer-events:none; }

@@ -5,9 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ALIVEMAEX — Releases</title>
 <meta name="description" content="ALIVEMAEX — releases." />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/png" href="assets/web/favicon.png" />
+<link rel="apple-touch-icon" href="assets/web/favicon.png" />
 <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
@@ -48,13 +47,30 @@
   <div class="wrap">
     <div class="page-head reveal">
       <h1 class="display">Releases</h1>
-      <p class="sub lower">everything, in one room. click a cover to listen.</p>
     </div>
-    <div class="tabs reveal">
-      <button class="tab active lower" data-tab="aktuell">latest</button>
-      <button class="tab lower" data-tab="archiv">archive</button>
+
+    <div class="maintabs reveal">
+      <button class="maintab active lower" data-panel="p-music">music</button>
+      <button class="maintab lower" data-panel="p-video">video</button>
     </div>
-    <div class="grid" id="releases"></div>
+
+    <div id="p-music" class="panel">
+      <div class="tabs reveal">
+        <button class="tab active lower" data-tab="aktuell">latest</button>
+        <button class="tab lower" data-tab="archiv">archive</button>
+      </div>
+      <div class="grid" id="releases"></div>
+    </div>
+
+    <div id="p-video" class="panel" hidden>
+      <div class="vgrid">
+        <div class="tvframe ytfacade" data-yt="tXvfITt0ZK4" role="button" tabindex="0" aria-label="Betonwüstengrau abspielen">
+          <img src="https://i.ytimg.com/vi/tXvfITt0ZK4/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/tXvfITt0ZK4/hqdefault.jpg';" alt="ALIVEMAEX — Betonwüstengrau" loading="lazy" />
+          <span class="playbtn" aria-hidden="true"></span>
+          <div class="lines"></div><div class="curve"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </main>
 
@@ -63,7 +79,7 @@
     <div class="links" id="social"></div>
     <div class="fine lower">
       booking · press: <a href="mailto:info@alivemaex.com">info@alivemaex.com</a><br>
-      © <span id="yr"></span> alivemaex · liebe über angst · <a href="impressum.html">imprint</a>
+      © <span id="yr"></span> alivemaex · liebe über angst · <a href="impressum.html">imprint</a> · <a href="datenschutz.html">datenschutz</a>
     </div>
   </div>
 </footer>

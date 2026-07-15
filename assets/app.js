@@ -389,14 +389,28 @@ function pickSrc(v){
   o.addEventListener('click',()=>{ clearTimeout(t); done(); });
 })();
 
-/* ---------- Cookie-Banner ---------- */
-(function cookie(){
-  try{ if(localStorage.getItem('amx_cookie')) return; }catch(e){}
-  const c=document.createElement('div'); c.className='cookie';
-  c.innerHTML='<p>Diese Seite verwendet nur technisch notwendige Cookies und anonyme Statistik. Mit der weiteren Nutzung stimmst du zu. <a href="impressum.html">Impressum</a></p><button type="button">Okay</button>';
-  document.body.appendChild(c);
-  requestAnimationFrame(()=>requestAnimationFrame(()=>c.classList.add('in')));
-  c.querySelector('button').addEventListener('click',()=>{ try{ localStorage.setItem('amx_cookie','1'); }catch(e){} c.classList.remove('in'); setTimeout(()=>{ if(c.parentNode) c.parentNode.removeChild(c); },600); });
+/* ---------- Consent + Meta Pixel ---------- */
+(function consent(){
+  const PIXEL_ID='1829980527965213', KEY='amx_consent';
+  function loadPixel(){
+    if(window.fbq) return;
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init',PIXEL_ID); fbq('track','PageView');
+  }
+  function banner(){
+    if(document.querySelector('.cookie')) return;
+    const c=document.createElement('div'); c.className='cookie';
+    c.innerHTML='<p>ein meta-pixel hilft mir zu sehen, wie ihr zur musik findet — lädt nur mit deinem okay. <a href="datenschutz.html">mehr dazu</a></p><div class="c-btns"><button type="button" class="c-yes">okay</button><button type="button" class="c-no">lieber nicht</button></div>';
+    document.body.appendChild(c);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>c.classList.add('in')));
+    const close=()=>{ c.classList.remove('in'); setTimeout(()=>{ if(c.parentNode) c.parentNode.removeChild(c); },600); };
+    c.querySelector('.c-yes').addEventListener('click',()=>{ try{ localStorage.setItem(KEY,'yes'); }catch(e){} close(); loadPixel(); });
+    c.querySelector('.c-no').addEventListener('click',()=>{ try{ localStorage.setItem(KEY,'no'); }catch(e){} close(); });
+  }
+  let c=null; try{ c=localStorage.getItem(KEY); }catch(e){}
+  if(c==='yes') loadPixel();
+  else if(c!=='no') setTimeout(banner, 2400); /* nach dem Intro */
+  window.amxConsentReset=function(){ try{ localStorage.removeItem(KEY); }catch(e){} banner(); };
 })();
 
 /* ---------- Jahr im Footer ---------- */
