@@ -413,5 +413,29 @@ function pickSrc(v){
   window.amxConsentReset=function(){ try{ localStorage.removeItem(KEY); }catch(e){} banner(); };
 })();
 
+/* ---------- Release-Countdown (Hero) ---------- */
+(function countdown(){
+  const wrap=document.getElementById('heroRelease'); if(!wrap) return;
+  const T=new Date(wrap.dataset.release||'2026-08-14T00:00:00').getTime();
+  const el={ d:wrap.querySelector('[data-cd=d]'), h:wrap.querySelector('[data-cd=h]'), m:wrap.querySelector('[data-cd=m]'), s:wrap.querySelector('[data-cd=s]') };
+  const btn=document.getElementById('presaveBtn');
+  const p=n=>String(n).padStart(2,'0');
+  let iv=null;
+  function tick(){
+    let x=T-Date.now();
+    if(x<=0){ /* Release-Tag: Countdown weg, Button auf „stream now" */
+      wrap.classList.add('released');
+      if(btn){ btn.textContent='stream now'; }
+      if(iv) clearInterval(iv);
+      return;
+    }
+    if(el.d) el.d.textContent=p(Math.floor(x/864e5));
+    if(el.h) el.h.textContent=p(Math.floor(x%864e5/36e5));
+    if(el.m) el.m.textContent=p(Math.floor(x%36e5/6e4));
+    if(el.s) el.s.textContent=p(Math.floor(x%6e4/1e3));
+  }
+  tick(); iv=setInterval(tick,1000);
+})();
+
 /* ---------- Jahr im Footer ---------- */
 document.querySelectorAll('#yr').forEach(el=>el.textContent=new Date().getFullYear());
