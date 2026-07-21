@@ -319,6 +319,32 @@ footer{ background:#2a2521; padding:60px 0 46px; border-top:1px solid rgba(244,2
 @keyframes in-badge{ 0%{opacity:0; transform:translateY(-16px) rotate(-8deg)} 60%{opacity:.95} 100%{opacity:.9; transform:none} }
 @keyframes in-hint{ 0%,55%{opacity:0} 100%{opacity:1} }
 
+/* ===================== PRE-SAVE-SEITE ===================== */
+.presave{ padding:clamp(30px,6vw,70px) 0 clamp(80px,12vw,140px); background:#2a2521; }
+.presave .wrap{ max-width:560px; display:flex; flex-direction:column; align-items:center; text-align:center; }
+.ps-cover{ position:relative; width:min(340px,74vw); aspect-ratio:1/1; overflow:hidden; margin:0 0 clamp(26px,5vw,40px);
+  border-radius:4px; box-shadow:0 30px 90px rgba(0,0,0,.55); }
+.ps-cover img{ width:100%; height:100%; object-fit:cover; }
+.ps-cover .lines{ position:absolute; inset:0; pointer-events:none; opacity:.35; mix-blend-mode:multiply;
+  background:repeating-linear-gradient(0deg, rgba(0,0,0,.4) 0 1px, transparent 1px 3px); }
+.ps-cover .curve{ position:absolute; inset:0; pointer-events:none; border-radius:4px;
+  box-shadow:inset 0 0 70px 14px rgba(12,5,0,.45); }
+.ps-head{ text-shadow:0 2px 16px rgba(6,10,20,.6); }
+.ps-head::before{ display:none; }
+.ps-head .hr-title{ font-size:clamp(1.8rem,6vw,2.9rem); }
+.ps-sub{ margin-top:22px; font-size:.88rem; opacity:.6; max-width:32ch; }
+.ps-list{ display:flex; flex-direction:column; gap:10px; width:100%; max-width:420px; margin:clamp(24px,4vw,34px) auto 0; }
+.ps-row{ display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding:15px 22px; border:1px solid rgba(244,236,218,.22); border-radius:44px; background:rgba(20,14,8,.35);
+  transition:border-color .3s var(--ease), background .3s var(--ease), transform .3s var(--ease); }
+.ps-row:hover{ border-color:var(--gold); background:rgba(201,154,58,.10); transform:translateY(-2px); }
+.ps-row .ps-name{ display:flex; align-items:center; gap:13px; font-size:.92rem; letter-spacing:.05em; }
+.ps-row .ps-name img{ width:20px; height:20px; opacity:.85; }
+.ps-row:hover .ps-name img{ opacity:1; }
+.ps-row .ps-act{ font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); white-space:nowrap; }
+.ps-fine{ margin-top:clamp(34px,6vw,54px); font-size:.78rem; opacity:.38; font-style:italic; }
+@media(max-width:520px){ .ps-row{ padding:14px 18px; } .ps-row .ps-name{ font-size:.86rem; gap:11px; } }
+
 /* ===================== INTRO: DER RÖHREN-TV SCHALTET SICH EIN ===================== */
 .tvi{ position:fixed; inset:0; z-index:200; background:#000; overflow:hidden; cursor:pointer;
   animation:tvi-out .42s var(--ease) 1.52s forwards; }

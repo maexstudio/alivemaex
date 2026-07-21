@@ -249,7 +249,7 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 /* ---------- Navigations-Soundeffekt: sofort wechseln, Effekt auf der Unterseite spielen ---------- */
 const SFX_NAV = 'assets/web/sfx-nav.mp3';
-const SFX_TARGETS = ['releases.html','shop.html','about.html'];
+const SFX_TARGETS = ['releases.html','shop.html','about.html','boys-never-bleed.html'];
 (function navSfx(){
   // 1) Klick auf eine Unterseite: Flag setzen, dann ganz normal (sofort) navigieren
   document.querySelectorAll('a[href]').forEach(a=>{
