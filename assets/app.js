@@ -346,46 +346,45 @@ function pickSrc(v){
   ['touchstart','pointerdown','scroll'].forEach(ev=>addEventListener(ev, go, {once:true, passive:true}));
 })();
 
-/* ---------- Intro: beim ersten Besuch langsam abtauchen ---------- */
+/* ---------- Intro: der Röhren-TV schaltet sich ein (erster Besuch) ---------- */
 (function intro(){
   try{ if(sessionStorage.getItem('amx_dived')) return; sessionStorage.setItem('amx_dived','1'); }catch(e){}
-  const o=document.createElement('div'); o.className='intro';
   const touch = !!(window.matchMedia && matchMedia('(hover:none)').matches);
-  const layers = touch ? [
-    {cls:'far',  n:10, min:2, max:6,  dmin:11, dmax:18, px:0},
-    {cls:'mid',  n:8,  min:5, max:11, dmin:8,  dmax:13, px:0},
-    {cls:'near', n:4,  min:9, max:18, dmin:6,  dmax:10, px:0},
-  ] : [
-    {cls:'far',  n:24, min:2,  max:6,  dmin:10, dmax:18, px:6},
-    {cls:'mid',  n:16, min:5,  max:12, dmin:7,  dmax:12, px:14},
-    {cls:'near', n:9,  min:10, max:22, dmin:5,  dmax:9,  px:26},
-  ];
-  const fields = layers.map(L=>{
-    let s='';
-    for(let i=0;i<L.n;i++){
-      const sz=(L.min+Math.random()*(L.max-L.min)).toFixed(1);
-      const l=(Math.random()*100).toFixed(1);
-      const dur=(L.dmin+Math.random()*(L.dmax-L.dmin)).toFixed(1);
-      const dl=(-Math.random()*dur).toFixed(1);
-      const dx=(Math.random()*70-35).toFixed(0)+'px';
-      s+=`<i style="left:${l}%;width:${sz}px;height:${sz}px;animation-duration:${dur}s;animation-delay:${dl}s;--dx:${dx}"></i>`;
-    }
-    return `<div class="intro-field ${L.cls}" data-px="${L.px}">${s}</div>`;
-  }).join('');
-  o.innerHTML='<div class="intro-rays"></div>'+fields+'<img class="intro-badge" src="assets/web/badge.png" alt="ALIVEMAEX">';
+  const NW = touch?140:220, NH = touch?84:130;   // Rausch-Auflösung: mobil kleiner
+  const o=document.createElement('div'); o.className='tvi';
+  o.innerHTML =
+    '<div class="tvi-stage">'
+    +'<canvas width="'+NW+'" height="'+NH+'"></canvas>'
+    +'<div class="tvi-scan"></div><div class="tvi-roll"></div>'
+    +'<img class="tvi-star" src="assets/web/badge.png" alt="ALIVEMAEX">'
+    +'<div class="tvi-curve"></div>'
+    +'</div><div class="tvi-line"></div><div class="tvi-flash"></div>';
   document.body.appendChild(o); document.body.style.overflow='hidden';
-  // Intro-Soundeffekt (Neon) — versucht sofort, sonst beim ersten Kontakt
+
+  // Bildrauschen (kleines Canvas, hochskaliert = billig)
+  const cv=o.querySelector('canvas'), ctx=cv.getContext('2d');
+  const im=ctx.createImageData(NW,NH);
+  let raf=null, last=0;
+  (function noise(ts){
+    if(ts-last>33){ const d=im.data;
+      for(let i=0;i<d.length;i+=4){ const v=Math.random()*255; d[i]=v; d[i+1]=v; d[i+2]=v; d[i+3]=255; }
+      ctx.putImageData(im,0,0); last=ts; }
+    raf=requestAnimationFrame(noise);
+  })(0);
+
+  // Einschalt-Sound (Browser blocken Autoplay ggf. bis zur ersten Interaktion)
   const isfx=new Audio('assets/web/sfx-intro.mp3'); isfx.volume=0.85;
   const playIsfx=()=>{ const p=isfx.play(); if(p&&p.catch) p.catch(()=>{}); };
   playIsfx();
   addEventListener('pointerdown', playIsfx, {once:true, passive:true});
-  const flds=o.querySelectorAll('.intro-field');
-  const onMove=e=>{ const cx=(e.clientX/innerWidth-.5), cy=(e.clientY/innerHeight-.5); flds.forEach(f=>{ const px=+f.dataset.px; f.style.transform=`translate(${(cx*px).toFixed(1)}px,${(cy*px).toFixed(1)}px)`; }); };
-  o.addEventListener('mousemove', onMove, {passive:true});
-  const done=()=>{ o.classList.add('dive'); document.body.style.overflow=''; o.removeEventListener('mousemove',onMove);
-    try{ let v=isfx.volume; const f=setInterval(()=>{ v-=0.12; if(v<=0){ try{ isfx.pause(); }catch(_){ } clearInterval(f); } else isfx.volume=Math.max(0,v); },40); }catch(e){}
-    setTimeout(()=>{ if(o.parentNode) o.remove(); },1700); };
-  const t=setTimeout(done,1900);
+
+  const done=()=>{
+    if(!o.parentNode) return;
+    cancelAnimationFrame(raf); document.body.style.overflow='';
+    try{ let v=isfx.volume; const f=setInterval(()=>{ v-=0.2; if(v<=0){ try{ isfx.pause(); }catch(_){ } clearInterval(f); } else isfx.volume=Math.max(0,v); },40); }catch(e){}
+    o.remove();
+  };
+  const t=setTimeout(done,1950);
   o.addEventListener('click',()=>{ clearTimeout(t); done(); });
 })();
 

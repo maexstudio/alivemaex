@@ -319,6 +319,49 @@ footer{ background:#2a2521; padding:60px 0 46px; border-top:1px solid rgba(244,2
 @keyframes in-badge{ 0%{opacity:0; transform:translateY(-16px) rotate(-8deg)} 60%{opacity:.95} 100%{opacity:.9; transform:none} }
 @keyframes in-hint{ 0%,55%{opacity:0} 100%{opacity:1} }
 
+/* ===================== INTRO: DER RÖHREN-TV SCHALTET SICH EIN ===================== */
+.tvi{ position:fixed; inset:0; z-index:200; background:#000; overflow:hidden; cursor:pointer;
+  animation:tvi-out .42s var(--ease) 1.52s forwards; }
+.tvi .tvi-stage{ position:absolute; inset:0; transform-origin:center center; transform:scaleY(.004) scaleX(.5);
+  animation:tvi-open .46s cubic-bezier(.2,1.25,.3,1) .10s forwards; }
+.tvi canvas{ position:absolute; inset:0; width:100%; height:100%; image-rendering:pixelated; opacity:.9;
+  animation:tvi-noise 1.5s steps(1) 0s both; }
+.tvi .tvi-line{ position:absolute; left:50%; top:50%; width:106%; height:2px; background:#fff; border-radius:2px;
+  transform:translate(-50%,-50%) scaleX(0);
+  box-shadow:0 0 24px #fff, 0 0 70px rgba(190,235,255,.9), 0 0 140px rgba(140,210,255,.6);
+  animation:tvi-hot .16s cubic-bezier(.2,.9,.2,1) forwards, tvi-hotout .18s ease .30s forwards; }
+.tvi .tvi-scan{ position:absolute; inset:0; mix-blend-mode:multiply; opacity:.75;
+  background:repeating-linear-gradient(0deg, rgba(0,0,0,.55) 0 1px, rgba(0,0,0,.05) 1px 2px, transparent 2px 4px); }
+.tvi .tvi-roll{ position:absolute; left:0; right:0; height:22%; top:-22%;
+  background:linear-gradient(180deg,transparent,rgba(255,245,220,.22),transparent);
+  animation:tvi-roll .75s linear .35s 2; }
+.tvi .tvi-curve{ position:absolute; inset:0; border-radius:min(4vw,52px);
+  box-shadow:inset 0 0 220px 60px rgba(0,0,0,.85), inset 3px 0 34px rgba(255,60,60,.16), inset -3px 0 34px rgba(60,150,255,.18); }
+.tvi .tvi-star{ position:absolute; left:50%; top:50%; width:88px; height:88px; opacity:0;
+  transform:translate(-50%,-50%) scale(.82); filter:drop-shadow(0 0 18px rgba(255,240,210,.55));
+  animation:tvi-star .70s steps(1) .52s forwards; }
+.tvi .tvi-flash{ position:absolute; inset:0; background:#fff; opacity:0; animation:tvi-flash .30s ease-out 1.26s forwards; }
+@keyframes tvi-hot{ from{transform:translate(-50%,-50%) scaleX(0)} to{transform:translate(-50%,-50%) scaleX(1)} }
+@keyframes tvi-hotout{ to{opacity:0;height:1px} }
+@keyframes tvi-open{
+  0%{transform:scaleY(.004) scaleX(.5)} 45%{transform:scaleY(.5) scaleX(1.02)}
+  75%{transform:scaleY(1.06) scaleX(1)} 100%{transform:scaleY(1) scaleX(1)} }
+@keyframes tvi-noise{ 0%{opacity:.35} 8%{opacity:.95} 22%{opacity:.8} 30%{opacity:1}
+  46%{opacity:.55} 54%{opacity:.85} 66%{opacity:.35} 78%{opacity:.5} 88%{opacity:.22} 100%{opacity:.12} }
+@keyframes tvi-roll{ from{transform:translateY(0)} to{transform:translateY(560%)} }
+@keyframes tvi-star{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.82)}
+  12%{opacity:1;transform:translate(-50%,-50%) scale(.92) translateX(-7px);filter:drop-shadow(-6px 0 0 rgba(255,60,60,.85)) drop-shadow(6px 0 0 rgba(60,150,255,.85))}
+  22%{opacity:.15;transform:translate(-50%,-50%) scale(.9) translateX(5px)}
+  34%{opacity:1;transform:translate(-50%,-50%) scale(1.02) translateX(-3px);filter:drop-shadow(-3px 0 0 rgba(255,60,60,.6)) drop-shadow(3px 0 0 rgba(60,150,255,.6))}
+  46%{opacity:.4;transform:translate(-50%,-50%) scale(.98)}
+  60%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  72%{opacity:.7}
+  100%{opacity:1;transform:translate(-50%,-50%) scale(1);filter:drop-shadow(0 0 22px rgba(255,240,210,.6))} }
+@keyframes tvi-flash{ 0%{opacity:0} 22%{opacity:.92} 100%{opacity:0} }
+@keyframes tvi-out{ to{opacity:0;transform:scale(1.045);filter:blur(3px)} }
+@media (hover:none){ .tvi .tvi-curve{ box-shadow:inset 0 0 160px 40px rgba(0,0,0,.8); } }
+
 /* ===================== COOKIE-BANNER ===================== */
 .cookie{ position:fixed; z-index:80; left:16px; right:16px; bottom:16px; max-width:640px; margin:0 auto;
   display:flex; gap:12px 22px; align-items:center; justify-content:space-between; flex-wrap:wrap;
