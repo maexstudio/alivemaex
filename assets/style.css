@@ -321,6 +321,24 @@ footer{ background:#2a2521; padding:60px 0 46px; border-top:1px solid rgba(244,2
 @keyframes in-badge{ 0%{opacity:0; transform:translateY(-16px) rotate(-8deg)} 60%{opacity:.95} 100%{opacity:.9; transform:none} }
 @keyframes in-hint{ 0%,55%{opacity:0} 100%{opacity:1} }
 
+/* ===================== RECHTSTEXTE (Datenschutz / Impressum) ===================== */
+.legal{ padding:clamp(20px,4vw,50px) 0 clamp(80px,12vw,140px); background:#2a2521; }
+.legal .wrap{ max-width:780px; }
+.legal h2{ font-family:var(--disp); font-size:clamp(1rem,1.9vw,1.2rem); text-transform:uppercase; letter-spacing:.14em;
+  color:var(--gold); font-weight:600; margin:clamp(38px,5vw,56px) 0 16px; padding-top:clamp(22px,3vw,30px);
+  border-top:1px solid rgba(244,236,218,.12); }
+.legal h2:first-of-type{ border-top:0; padding-top:0; margin-top:0; }
+.legal p{ font-size:1rem; line-height:1.85; color:rgba(244,236,218,.82); max-width:72ch; }
+.legal p + p{ margin-top:1.15em; }
+.legal a{ border-bottom:1px solid rgba(244,236,218,.3); transition:color .3s, border-color .3s; }
+.legal a:hover{ color:var(--gold); border-color:var(--gold); }
+.legal strong{ color:var(--creme); font-weight:700; }
+.legal .addr{ font-size:1.05rem; line-height:1.95; color:var(--creme); }
+.legal .stand{ margin-top:clamp(40px,6vw,60px); padding-top:22px; border-top:1px solid rgba(244,236,218,.12);
+  font-size:.85rem; opacity:.45; }
+.legal ul{ margin:.6em 0 0 1.1em; }
+.legal li{ font-size:1rem; line-height:1.8; color:rgba(244,236,218,.82); margin-bottom:.35em; }
+
 /* ===================== FLUSS: GESTAFFELTES EINBLENDEN ===================== */
 /* Kacheln kommen nacheinander statt als Block — macht die Übergänge weich */
 .ig-grid.in .ig-tile,
@@ -416,13 +434,20 @@ footer{ background:#2a2521; padding:60px 0 46px; border-top:1px solid rgba(244,2
   border:1px solid rgba(244,236,218,.18); border-radius:12px; box-shadow:0 12px 44px rgba(0,0,0,.42);
   transform:translateY(160%); transition:transform .6s var(--ease); }
 .cookie.in{ transform:none; }
-.cookie p{ font-size:.82rem; opacity:.82; max-width:44ch; }
+.cookie .c-txt{ flex:1 1 300px; min-width:0; }
+.cookie .c-txt strong{ display:block; font-family:var(--disp); font-size:.9rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--gold); font-weight:600; margin-bottom:7px; }
+.cookie p{ font-size:.84rem; line-height:1.6; opacity:.85; max-width:52ch; }
 .cookie p a{ border-bottom:1px solid rgba(244,236,218,.35); }
-.cookie button{ font-family:inherit; font-size:.8rem; letter-spacing:.08em; cursor:pointer; border-radius:40px; padding:10px 22px; border:none; background:var(--gold); color:#2a2521; transition:.3s; }
-.cookie button:hover{ background:var(--orange); color:var(--creme); }
+.cookie p a:hover{ color:var(--gold); border-color:var(--gold); }
+.cookie button{ font-family:inherit; font-size:.82rem; letter-spacing:.06em; cursor:pointer; border-radius:40px;
+  padding:11px 24px; border:1px solid transparent; transition:.3s var(--ease); white-space:nowrap; }
 .cookie .c-btns{ display:flex; gap:10px; align-items:center; flex-shrink:0; }
-.cookie button.c-no{ background:none; border:1px solid rgba(244,236,218,.25); color:var(--creme); }
-.cookie button.c-no:hover{ background:none; border-color:rgba(244,236,218,.5); color:var(--creme); }
+.cookie button.c-yes{ background:var(--gold); color:#241d12; font-weight:700; border-color:var(--gold); }
+.cookie button.c-yes:hover{ background:#dcae4d; border-color:#dcae4d; }
+.cookie button.c-no{ background:none; border-color:rgba(244,236,218,.32); color:var(--creme); }
+.cookie button.c-no:hover{ border-color:var(--creme); background:rgba(244,236,218,.08); }
+@media(max-width:560px){ .cookie{ padding:18px; } .cookie .c-btns{ width:100%; } .cookie .c-btns button{ flex:1; padding:12px 14px; } }
 
 /* ===================== CRT / RÖHREN-TV ===================== */
 .crt{ position:fixed; inset:0; z-index:59; pointer-events:none; }

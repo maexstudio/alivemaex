@@ -399,7 +399,14 @@ function pickSrc(v){
   function banner(){
     if(document.querySelector('.cookie')) return;
     const c=document.createElement('div'); c.className='cookie';
-    c.innerHTML='<p>ein meta-pixel hilft mir zu sehen, wie ihr zur musik findet — lädt nur mit deinem okay. <a href="datenschutz.html">mehr dazu</a></p><div class="c-btns"><button type="button" class="c-yes">okay</button><button type="button" class="c-no">lieber nicht</button></div>';
+    c.innerHTML='<div class="c-txt">'
+      +'<strong>Reichweitenmessung</strong>'
+      +'<p>Mit deiner Einwilligung nutze ich den Meta-Pixel, um zu sehen, wie Menschen zu meiner Musik finden. Ohne Zustimmung wird er nicht geladen. Details in der <a href="datenschutz.html">Datenschutzerklärung</a>.</p>'
+      +'</div>'
+      +'<div class="c-btns">'
+      +'<button type="button" class="c-no">Ablehnen</button>'
+      +'<button type="button" class="c-yes">Einverstanden</button>'
+      +'</div>';
     document.body.appendChild(c);
     requestAnimationFrame(()=>requestAnimationFrame(()=>c.classList.add('in')));
     const close=()=>{ c.classList.remove('in'); setTimeout(()=>{ if(c.parentNode) c.parentNode.removeChild(c); },600); };
