@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Amazon Music">
+  <g fill="none" stroke="#F4ECDA" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2.6" y="2.6" width="18.8" height="18.8" rx="5.2"/>
+  </g>
+  <g fill="#F4ECDA">
+    <path d="M15.1 6.5c.5-.1.95.28.95.79v6.36c0 1.53-1.24 2.77-2.77 2.77-.95 0-1.72-.77-1.72-1.72s.77-1.72 1.72-1.72c.35 0 .68.1.95.29V9.9l-3.9.86v4.9c0 1.53-1.24 2.77-2.77 2.77-.95 0-1.72-.77-1.72-1.72s.77-1.72 1.72-1.72c.35 0 .68.11.95.29V8.62c0-.38.26-.7.63-.78z"/>
+  </g>
+</svg>
