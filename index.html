@@ -25,10 +25,19 @@
   a{color:inherit;text-decoration:none}
 
   /* 1973-korn */
-  .grain{position:fixed;inset:-8%;z-index:60;pointer-events:none;opacity:.17;mix-blend-mode:overlay;
+  .grain{position:fixed;inset:-8%;z-index:60;pointer-events:none;opacity:.20;mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size:180px;animation:grain .6s steps(3) infinite}
+    background-size:150px;animation:grain .6s steps(3) infinite}
   @keyframes grain{0%{transform:translate(0,0)}33%{transform:translate(-2%,1%)}66%{transform:translate(1%,-2%)}100%{transform:translate(-1%,1%)}}
+  /* FILM-KORN, zweite lage: feiner, schneller, weicher eingemischt */
+  .grain--fine{opacity:.13;mix-blend-mode:soft-light;background-size:96px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+    animation:grainb .43s steps(4) infinite}
+  @keyframes grainb{0%{transform:translate(0,0)}25%{transform:translate(1.5%,-1%)}
+    50%{transform:translate(-1%,1.5%)}75%{transform:translate(1%,1%)}100%{transform:translate(-1.5%,0)}}
+  /* randabdunklung wie bei einer projizierten kopie - sehr zurueckhaltend */
+  .vig{position:fixed;inset:0;z-index:59;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 48%,rgba(0,0,0,0) 52%,rgba(0,0,0,.13) 82%,rgba(0,0,0,.28) 100%)}
 
   /* SPACE-AGE COCKPIT-FENSTER: die ganze seite sitzt in einem gerundeten screen */
   .viewport{position:fixed;inset:12px;z-index:45;pointer-events:none;border:1px solid rgba(237,230,216,.42);border-radius:var(--r)}
@@ -211,7 +220,7 @@
 
   .rise{opacity:0;transform:translateY(14px);transition:opacity 1.6s cubic-bezier(.16,.72,.29,1),transform 1.6s cubic-bezier(.16,.72,.29,1)}
   .rise.in{opacity:1;transform:none}
-  @media(prefers-reduced-motion:reduce){.rise{opacity:1;transform:none}.grain,.float img,.top .brand img,.top .brand::before{animation:none}.pimg video{display:none}}
+  @media(prefers-reduced-motion:reduce){.rise{opacity:1;transform:none}.grain,.grain--fine,.float img,.top .brand img,.top .brand::before{animation:none}.pimg video{display:none}}
 
   /* ------------------------------------------------------------------
      BREITBILD: die drei motive sind 9:16. randlos auf 100vh heisst auf
@@ -257,6 +266,8 @@
 
 
 <div class="grain"></div>
+<div class="grain grain--fine"></div>
+<div class="vig"></div>
 <div class="viewport"></div>
 
 <header class="top">
@@ -276,7 +287,8 @@
 <section class="plate plate--hero">
   <div class="pimg pimg--1">
     <img src="ith-1.jpg" alt="" />
-    <video src="ith-1.mp4" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+    <video data-wide="ith-1-wide.mp4" data-narrow="ith-1.mp4"
+           autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
   </div>
   <div class="scrim"></div>
   <div class="caption">
@@ -469,6 +481,23 @@
   const kick=()=>{ if(!muted) startSound(); };
   ['pointerdown','keydown','touchstart'].forEach(ev=>addEventListener(ev,kick,{once:true,passive:true}));
   addEventListener('scroll',kick,{once:true,passive:true});
+
+
+  /* ---------- HERO-VIDEO: fassung nach bildschirm ----------
+     breitbild zieht das video ueber die volle breite, da braucht es
+     aufloesung. hochkant nicht. quelle wird erst hier gesetzt, damit
+     nie beide dateien geladen werden. */
+  (function(){
+    var v=document.querySelector('.pimg--1 video');
+    if(!v) return;
+    // datensparmodus und bewegungsarm: standbild genuegt
+    var save=navigator.connection&&navigator.connection.saveData;
+    var still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if(save||still){ v.remove(); return; }
+    var wide=matchMedia('(min-aspect-ratio:1/1)').matches;
+    v.src=wide?v.dataset.wide:v.dataset.narrow;
+    v.load();
+  })();
 
   /* ---------- INTRO-VORHANG ---------- */
   (function(){
