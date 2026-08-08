@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ALIVEMAEX — Kontakt · Impressum</title>
+<title>ALIVEMAEX — Video</title>
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" href="/icon-light.png" media="(prefers-color-scheme: light)" />
 <link rel="icon" type="image/png" href="/icon-dark.png" media="(prefers-color-scheme: dark)" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<link rel="canonical" href="https://alivemaex.com/kontakt" />
-<meta name="description" content="Booking und Presse für ALIVEMAEX: info@alivemaex.com. Impressum und Anbieterkennzeichnung." />
+<link rel="canonical" href="https://alivemaex.com/video" />
+<meta name="description" content="Videos von ALIVEMAEX. Erst dein Klick lädt YouTube." />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="ALIVEMAEX" />
 <meta property="og:locale" content="de_DE" />
-<meta property="og:title" content="ALIVEMAEX — Kontakt · Impressum" />
-<meta property="og:description" content="Booking und Presse für ALIVEMAEX: info@alivemaex.com. Impressum und Anbieterkennzeichnung." />
+<meta property="og:title" content="ALIVEMAEX — Video" />
+<meta property="og:description" content="Videos von ALIVEMAEX. Erst dein Klick lädt YouTube." />
 <meta property="og:image" content="https://alivemaex.com/ith-1.jpg" />
 <meta property="og:image:width" content="1500" />
 <meta property="og:image:height" content="2688" />
-<meta property="og:url" content="https://alivemaex.com/kontakt" />
+<meta property="og:url" content="https://alivemaex.com/video" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="theme-color" content="#0A0A0B" />
 <style>
@@ -30,6 +30,27 @@
   @font-face{font-family:'Michroma';font-style:normal;font-weight:400;font-display:swap;
     src:url('/michroma-ext.woff2') format('woff2');
     unicode-range:U+0100-024F,U+0259,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF}
+
+  /* ---------------- FILME ---------------- */
+  .films{display:grid;gap:clamp(28px,4vw,52px);grid-template-columns:1fr}
+  @media(min-width:900px){.films{grid-template-columns:1fr 1fr}}
+  .film{position:relative;margin:0}
+  .film-btn{display:block;width:100%;padding:0;border:0;background:none;cursor:pointer;
+    position:relative;overflow:hidden;border-radius:var(--r);line-height:0}
+  .film-btn img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;
+    filter:saturate(.92);transition:transform 1.1s cubic-bezier(.16,.72,.29,1),filter .6s}
+  .film-btn:hover img{transform:scale(1.04);filter:saturate(1)}
+  .film-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:clamp(56px,7vw,78px);height:clamp(56px,7vw,78px);border-radius:50%;
+    border:1px solid var(--bone);display:grid;place-items:center;
+    background:rgba(8,8,10,.34);backdrop-filter:blur(3px);transition:background .5s}
+  .film-btn:hover .film-play{background:rgba(237,230,216,.92)}
+  .film-play svg{width:26px;height:26px;fill:var(--bone);transition:fill .5s;margin-left:2px}
+  .film-btn:hover .film-play svg{fill:var(--ink)}
+  .film-cap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    padding:16px 4px 0;font-size:.54rem;letter-spacing:.18em;text-transform:uppercase}
+  .film-t{opacity:.9}.film-n{opacity:.45}
+  .film iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:var(--r);display:block}
 </style>
 <style>
   :root{
@@ -146,57 +167,28 @@
 <section class="head">
   <div class="pimg"><img src="ith-2.jpg" alt="" /></div>
   <div class="scrim"></div>
-  <h1 class="title">contact · imprint</h1>
+  <h1 class="title">video</h1>
 </section>
 
 <!-- KONSOLEN-INHALT -->
 <main class="body">
-  <div class="cols">
 
-    <div>
-      <div class="block rise">
-        <div class="h">contact</div>
-        <p class="p">booking · press<br><strong>info@alivemaex.com</strong></p>
-        <div class="caprow">
-          <a class="cap" href="mailto:info@alivemaex.com"><span class="led"></span>write</a>
-        </div>
-      </div>
+  <!-- ZWEI-KLICK: vorschau liegt lokal. erst der klick laedt youtube,
+       und dann ueber youtube-nocookie.com. vorher geht nichts an google. -->
+  <div class="films">
 
-      <div class="block rise">
-        <div class="h">follow</div>
-        <div class="caprow">
-          <a class="cap" href="https://www.instagram.com/alivemaex" target="_blank" rel="noopener"><span class="led"></span>instagram</a>
-          <a class="cap" href="https://www.youtube.com/@ALIVEMAEX" target="_blank" rel="noopener"><span class="led"></span>youtube</a>
-          <a class="cap" href="https://open.spotify.com/artist/0aiBlkcHQ2Nqta7K7JBS3d" target="_blank" rel="noopener"><span class="led"></span>spotify</a>
-          <a class="cap" href="https://www.tiktok.com/@alivemaex" target="_blank" rel="noopener"><span class="led"></span>tiktok</a>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <div class="block rise">
-        <div class="h">anbieter</div>
-        <p class="p">ALIVEMAEX<br>Max Heckelmann<br>Hochstädter Straße 11<br>13347 Berlin · Deutschland</p>
-      </div>
-
-      <div class="block rise">
-        <div class="h">kontakt</div>
-        <p class="p">E-Mail: <a href="mailto:info@alivemaex.com">info@alivemaex.com</a><br>Telefon: <a href="tel:+4915110199995">+49 1511 01 9995</a></p>
-      </div>
-
-      <div class="block rise">
-        <div class="h">umsatzsteuer</div>
-        <p class="p">USt-IdNr. gemäß § 27&nbsp;a UStG:<br><strong>DE410437078</strong><br>Steuernummer: 23/335/01086</p>
-      </div>
-
-      <div class="block rise">
-        <div class="h">verantwortlich</div>
-        <p class="p">Nach § 18 Abs.&nbsp;2 MStV:<br>Max Heckelmann, Anschrift wie oben.</p>
-        <div class="caprow">
-          <a class="cap" href="datenschutz"><span class="led"></span>datenschutz</a>
-        </div>
-      </div>
-    </div>
+    <figure class="film" data-yt="" data-title="boys never bleed">
+      <button class="film-btn" type="button" aria-label="video abspielen">
+        <img src="ith-2.jpg" alt="" />
+        <span class="film-play" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg>
+        </span>
+      </button>
+      <figcaption class="film-cap">
+        <span class="film-t">boys never bleed</span>
+        <span class="film-n">erst dein klick l&auml;dt youtube</span>
+      </figcaption>
+    </figure>
 
   </div>
 </main>
@@ -222,5 +214,24 @@
   document.querySelectorAll('.rise').forEach(el=>io.observe(el));
 </script>
 <script src="consent.js" defer></script>
+
+<script>
+  /* youtube erst auf klick, ohne cookie-domain */
+  document.querySelectorAll('.film').forEach(function(f){
+    var btn=f.querySelector('.film-btn');
+    btn.addEventListener('click',function(){
+      var id=f.dataset.yt;
+      if(!id) return;
+      var fr=document.createElement('iframe');
+      fr.src='https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0';
+      fr.title=f.dataset.title||'video';
+      fr.allow='accelerometer; autoplay; encrypted-media; picture-in-picture';
+      fr.setAttribute('allowfullscreen','');
+      btn.replaceWith(fr);
+      var n=f.querySelector('.film-n'); if(n) n.textContent='youtube l\u00e4uft';
+      if(window.amxTrack) amxTrack('ViewContent',{content_name:f.dataset.title||'video'});
+    });
+  });
+</script>
 </body>
 </html>

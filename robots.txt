@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /datenschutz
+
+Sitemap: https://alivemaex.com/sitemap.xml
