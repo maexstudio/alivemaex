@@ -222,8 +222,14 @@
   @media (min-aspect-ratio:1/1){
     /* randlos ueber die volle breite. hochformat-quelle heisst: der ausschnitt
        sitzt oben, damit himmel und motiv drin bleiben statt der mitte. */
-    .plate{height:78svh;min-height:520px}
-    .pimg img,.pimg video{top:0;height:100%;width:100%;object-fit:cover}
+    /* volle hoehe - 78svh liess unten die naechste, dunkle sektion
+       angeschnitten stehen, das las sich wie ein letterbox-balken.
+       top/height NICHT anfassen: die 118% sind der ueberstand, den der
+       parallax braucht. ohne ihn schiebt er schwarze kanten ins bild. */
+    .pimg img,.pimg video{width:100%;object-fit:cover}
+    /* das video bringt eine dunkle vignette mit - minimal groesser
+       ziehen, dann liegt sie ausserhalb des rahmens */
+    .pimg video{transform:scale(1.04)}
     /* bei hochformat-quelle im breitbild wird nur senkrecht beschnitten.
        jedes motiv hat seinen eigenen anker, damit Max drin bleibt.
        leerflaeche drumrum ist gewollt. */
