@@ -300,6 +300,17 @@
   .social a{display:inline-flex;opacity:.62;transition:opacity .4s,transform .4s}
   .social a:hover{opacity:1;transform:translateY(-2px)}
   .social svg{width:19px;height:19px;fill:var(--bone);display:block}
+
+  .hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+  .signup-msg{margin-top:12px;min-height:1.1em;font-size:.54rem;letter-spacing:.16em;
+    text-transform:uppercase;opacity:0;transition:opacity .45s}
+  .signup-msg.on{opacity:.85}
+  .signup-msg.bad{color:#e8b4a0}
+  #signup.busy{opacity:.6;pointer-events:none}
+  footer .legal{flex:1 0 100%;order:3;padding-top:22px;opacity:.6;font-size:.54rem;letter-spacing:.16em;text-transform:uppercase}
+  footer .legal a{text-decoration:underline;text-underline-offset:3px}
+  .signup-note{margin-top:11px;font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;opacity:.5;line-height:1.7}
+  .signup-note a{text-decoration:underline;text-underline-offset:3px}
 </style>
 </head>
 <body class="gated">
@@ -381,10 +392,13 @@
   <div class="scrim"></div>
   <div class="caption">
     <div class="line rise">liebe über angst</div>
-    <form class="subline rise" onsubmit="return false;">
-      <input type="email" placeholder="your email" aria-label="your email" />
+    <form class="subline rise" id="signup" novalidate>
+      <input type="email" name="email" placeholder="your email" aria-label="your email" required />
+      <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp" />
       <button type="submit">step inside</button>
     </form>
+    <p class="signup-note">news zu releases und shows. jederzeit abbestellbar. <a href="datenschutz">datenschutz</a></p>
+    <p class="signup-msg" id="signup-msg" role="status" aria-live="polite"></p>
   </div>
 </section>
 
@@ -398,6 +412,7 @@
   </div>
   <div class="f">booking · press<br>info@alivemaex.com</div>
   <div class="f">© alivemaex<br>liebe über angst</div>
+  <div class="f legal"><a href="kontakt">impressum</a> · <a href="datenschutz">datenschutz</a> · <a href="about">about</a></div>
 </footer>
 
 <button class="sound" id="sound" aria-label="ton an/aus" title="ton"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect class="cup" x="2.5" y="13" width="4.5" height="7" rx="1.6"/><rect class="cup" x="17" y="13" width="4.5" height="7" rx="1.6"/><line class="slash" x1="3" y1="21.5" x2="21" y2="3.5"/></svg></button>
@@ -565,6 +580,41 @@
   (function(){
     var b=document.querySelector('.top .brand img'), t=document.querySelector('.seam img');
     if(b&&t) t.src=b.currentSrc||b.src;
+  })();
+
+
+  /* ---------- NEWSLETTER ----------
+     lag vorher auf onsubmit="return false" - das feld sah aus wie es
+     funktioniert und hat die adresse verworfen. jetzt an /api/subscribe. */
+  (function(){
+    var f=document.getElementById('signup'), msg=document.getElementById('signup-msg');
+    if(!f) return;
+    function say(t,bad){ msg.textContent=t; msg.className='signup-msg on'+(bad?' bad':''); }
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      var email=(f.email.value||'').trim();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ say('bitte eine gültige adresse',1); return; }
+      f.classList.add('busy'); say('...');
+      fetch('/api/subscribe',{
+        method:'POST',
+        headers:{'content-type':'application/json'},
+        body:JSON.stringify({email:email,website:f.website.value,source:'ithaka-landing'})
+      }).then(function(r){ return r.json().catch(function(){return {ok:r.ok};}); })
+        .then(function(d){
+          f.classList.remove('busy');
+          if(d&&d.ok){
+            f.reset(); say('du bist drin.');
+            if(window.amxTrack) amxTrack('Lead',{content_name:'newsletter'});
+          } else if(d&&d.reason==='not_configured'){
+            say('noch nicht angeschlossen - schreib an info@alivemaex.com',1);
+          } else if(d&&d.reason==='invalid_email'){
+            say('bitte eine gültige adresse',1);
+          } else {
+            say('hat nicht geklappt - versuch es später nochmal',1);
+          }
+        })
+        .catch(function(){ f.classList.remove('busy'); say('keine verbindung',1); });
+    });
   })();
 
   /* ---------- INTRO-VORHANG ---------- */
