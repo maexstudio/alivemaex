@@ -1,127 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ALIVEMAEX — About & Press</title>
-<meta name="description" content="ALIVEMAEX — about, bio, press kit and contact. New electronic wave from Berlin." />
-<link rel="icon" type="image/png" href="assets/web/favicon.png" />
-<link rel="apple-touch-icon" href="assets/web/favicon.png" />
-<link rel="stylesheet" href="assets/style.css" />
+<title>ALIVEMAEX — About · Press</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0A0A0B;--bone:#EDE6D8;
+    --face:'Michroma','Helvetica Neue',Arial,sans-serif;
+    --body:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    --m:clamp(30px,4.5vw,60px);--r:26px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--ink);color:var(--bone);font-family:var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+
+  .grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.27;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size:150px;animation:grain .6s steps(3) infinite}
+  @keyframes grain{0%{transform:translate(0,0)}33%{transform:translate(-2%,1%)}66%{transform:translate(1%,-2%)}100%{transform:translate(-1%,1%)}}
+  .grain--fine{opacity:.19;mix-blend-mode:soft-light;background-size:96px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+    animation:grainb .43s steps(4) infinite}
+  @keyframes grainb{0%{transform:translate(0,0)}25%{transform:translate(1.5%,-1%)}
+    50%{transform:translate(-1%,1.5%)}75%{transform:translate(1%,1%)}100%{transform:translate(-1.5%,0)}}
+  .vig{position:fixed;inset:0;z-index:59;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 48%,rgba(0,0,0,0) 52%,rgba(0,0,0,.13) 82%,rgba(0,0,0,.28) 100%)}
+  .viewport{position:fixed;inset:12px;z-index:45;pointer-events:none;border:1px solid rgba(237,230,216,.42);border-radius:var(--r)}
+
+  .top{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:26px var(--m)}
+  .top .brand{display:flex;align-items:center}
+  .top .brand img{height:30px;width:auto;display:block}
+  .burger{width:34px;height:14px;position:relative;cursor:pointer;background:none;border:0;padding:0}
+  .burger span{position:absolute;left:0;right:0;height:1.5px;background:var(--bone);transition:transform .6s cubic-bezier(.16,.72,.29,1)}
+  .burger span:nth-child(1){top:0}.burger span:nth-child(2){bottom:0}
+  body.menu-open .burger span:nth-child(1){top:6px;transform:rotate(45deg)}
+  body.menu-open .burger span:nth-child(2){bottom:6px;transform:rotate(-45deg)}
+  .menu{position:fixed;inset:0;z-index:35;background:var(--ink);display:flex;flex-direction:column;justify-content:center;padding:0 var(--m);opacity:0;pointer-events:none;transition:opacity .7s cubic-bezier(.16,.72,.29,1)}
+  body.menu-open .menu{opacity:1;pointer-events:auto}
+  .menu a{font-family:var(--face);font-size:clamp(1.4rem,4.4vw,2.6rem);letter-spacing:.04em;text-transform:uppercase;padding:14px 0;opacity:.55;transform:translateY(12px);transition:opacity .8s,transform .8s}
+  body.menu-open .menu a{opacity:1;transform:none}
+  body.menu-open .menu a:nth-child(1){transition-delay:.08s}body.menu-open .menu a:nth-child(2){transition-delay:.14s}
+  body.menu-open .menu a:nth-child(3){transition-delay:.2s}body.menu-open .menu a:nth-child(4){transition-delay:.26s}
+  .menu .mfoot{position:absolute;left:var(--m);bottom:clamp(30px,6vh,60px);font-family:var(--face);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;opacity:.45}
+
+  /* kompakter bild-kopf */
+  .head{position:relative;height:56vh;min-height:380px;overflow:hidden}
+  .head .pimg{position:absolute;inset:0}
+  .head img{position:absolute;left:0;right:0;top:-8%;height:116%;width:100%;object-fit:cover;object-position:center 30%}
+  .head .scrim{position:absolute;inset:0;background:rgba(6,6,7,.28)}
+  .head .title{position:absolute;left:var(--m);bottom:clamp(34px,6vh,60px);z-index:3;font-family:var(--face);
+    font-size:clamp(1.6rem,5vw,3rem);letter-spacing:.05em;text-transform:uppercase}
+
+  /* konsolen-inhalt auf ink */
+  .body{padding:clamp(60px,9vw,110px) var(--m) clamp(60px,9vw,110px)}
+  .cols{max-width:920px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,90px)}
+  @media(max-width:720px){.cols{grid-template-columns:1fr;gap:52px}}
+  .block+.block{margin-top:clamp(44px,6vw,72px)}
+  .h{font-family:var(--face);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bone);
+    display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .h::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--bone);opacity:.6;flex:0 0 auto}
+  .p{font-size:.98rem;line-height:1.9;color:rgba(237,230,216,.8);max-width:46ch}
+  .p a{border-bottom:1px solid rgba(237,230,216,.3);transition:border-color .5s}
+  .p a:hover{border-color:var(--bone)}
+  .p strong{color:var(--bone);font-weight:600}
+  .socials{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+  /* space-age konsolen-taste */
+  .cap{position:relative;display:inline-flex;align-items:center;gap:12px;font-family:var(--face);
+    font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--bone);
+    padding:14px 24px;border-radius:999px;border:1px solid var(--bone);transition:background .5s,color .5s}
+  .cap::before{content:"";position:absolute;inset:4px;border:1px solid rgba(237,230,216,.36);border-radius:999px;pointer-events:none;transition:border-color .5s}
+  .cap .led{width:6px;height:6px;border-radius:50%;background:var(--bone);flex:0 0 auto;transition:background .5s}
+  .cap:hover{background:var(--bone);color:var(--ink)}
+  .cap:hover::before{border-color:rgba(10,10,11,.3)}
+  .cap:hover .led{background:var(--ink)}
+  .caprow{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+
+  footer{padding:56px var(--m);display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;border-top:1px solid rgba(237,230,216,.16)}
+  footer .f{font-family:var(--face);font-size:.54rem;letter-spacing:.14em;text-transform:uppercase;opacity:.45;line-height:2.1}
+
+  .rise{opacity:0;transform:translateY(14px);transition:opacity 1.4s cubic-bezier(.16,.72,.29,1),transform 1.4s cubic-bezier(.16,.72,.29,1)}
+  .rise.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.rise{opacity:1;transform:none}.grain{animation:none}}
+</style>
 </head>
 <body>
-<div class="grain"></div>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <filter id="caustic">
-    <feTurbulence type="fractalNoise" baseFrequency="0.010 0.016" numOctaves="2" seed="7" result="n">
-      <animate attributeName="baseFrequency" dur="52s" values="0.010 0.016;0.016 0.024;0.010 0.016" repeatCount="indefinite"/>
-    </feTurbulence>
-    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.78  0 0 0 0 0.94  0 0 0 0 0.9  0 0 0 0.9 0"/>
-  </filter>
-  <filter id="refract">
-    <feTurbulence type="fractalNoise" baseFrequency="0.006 0.011" numOctaves="2" seed="4" result="w">
-      <animate attributeName="baseFrequency" dur="34s" values="0.006 0.011;0.010 0.017;0.006 0.011" repeatCount="indefinite"/>
-    </feTurbulence>
-    <feDisplacementMap in="SourceGraphic" in2="w" scale="20" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-  <filter id="refract-soft">
-    <feTurbulence type="fractalNoise" baseFrequency="0.008 0.014" numOctaves="2" seed="9" result="w">
-      <animate attributeName="baseFrequency" dur="28s" values="0.008 0.014;0.013 0.02;0.008 0.014" repeatCount="indefinite"/>
-    </feTurbulence>
-    <feDisplacementMap in="SourceGraphic" in2="w" scale="9" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</svg>
-<div class="density"><div class="tint"></div><div class="milk"></div><div class="press"></div></div>
 
-<header class="pagehead">
-  <a class="brand lower" href="/">alivemaex</a>
-  <nav class="nav lower">
-    <a href="/">home</a>
-    <a href="releases">releases</a>
-    <a href="about" class="on">about</a>
-  </nav>
+<div class="grain"></div>
+<div class="grain grain--fine"></div>
+<div class="vig"></div>
+<div class="viewport"></div>
+
+<header class="top">
+  <a class="brand" href="/" aria-label="alivemaex"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJwAAADwCAMAAADCUP1eAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAC9FBMVEXt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tj///8wxC7nAAAA+nRSTlMAATyv6OvFbRdG3Pm8Ic7fUnvjFs3SKEDznwlwTZWp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" alt="alivemaex" /></a>
+  <button class="burger" id="burger" aria-label="menu"><span></span><span></span></button>
 </header>
 
-<main class="musik about-page">
-  <img class="mannequin-tr" src="assets/web/fig-31.png" alt="" aria-hidden="true" />
-  <div class="wrap">
+<nav class="menu" id="menu">
+  <a href="/">home</a>
+  <a href="/#index">releases</a>
+  <a href="#">about</a>
+  <a href="kontakt">contact</a>
+  <div class="mfoot">liebe über angst</div>
+</nav>
 
-    <div class="page-head reveal">
-      <h1 class="display">About</h1>
-      <p class="sub lower">the world, the sound, and everything press & bookers need.</p>
+<!-- BILD-KOPF -->
+<section class="head">
+  <div class="pimg"><img src="ith-3.jpg" alt="" /></div>
+  <div class="scrim"></div>
+  <h1 class="title">about</h1>
+</section>
+
+<!-- KONSOLEN-INHALT -->
+<main class="body">
+  <div class="cols">
+
+    <div>
+      <div class="block rise">
+        <div class="h">the world</div>
+        <p class="p">An old soul speaking from inside a modern body.</p>
+        <p class="p">ALIVEMAEX lives somewhere between Berlin nights, old records and a future
+        that arrived too quickly. Close vocals, warm machines, heavy drums and broken echoes.</p>
+        <p class="p">Music about distance, desire and the moments in which people almost let
+        each other in.</p>
+        <p class="p"><strong>Liebe über Angst.</strong></p>
+      </div>
     </div>
 
-    <!-- WORLD / BIO -->
-    <section class="reveal" style="padding:clamp(20px,4vw,50px) 0">
-      <div class="eyebrow">the world</div>
-      <p class="lede">An old soul speaking from inside a modern body.</p>
-      <div class="about-cols" style="margin-top:44px">
-        <p class="prose">ALIVEMAEX lives somewhere between Berlin nights, old records and a future that arrived too quickly. Close vocals, warm machines, heavy drums and broken echoes.</p>
-        <p class="prose">Music about distance, desire and the moments in which people almost let each other in.</p>
+    <div>
+      <div class="block rise">
+        <div class="h">made by hand</div>
+        <p class="p">The current world of ALIVEMAEX is written, recorded, produced, mixed and
+        mastered by me. In earlier years, some records were finished with a mastering engineer —
+        today every step happens in my own space. I care deeply about the craft — the weight of a
+        drum, the distance of a voice, the moment a sound finally feels alive.</p>
+        <p class="p">The music is a way of giving shape to things I cannot explain in words.
+        This world is open. Come in. Stay a while.</p>
       </div>
-      <p class="prose" style="margin-top:1.6em"><em>Liebe über Angst.</em></p>
-    </section>
 
-    <!-- MADE BY HAND -->
-    <section class="reveal" style="padding:clamp(30px,6vw,70px) 0">
-      <div class="eyebrow">made by hand</div>
-      <p class="prose" style="max-width:62ch">The current world of ALIVEMAEX is written, recorded, produced, mixed and mastered by me. In earlier years, some records were finished with a mastering engineer — today every step happens in my own space. I care deeply about the craft — the weight of a drum, the distance of a voice, the moment a sound finally feels alive.</p>
-      <p class="prose" style="max-width:62ch">The music is a way of giving shape to things I cannot explain in words. This world is open. Come in. Stay a while.</p>
-    </section>
+      <div class="block rise">
+        <div class="h">press</div>
+        <div class="caprow">
+          <a class="cap" href="mailto:info@alivemaex.com?subject=Press%20kit%20request"><span class="led"></span>request press kit</a>
+          <a class="cap" href="mailto:info@alivemaex.com?subject=Hi-res%20photos"><span class="led"></span>hi-res photos</a>
+        </div>
+      </div>
 
-    <!-- PHOTOGRAPHS (editorial) -->
-    <section class="reveal" style="padding:clamp(30px,6vw,70px) 0">
-      <div class="eyebrow">the world in photographs</div>
-      <div class="editorial">
-        <figure class="ed-a"><img src="assets/web/ph-239.jpg" alt="ALIVEMAEX" loading="lazy" /></figure>
-        <figure class="ed-b"><img src="assets/web/ph-574.jpg" alt="ALIVEMAEX" loading="lazy" /></figure>
-        <figure class="ed-c"><img src="assets/web/ph-497.jpg" alt="ALIVEMAEX" loading="lazy" /></figure>
+      <div class="block rise">
+        <div class="h">booking · press</div>
+        <p class="p"><a href="mailto:info@alivemaex.com">info@alivemaex.com</a><br>label / mgmt: independent</p>
       </div>
-      <div class="kit">
-        <a href="mailto:info@alivemaex.com?subject=Press%20kit%20request">request press kit</a>
-        <a href="mailto:info@alivemaex.com?subject=Hi-res%20photos">hi-res photos</a>
-      </div>
-    </section>
 
-    <!-- CONTACT -->
-    <section class="reveal" style="padding:clamp(30px,6vw,70px) 0 clamp(20px,4vw,40px)">
-      <div class="eyebrow">contact</div>
-      <div class="contact-rows">
-        <div>
-          <h3>booking</h3>
-          <a href="mailto:info@alivemaex.com">info@alivemaex.com</a>
+      <div class="block rise">
+        <div class="h">follow</div>
+        <div class="caprow">
+          <a class="cap" href="https://www.instagram.com/alivemaex" target="_blank" rel="noopener"><span class="led"></span>instagram</a>
+          <a class="cap" href="https://www.youtube.com/@ALIVEMAEX" target="_blank" rel="noopener"><span class="led"></span>youtube</a>
+          <a class="cap" href="https://open.spotify.com/artist/0aiBlkcHQ2Nqta7K7JBS3d" target="_blank" rel="noopener"><span class="led"></span>spotify</a>
+          <a class="cap" href="https://www.tiktok.com/@alivemaex" target="_blank" rel="noopener"><span class="led"></span>tiktok</a>
         </div>
-        <div>
-          <h3>press</h3>
-          <a href="mailto:info@alivemaex.com">info@alivemaex.com</a>
-        </div>
-        <div>
-          <h3>label / mgmt</h3>
-          <p class="lower" style="opacity:.6">independent</p>
-        </div>
-        <div>
-          <h3>follow</h3>
-          <div class="nav lower" style="gap:16px">
-            <a href="https://www.instagram.com/alivemaex" target="_blank" rel="noopener">instagram</a>
-            <a href="https://www.youtube.com/@ALIVEMAEX" target="_blank" rel="noopener">youtube</a>
-          </div>
+        <div class="caprow">
+          <a class="cap" href="kontakt"><span class="led"></span>contact · imprint</a>
         </div>
       </div>
-    </section>
+    </div>
 
   </div>
 </main>
 
 <footer>
-  <div class="wrap foot">
-    <div class="links" id="social"></div>
-    <div class="fine lower">
-      booking · press: <a href="mailto:info@alivemaex.com">info@alivemaex.com</a><br>
-      © <span id="yr"></span> alivemaex · liebe über angst · <a href="impressum">imprint</a> · <a href="datenschutz">datenschutz</a>
-    </div>
-  </div>
+  <div class="f">booking · press<br>info@alivemaex.com</div>
+  <div class="f">© alivemaex<br>liebe über angst</div>
 </footer>
 
-<script src="assets/app.js"></script>
+<script>
+  const b=document.getElementById('burger');
+  b.addEventListener('click',()=>document.body.classList.toggle('menu-open'));
+  document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>document.body.classList.remove('menu-open')));
+  const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }),{threshold:.2});
+  document.querySelectorAll('.rise').forEach(el=>io.observe(el));
+</script>
+<script src="consent.js" defer></script>
 </body>
 </html>
