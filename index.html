@@ -203,6 +203,10 @@
   .pimg img,.pimg video{position:absolute;left:0;right:0;top:-9%;height:118%;width:100%;object-fit:cover;display:block}
   .pimg video{z-index:1;opacity:0;transition:opacity .5s ease}
   .pimg video.ready{opacity:1}
+  /* das standbild im hero ist rueckfall, kein vorspann: es bleibt
+     unsichtbar, solange das video eine chance hat zu starten. */
+  .pimg--1 img{opacity:0;transition:opacity .45s ease}
+  .pimg--1 img.show,.pimg--1.still img{opacity:1}
   .float img{animation:levit 7s ease-in-out infinite}
   @keyframes levit{0%,100%{transform:translateY(-11px)}50%{transform:translateY(11px)}}
   /* verlauf statt flachem rechteck - sonst läuft eine harte kante quer durchs bild */
@@ -402,6 +406,7 @@
 <section class="plate plate--hero">
   <div class="pimg pimg--1">
     <img src="ith-1.jpg" alt="" />
+    <noscript><style>.pimg--1 img{opacity:1}</style></noscript>
     <video data-wide="ith-1-wide.mp4" data-narrow="ith-1.mp4"
            autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
   </div>
@@ -641,20 +646,31 @@
     var v=document.querySelector('.pimg--1 video');
     if(!v) return;
     // datensparmodus und bewegungsarm: standbild genuegt
+    var box=v.parentNode, img=box.querySelector('img');
+    var fallback=function(){ box.classList.add('still'); };
+
+    // datensparmodus und bewegungsarm: standbild genuegt
     var save=navigator.connection&&navigator.connection.saveData;
-    var still=matchMedia('(prefers-reduced-motion:reduce)').matches;
-    if(save||still){ v.remove(); return; }
-    var wide=matchMedia('(min-aspect-ratio:1/1)').matches;
-    // erst aufblenden, wenn das erste bild wirklich steht - sonst
-    // sieht man das standbild und danach einen harten schnitt
-    var show=function(){ v.classList.add('ready'); };
+    var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if(save||reduce){ v.remove(); fallback(); return; }
+
+    var done=false;
+    var show=function(){
+      if(done) return; done=true;
+      clearTimeout(timer);
+      v.classList.add('ready');       // video auf, standbild bleibt unsichtbar
+    };
+    // wenn das video nicht rechtzeitig laeuft, kommt doch das standbild
+    var timer=setTimeout(function(){ if(!done) fallback(); },2600);
+
     v.addEventListener('playing',show,{once:true});
-    v.addEventListener('loadeddata',function(){
-      if(v.readyState>=3) show();
-    },{once:true});
+    v.addEventListener('loadeddata',function(){ if(v.readyState>=3) show(); },{once:true});
+    v.addEventListener('error',function(){ done=true; clearTimeout(timer); fallback(); },{once:true});
+
+    var wide=matchMedia('(min-aspect-ratio:1/1)').matches;
     v.src=wide?v.dataset.wide:v.dataset.narrow;
     v.load();
-    var p=v.play(); if(p&&p.catch) p.catch(function(){});
+    var p=v.play(); if(p&&p.catch) p.catch(function(){ fallback(); });
   })();
 
 
