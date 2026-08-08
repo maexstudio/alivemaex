@@ -4,125 +4,232 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ALIVEMAEX — Datenschutz</title>
-<meta name="description" content="ALIVEMAEX — Datenschutzerklärung." />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" href="/icon-light.png" media="(prefers-color-scheme: light)" />
+<link rel="icon" type="image/png" href="/icon-dark.png" media="(prefers-color-scheme: dark)" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<meta name="theme-color" content="#0A0A0B" />
 <meta name="robots" content="noindex" />
-<link rel="icon" type="image/png" href="assets/web/favicon.png" />
-<link rel="apple-touch-icon" href="assets/web/favicon.png" />
-<link rel="stylesheet" href="assets/style.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0A0A0B;--bone:#EDE6D8;
+    --face:'Michroma','Helvetica Neue',Arial,sans-serif;
+    --body:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    --m:clamp(30px,4.5vw,60px);--r:26px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--ink);color:var(--bone);font-family:var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+
+  .grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.27;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size:150px;animation:grain .6s steps(3) infinite}
+  @keyframes grain{0%{transform:translate(0,0)}33%{transform:translate(-2%,1%)}66%{transform:translate(1%,-2%)}100%{transform:translate(-1%,1%)}}
+  .grain--fine{opacity:.19;mix-blend-mode:soft-light;background-size:96px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+    animation:grainb .43s steps(4) infinite}
+  @keyframes grainb{0%{transform:translate(0,0)}25%{transform:translate(1.5%,-1%)}
+    50%{transform:translate(-1%,1.5%)}75%{transform:translate(1%,1%)}100%{transform:translate(-1.5%,0)}}
+  .vig{position:fixed;inset:0;z-index:59;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 48%,rgba(0,0,0,0) 52%,rgba(0,0,0,.13) 82%,rgba(0,0,0,.28) 100%)}
+  .viewport{position:fixed;inset:12px;z-index:45;pointer-events:none;border:1px solid rgba(237,230,216,.42);border-radius:var(--r)}
+
+  .top{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:26px var(--m)}
+  .top .brand{display:flex;align-items:center}
+  .top .brand img{height:30px;width:auto;display:block}
+  .burger{width:34px;height:14px;position:relative;cursor:pointer;background:none;border:0;padding:0}
+  .burger span{position:absolute;left:0;right:0;height:1.5px;background:var(--bone);transition:transform .6s cubic-bezier(.16,.72,.29,1)}
+  .burger span:nth-child(1){top:0}.burger span:nth-child(2){bottom:0}
+  body.menu-open .burger span:nth-child(1){top:6px;transform:rotate(45deg)}
+  body.menu-open .burger span:nth-child(2){bottom:6px;transform:rotate(-45deg)}
+  .menu{position:fixed;inset:0;z-index:35;background:var(--ink);display:flex;flex-direction:column;justify-content:center;padding:0 var(--m);opacity:0;pointer-events:none;transition:opacity .7s cubic-bezier(.16,.72,.29,1)}
+  body.menu-open .menu{opacity:1;pointer-events:auto}
+  .menu a{font-family:var(--face);font-size:clamp(1.4rem,4.4vw,2.6rem);letter-spacing:.04em;text-transform:uppercase;padding:14px 0;opacity:.55;transform:translateY(12px);transition:opacity .8s,transform .8s}
+  body.menu-open .menu a{opacity:1;transform:none}
+  body.menu-open .menu a:nth-child(1){transition-delay:.08s}body.menu-open .menu a:nth-child(2){transition-delay:.14s}
+  body.menu-open .menu a:nth-child(3){transition-delay:.2s}body.menu-open .menu a:nth-child(4){transition-delay:.26s}
+  .menu .mfoot{position:absolute;left:var(--m);bottom:clamp(30px,6vh,60px);font-family:var(--face);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;opacity:.45}
+
+  /* kompakter bild-kopf */
+  .head{position:relative;height:56vh;min-height:380px;overflow:hidden}
+  .head .pimg{position:absolute;inset:0}
+  .head img{position:absolute;left:0;right:0;top:-8%;height:116%;width:100%;object-fit:cover;object-position:center 30%}
+  .head .scrim{position:absolute;inset:0;background:rgba(6,6,7,.28)}
+  .head .title{position:absolute;left:var(--m);bottom:clamp(34px,6vh,60px);z-index:3;font-family:var(--face);
+    font-size:clamp(1.6rem,5vw,3rem);letter-spacing:.05em;text-transform:uppercase}
+
+  /* konsolen-inhalt auf ink */
+  .body{padding:clamp(60px,9vw,110px) var(--m) clamp(60px,9vw,110px)}
+  .cols{max-width:920px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,90px)}
+  @media(max-width:720px){.cols{grid-template-columns:1fr;gap:52px}}
+  .block+.block{margin-top:clamp(44px,6vw,72px)}
+  .h{font-family:var(--face);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bone);
+    display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .h::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--bone);opacity:.6;flex:0 0 auto}
+  .p{font-size:.98rem;line-height:1.9;color:rgba(237,230,216,.8);max-width:46ch}
+  .p a{border-bottom:1px solid rgba(237,230,216,.3);transition:border-color .5s}
+  .p a:hover{border-color:var(--bone)}
+  .p strong{color:var(--bone);font-weight:600}
+  .socials{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+  /* space-age konsolen-taste */
+  .cap{position:relative;display:inline-flex;align-items:center;gap:12px;font-family:var(--face);
+    font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--bone);
+    padding:14px 24px;border-radius:999px;border:1px solid var(--bone);transition:background .5s,color .5s}
+  .cap::before{content:"";position:absolute;inset:4px;border:1px solid rgba(237,230,216,.36);border-radius:999px;pointer-events:none;transition:border-color .5s}
+  .cap .led{width:6px;height:6px;border-radius:50%;background:var(--bone);flex:0 0 auto;transition:background .5s}
+  .cap:hover{background:var(--bone);color:var(--ink)}
+  .cap:hover::before{border-color:rgba(10,10,11,.3)}
+  .cap:hover .led{background:var(--ink)}
+  .caprow{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+
+  footer{padding:56px var(--m);display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;border-top:1px solid rgba(237,230,216,.16)}
+  footer .f{font-family:var(--face);font-size:.54rem;letter-spacing:.14em;text-transform:uppercase;opacity:.45;line-height:2.1}
+
+  .rise{opacity:0;transform:translateY(14px);transition:opacity 1.4s cubic-bezier(.16,.72,.29,1),transform 1.4s cubic-bezier(.16,.72,.29,1)}
+  .rise.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.rise{opacity:1;transform:none}.grain{animation:none}}
+
+  /* SOZIALE IM FUSS. logos liegen als svg in der seite - vorher kamen sie
+     von cdn.simpleicons.org, das war bei jedem aufruf eine IP an einen dritten. */
+  .social{flex:1 0 100%;display:flex;gap:20px;align-items:center;flex-wrap:wrap;
+    padding-bottom:26px;margin-bottom:4px;border-bottom:1px solid rgba(237,230,216,.12)}
+  .social a{display:inline-flex;opacity:.62;transition:opacity .4s,transform .4s}
+  .social a:hover{opacity:1;transform:translateY(-2px)}
+  .social svg{width:19px;height:19px;fill:var(--bone);display:block}
+</style>
 </head>
 <body>
-<div class="grain"></div>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <filter id="caustic">
-    <feTurbulence type="fractalNoise" baseFrequency="0.010 0.016" numOctaves="2" seed="7" result="n">
-      <animate attributeName="baseFrequency" dur="52s" values="0.010 0.016;0.016 0.024;0.010 0.016" repeatCount="indefinite"/>
-    </feTurbulence>
-    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.78  0 0 0 0 0.94  0 0 0 0 0.9  0 0 0 0.9 0"/>
-  </filter>
-  <filter id="refract">
-    <feTurbulence type="fractalNoise" baseFrequency="0.006 0.011" numOctaves="2" seed="4" result="w">
-      <animate attributeName="baseFrequency" dur="34s" values="0.006 0.011;0.010 0.017;0.006 0.011" repeatCount="indefinite"/>
-    </feTurbulence>
-    <feDisplacementMap in="SourceGraphic" in2="w" scale="20" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-  <filter id="refract-soft">
-    <feTurbulence type="fractalNoise" baseFrequency="0.008 0.014" numOctaves="2" seed="9" result="w">
-      <animate attributeName="baseFrequency" dur="28s" values="0.008 0.014;0.013 0.02;0.008 0.014" repeatCount="indefinite"/>
-    </feTurbulence>
-    <feDisplacementMap in="SourceGraphic" in2="w" scale="9" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</svg>
-<div class="density"><div class="tint"></div><div class="milk"></div><div class="press"></div></div>
 
-<header class="pagehead">
-  <a class="brand lower" href="/">alivemaex</a>
-  <nav class="nav lower">
-    <a href="/">home</a>
-    <a href="releases">releases</a>
-    <a href="about">about</a>
-  </nav>
+<div class="grain"></div>
+<div class="grain grain--fine"></div>
+<div class="vig"></div>
+<div class="viewport"></div>
+
+<header class="top">
+  <a class="brand" href="/" aria-label="alivemaex"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJwAAADwCAMAAADCUP1eAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAC9FBMVEXt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tjt5tj///8wxC7nAAAA+nRSTlMAATyv6OvFbRdG3Pm8Ic7fUnvjFs3SKEDznwlwTZWp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" alt="alivemaex" /></a>
+  <button class="burger" id="burger" aria-label="menu"><span></span><span></span></button>
 </header>
 
-<main class="legal">
-  <div class="wrap">
-    <div class="page-head reveal">
-      <h1 class="display">Datenschutz</h1>
-      <p class="sub lower">wie diese seite mit deinen daten umgeht — kurz und ehrlich.</p>
+<nav class="menu" id="menu">
+  <a href="/">home</a>
+  <a href="/#index">releases</a>
+  <a href="about">about</a>
+  <a href="kontakt">contact</a>
+  <div class="mfoot">liebe über angst</div>
+</nav>
+
+<!-- BILD-KOPF -->
+<section class="head">
+  <div class="pimg"><img src="ith-3.jpg" alt="" /></div>
+  <div class="scrim"></div>
+  <h1 class="title">datenschutz</h1>
+</section>
+
+<!-- KONSOLEN-INHALT -->
+<main class="body">
+  <div class="cols">
+
+    <div>
+      <div class="block rise">
+        <div class="h">verantwortlich</div>
+        <p class="p">Max Heckelmann (ALIVEMAEX)<br>Hochstädter Straße 11 · 13347 Berlin · Deutschland<br><a href="mailto:info@alivemaex.com">info@alivemaex.com</a></p>
+      </div>
+
+      <div class="block rise">
+        <div class="h">grundsätzliches</div>
+        <p class="p">Diese Website setzt Analyse- und Marketing-Werkzeuge ausschließlich mit deiner ausdrücklichen Einwilligung ein. Ohne Einwilligung werden personenbezogene Daten nur verarbeitet, soweit dies für den Betrieb der Seite technisch erforderlich ist oder du sie selbst übermittelst.</p>
+        <p class="p">Rechtsgrundlagen sind Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO (berechtigtes Interesse an einem sicheren, funktionierenden Auftritt) sowie Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;a DSGVO (Einwilligung).</p>
+      </div>
+
+      <div class="block rise">
+        <div class="h">hosting</div>
+        <p class="p">Die Website wird bei der Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA gehostet. Beim Aufruf verarbeitet Vercel technisch notwendige Verbindungsdaten in Server-Logfiles — unter anderem IP-Adresse, Zeitpunkt, Browser- und Gerätetyp sowie die aufgerufene Seite.</p>
+        <p class="p">Diese Daten dienen Auslieferung, Stabilität und Sicherheit und werden nicht mit anderen Quellen zusammengeführt. Die Übermittlung in die USA erfolgt auf Grundlage der EU-Standardvertragsklauseln beziehungsweise des EU-US Data Privacy Framework. <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">vercel.com/legal/privacy-policy</a></p>
+      </div>
+
+      <div class="block rise">
+        <div class="h">schriften</div>
+        <p class="p">Die Schrift Michroma wird über Google Fonts geladen (Google Ireland Ltd., Gordon House, Barrow Street, Dublin 4, Irland). Dabei baut dein Browser eine Verbindung zu <strong>fonts.googleapis.com</strong> und <strong>fonts.gstatic.com</strong> auf und übermittelt deine IP-Adresse an Google.</p>
+        <p class="p">Rechtsgrundlage ist unser berechtigtes Interesse an einer einheitlichen Darstellung (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO).</p>
+      </div>
+
+      <div class="block rise">
+        <div class="h">klangebene</div>
+        <p class="p">Die Klangebene der Startseite nutzt die Bibliothek Tone.js, die über das Content Delivery Network <strong>cdnjs.cloudflare.com</strong> (Cloudflare, Inc.) geladen wird. Dabei wird deine IP-Adresse an Cloudflare übertragen. Ton wird erst nach deiner Interaktion abgespielt.</p>
+      </div>
+
     </div>
 
-    <div class="reveal">
+    <div>
+      <div class="block rise">
+        <div class="h">speicherung im browser</div>
+        <p class="p">Die Seite speichert wenige Einstellungen lokal auf deinem Gerät: deine Ton-Einstellung und deine Entscheidung zur Einwilligung im Local Storage, sowie im Session Storage die Information, dass der Vorhang bereits geöffnet wurde.</p>
+        <p class="p">Diese Daten bleiben auf deinem Gerät, werden nicht übertragen und lassen sich über die Einstellungen deines Browsers löschen.</p>
+      </div>
 
-      <h2>Verantwortlicher</h2>
-      <p class="addr">
-        Max Heckelmann (ALIVEMAEX)<br>
-        Hochstädter Straße 11 · 13347 Berlin · Deutschland<br>
-        <a href="mailto:info@alivemaex.com">info@alivemaex.com</a>
-      </p>
+      <div class="block rise">
+        <div class="h">eingebundene inhalte dritter</div>
+        <p class="p"><strong>Cover-Bilder:</strong> Im Katalog werden Cover direkt vom Spotify-CDN (i.scdn.co, Spotify AB) geladen. Dabei wird deine IP-Adresse an Spotify übertragen.</p>
+        <p class="p"><strong>Plattform-Links:</strong> Die Dienste je Titel werden über die Schnittstelle <strong>api.song.link</strong> (Odesli) aufgelöst. Dabei wird deine IP-Adresse an den Anbieter übertragen.</p>
+        <p class="p">Rechtsgrundlage ist unser berechtigtes Interesse an der Darstellung unserer Musik (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO).</p>
+      </div>
 
-      <h2>Grundsätzliches</h2>
-      <p>Diese Website setzt Analyse- und Marketing-Werkzeuge ausschließlich mit deiner ausdrücklichen Einwilligung ein. Ohne Einwilligung werden personenbezogene Daten nur verarbeitet, soweit dies für den Betrieb der Seite technisch erforderlich ist oder du sie selbst übermittelst — etwa per E-Mail oder beim Eintrag in den Newsletter.</p>
-      <p>Rechtsgrundlagen sind Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO (berechtigtes Interesse an einem sicheren, funktionierenden Auftritt) sowie Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;a DSGVO (Einwilligung).</p>
+      <div class="block rise">
+        <div class="h">pre-save</div>
+        <p class="p">Der Pre-Save-Weg führt zum Dienst Feature.fm (Feature.fm Inc.). Mit dem Klick verlässt du diese Website; ab dann gelten die Bestimmungen von Feature.fm und deines Musikdienstes. Wir erhalten keinen Zugriff auf dein Konto. <a href="https://www.feature.fm/privacy-policy/" target="_blank" rel="noopener">feature.fm/privacy-policy</a></p>
+      </div>
 
-      <h2>Hosting</h2>
-      <p>Die Website wird bei der Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA gehostet. Beim Aufruf der Seite verarbeitet Vercel technisch notwendige Verbindungsdaten in Server-Logfiles — unter anderem IP-Adresse, Datum und Uhrzeit, Browser- und Gerätetyp sowie die aufgerufene Seite.</p>
-      <p>Diese Daten dienen der Auslieferung, Stabilität und Sicherheit der Website und werden nicht mit anderen Datenquellen zusammengeführt. Die Übermittlung in die USA erfolgt auf Grundlage der EU-Standardvertragsklauseln beziehungsweise des EU-US Data Privacy Framework. Weitere Informationen: <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">vercel.com/legal/privacy-policy</a></p>
+      <div class="block rise">
+        <div class="h">meta-pixel (nur mit einwilligung)</div>
+        <p class="p">Wenn du im Hinweis zustimmst, verwenden wir den Meta-Pixel der Meta Platforms Ireland Ltd., Merrion Road, Dublin 4, Irland, um die Reichweite unserer Musik und Anzeigen zu messen (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;a DSGVO, §&nbsp;25 Abs.&nbsp;1 TDDDG).</p>
+        <p class="p">Dabei werden unter anderem IP-Adresse, Browser-Informationen und besuchte Seiten an Meta übertragen und können in die USA übermittelt werden. <strong>Ohne deine Zustimmung wird der Pixel nicht geladen.</strong></p>
+        <p class="p"><a href="#" onclick="amxConsentReset();return false;">Einwilligung jetzt ändern</a> · <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">Datenschutzrichtlinie von Meta</a></p>
+      </div>
 
-      <h2>Schriften</h2>
-      <p>Alle Schriften werden lokal von diesem Server geladen. Es findet keine Verbindung zu Google Fonts oder anderen externen Schriftdiensten statt.</p>
+      <div class="block rise">
+        <div class="h">kontakt per e-mail</div>
+        <p class="p">Wenn du uns schreibst, verarbeiten wir deine Angaben zur Beantwortung der Anfrage (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;b beziehungsweise lit.&nbsp;f DSGVO) und löschen sie, sobald sie nicht mehr erforderlich sind.</p>
+      </div>
 
-      <h2>Lokale Speicherung im Browser</h2>
-      <p>Die Seite speichert wenige technisch notwendige Einstellungen im Local Storage beziehungsweise Session Storage deines Browsers — zum Beispiel deine Sound-Einstellung, ob das Intro bereits gezeigt wurde, und deine Entscheidung zur Einwilligung.</p>
-      <p>Diese Daten bleiben auf deinem Gerät, werden nicht an uns oder Dritte übertragen und lassen sich jederzeit über die Einstellungen deines Browsers löschen. Tracking- oder Werbe-Cookies werden ohne deine Zustimmung nicht gesetzt.</p>
+      <div class="block rise">
+        <div class="h">deine rechte</div>
+        <p class="p">Auskunft (Art.&nbsp;15), Berichtigung (Art.&nbsp;16), Löschung (Art.&nbsp;17), Einschränkung (Art.&nbsp;18), Datenübertragbarkeit (Art.&nbsp;20) und Widerspruch (Art.&nbsp;21 DSGVO).</p>
+        <p class="p">Eine erteilte Einwilligung kannst du jederzeit mit Wirkung für die Zukunft widerrufen. Dir steht ein Beschwerderecht bei einer Aufsichtsbehörde zu; zuständig ist die Berliner Beauftragte für Datenschutz und Informationsfreiheit.</p>
+      </div>
 
-      <h2>Eingebundene Inhalte Dritter</h2>
-      <p><strong>Instagram-Feed (Behold):</strong> Auf der Startseite werden aktuelle Instagram-Beiträge über den Dienst Behold (behold.so) geladen. Dabei wird deine IP-Adresse an Behold beziehungsweise an das Instagram-CDN von Meta Platforms übertragen, um die Bilder auszuliefern.</p>
-      <p><strong>Spotify-Cover:</strong> Auf der Releases-Seite werden Cover-Bilder direkt vom Spotify-CDN (i.scdn.co, Spotify AB) geladen. Dabei wird deine IP-Adresse an Spotify übertragen.</p>
-      <p><strong>Plattform-Symbole:</strong> Auf der Pre-Save-Seite werden einzelne Dienst-Symbole über das CDN von Simple Icons (cdn.simpleicons.org) geladen. Dabei wird deine IP-Adresse an den Anbieter übertragen.</p>
-      <p><strong>YouTube:</strong> Videos werden erst nach deinem Klick auf das Vorschaubild geladen (Zwei-Klick-Prinzip). Erst dann werden Daten an YouTube beziehungsweise Google Ireland Ltd. übertragen; es gelten die Datenschutzbestimmungen von Google.</p>
-      <p>Rechtsgrundlage ist unser berechtigtes Interesse an der Darstellung unserer Musik und Inhalte (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO), beim Klick auf ein YouTube-Video deine Einwilligung (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;a DSGVO).</p>
+      <div class="block rise">
+        <div class="h">stand</div>
+        <p class="p">August 2026</p>
+      </div>
 
-      <h2>Pre-Save für kommende Veröffentlichungen</h2>
-      <p>Auf der Seite zur Veröffentlichung „boys never bleed" kannst du den Titel bei deinem Musikdienst vormerken. Die Verlinkung führt zum Dienst Feature.fm (Feature.fm Inc.). Mit dem Klick verlässt du diese Website; ab diesem Zeitpunkt gelten die Datenschutzbestimmungen von Feature.fm und des jeweiligen Musikdienstes.</p>
-      <p>Dort entscheidest du selbst, ob du deinem Streaming-Dienst die Erlaubnis erteilst, den Titel am Erscheinungstag zu deiner Bibliothek hinzuzufügen. Wir erhalten dabei keinen Zugriff auf dein Konto oder dein Passwort. Weitere Informationen: <a href="https://www.feature.fm/privacy-policy/" target="_blank" rel="noopener">feature.fm/privacy-policy</a></p>
-
-      <h2>Meta-Pixel (nur mit Einwilligung)</h2>
-      <p>Wenn du im Hinweisbanner zustimmst, verwenden wir den Meta-Pixel der Meta Platforms Ireland Ltd., Merrion Road, Dublin 4, Irland, um die Reichweite unserer Musik und Anzeigen zu messen (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;a DSGVO, §&nbsp;25 Abs.&nbsp;1 TDDDG).</p>
-      <p>Dabei werden unter anderem deine IP-Adresse, Browser-Informationen und die besuchten Seiten an Meta übertragen. Meta kann diese Daten mit deinem Konto verknüpfen und in die USA übermitteln (EU-US Data Privacy Framework). Ohne deine Zustimmung wird der Pixel nicht geladen.</p>
-      <p>Deine Einwilligung kannst du jederzeit mit Wirkung für die Zukunft ändern oder widerrufen: <a href="#" onclick="amxConsentReset();return false;">Einwilligung jetzt ändern</a>. Weitere Informationen: <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">Datenschutzrichtlinie von Meta</a></p>
-
-      <h2>Newsletter</h2>
-      <p>Wenn du dich mit deiner E-Mail-Adresse einträgst, verwenden wir sie ausschließlich, um dir Neuigkeiten zu ALIVEMAEX zu schicken (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;a DSGVO). Du kannst dich jederzeit abmelden — formlos per E-Mail an <a href="mailto:info@alivemaex.com">info@alivemaex.com</a> oder über den Abmeldelink. Nach der Abmeldung wird deine Adresse gelöscht.</p>
-
-      <h2>Kontakt per E-Mail</h2>
-      <p>Wenn du uns schreibst, verarbeiten wir deine Angaben zur Beantwortung der Anfrage (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;b beziehungsweise lit.&nbsp;f DSGVO). Wir löschen sie, sobald sie nicht mehr erforderlich sind und keine gesetzlichen Aufbewahrungspflichten entgegenstehen.</p>
-
-      <h2>Deine Rechte</h2>
-      <p>Dir stehen gegenüber uns folgende Rechte zu:</p>
-      <ul>
-        <li>Auskunft über die verarbeiteten Daten (Art.&nbsp;15 DSGVO)</li>
-        <li>Berichtigung unrichtiger Daten (Art.&nbsp;16 DSGVO)</li>
-        <li>Löschung (Art.&nbsp;17 DSGVO)</li>
-        <li>Einschränkung der Verarbeitung (Art.&nbsp;18 DSGVO)</li>
-        <li>Datenübertragbarkeit (Art.&nbsp;20 DSGVO)</li>
-        <li>Widerspruch gegen Verarbeitungen auf Grundlage berechtigter Interessen (Art.&nbsp;21 DSGVO)</li>
-      </ul>
-      <p>Eine erteilte Einwilligung kannst du jederzeit mit Wirkung für die Zukunft widerrufen. Außerdem steht dir ein Beschwerderecht bei einer Datenschutz-Aufsichtsbehörde zu; für uns zuständig ist die Berliner Beauftragte für Datenschutz und Informationsfreiheit.</p>
-
-      <p class="stand">Stand: Juli 2026</p>
     </div>
+
   </div>
 </main>
 
 <footer>
-  <div class="wrap foot">
-    <div class="links" id="social"></div>
-    <div class="fine lower">
-      booking · press: <a href="mailto:info@alivemaex.com">info@alivemaex.com</a><br>
-      © <span id="yr"></span> alivemaex · liebe über angst · <a href="impressum">imprint</a> · <a href="datenschutz">datenschutz</a>
-    </div>
+  <div class="social">
+    <a href="https://www.instagram.com/alivemaex" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></a>
+    <a href="https://www.tiktok.com/@alivemaex" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
+    <a href="https://open.spotify.com/artist/0aiBlkcHQ2Nqta7K7JBS3d" target="_blank" rel="noopener" aria-label="Spotify"><svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></a>
+    <a href="https://www.youtube.com/@ALIVEMAEX" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+    <a href="https://soundcloud.com/alivemaex" target="_blank" rel="noopener" aria-label="SoundCloud"><svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M23.999 14.165c-.052 1.796-1.612 3.169-3.4 3.169h-8.18a.68.68 0 0 1-.675-.683V7.862a.747.747 0 0 1 .452-.724s.75-.513 2.333-.513a5.364 5.364 0 0 1 2.763.755 5.433 5.433 0 0 1 2.57 3.54c.282-.08.574-.121.868-.12.884 0 1.73.358 2.347.992s.948 1.49.922 2.373ZM10.721 8.421c.247 2.98.427 5.697 0 8.672a.264.264 0 0 1-.53 0c-.395-2.946-.22-5.718 0-8.672a.264.264 0 0 1 .53 0ZM9.072 9.448c.285 2.659.37 4.986-.006 7.655a.277.277 0 0 1-.55 0c-.331-2.63-.256-5.02 0-7.655a.277.277 0 0 1 .556 0Zm-1.663-.257c.27 2.726.39 5.171 0 7.904a.266.266 0 0 1-.532 0c-.38-2.69-.257-5.21 0-7.904a.266.266 0 0 1 .532 0Zm-1.647.77a26.108 26.108 0 0 1-.008 7.147.272.272 0 0 1-.542 0 27.955 27.955 0 0 1 0-7.147.275.275 0 0 1 .55 0Zm-1.67 1.769c.421 1.865.228 3.5-.029 5.388a.257.257 0 0 1-.514 0c-.21-1.858-.398-3.549 0-5.389a.272.272 0 0 1 .543 0Zm-1.655-.273c.388 1.897.26 3.508-.01 5.412-.026.28-.514.283-.54 0-.244-1.878-.347-3.54-.01-5.412a.283.283 0 0 1 .56 0Zm-1.668.911c.4 1.268.257 2.292-.026 3.572a.257.257 0 0 1-.514 0c-.241-1.262-.354-2.312-.023-3.572a.283.283 0 0 1 .563 0Z"/></svg></a>
   </div>
+  <div class="f">booking · press<br>info@alivemaex.com</div>
+  <div class="f">© alivemaex<br>liebe über angst</div>
 </footer>
 
-<script src="assets/app.js"></script>
+<script>
+  const b=document.getElementById('burger');
+  b.addEventListener('click',()=>document.body.classList.toggle('menu-open'));
+  document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>document.body.classList.remove('menu-open')));
+  const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }),{threshold:.2});
+  document.querySelectorAll('.rise').forEach(el=>io.observe(el));
+</script>
+<script src="consent.js" defer></script>
 </body>
 </html>
