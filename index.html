@@ -128,7 +128,8 @@
   .plate{position:relative;height:100vh;height:100svh;overflow:hidden}
   .pimg{position:absolute;inset:0;will-change:transform}
   .pimg img,.pimg video{position:absolute;left:0;right:0;top:-9%;height:118%;width:100%;object-fit:cover;display:block}
-  .pimg video{z-index:1}
+  .pimg video{z-index:1;opacity:0;transition:opacity .5s ease}
+  .pimg video.ready{opacity:1}
   .float img{animation:levit 7s ease-in-out infinite}
   @keyframes levit{0%,100%{transform:translateY(-11px)}50%{transform:translateY(11px)}}
   /* verlauf statt flachem rechteck - sonst läuft eine harte kante quer durchs bild */
@@ -506,8 +507,16 @@
     var still=matchMedia('(prefers-reduced-motion:reduce)').matches;
     if(save||still){ v.remove(); return; }
     var wide=matchMedia('(min-aspect-ratio:1/1)').matches;
+    // erst aufblenden, wenn das erste bild wirklich steht - sonst
+    // sieht man das standbild und danach einen harten schnitt
+    var show=function(){ v.classList.add('ready'); };
+    v.addEventListener('playing',show,{once:true});
+    v.addEventListener('loadeddata',function(){
+      if(v.readyState>=3) show();
+    },{once:true});
     v.src=wide?v.dataset.wide:v.dataset.narrow;
     v.load();
+    var p=v.play(); if(p&&p.catch) p.catch(function(){});
   })();
 
   /* ---------- INTRO-VORHANG ---------- */
