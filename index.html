@@ -37,6 +37,56 @@
   .top{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:26px var(--m)}
   .top .brand{display:flex;align-items:center}
   .top .brand img{height:44px;width:auto;display:block}
+  /* ---------------- INTRO-VORHANG ---------------- */
+  body.gated{overflow:hidden}
+  .gate{position:fixed;inset:0;z-index:90;background:#08080a;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;
+    transition:opacity 1.15s cubic-bezier(.22,.61,.36,1),visibility 1.15s}
+  .gate.open{opacity:0;visibility:hidden}
+  .gate-star{background:none;border:0;padding:0;cursor:pointer;position:relative;display:block}
+  .gate-star img{height:clamp(78px,13vh,132px);width:auto;display:block;
+    animation:gatebreath 3.4s ease-in-out infinite;
+    filter:drop-shadow(0 0 16px rgba(237,230,216,.42));
+    transition:filter .16s linear,transform .16s linear}
+  @keyframes gatebreath{0%,100%{opacity:.66;transform:scale(1)}50%{opacity:1;transform:scale(1.07)}}
+  /* hof hinter dem stern, gleicher takt */
+  .gate-star::after{content:"";position:absolute;left:50%;top:50%;width:min(52vw,300px);height:min(52vw,300px);
+    transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;z-index:-1;
+    background:radial-gradient(circle,rgba(237,230,216,.20),rgba(237,230,216,0) 66%);
+    animation:gatehalo 3.4s ease-in-out infinite}
+  @keyframes gatehalo{0%,100%{opacity:.3;transform:translate(-50%,-50%) scale(.86)}
+                      50%   {opacity:.9;transform:translate(-50%,-50%) scale(1.16)}}
+  .gate-hint{font-size:.56rem;letter-spacing:.26em;text-transform:uppercase;opacity:.4;
+    animation:gatehint 3.4s ease-in-out infinite}
+  @keyframes gatehint{0%,100%{opacity:.22}50%{opacity:.58}}
+  /* der blitz beim anklicken */
+  .gate.flash{background:#fffdf5}
+  .gate.flash .gate-star img{filter:drop-shadow(0 0 70px #fff) brightness(3.4);transform:scale(1.6);animation:none}
+  .gate.flash .gate-hint{opacity:0}
+
+  /* STERN: ruhiges atmen, dazwischen ein blitz - unregelmaessig, damit es lebt */
+  .top .brand{position:relative}
+  .top .brand img{
+    animation:starbreath 4.6s ease-in-out infinite, starflash 9.2s steps(1,end) infinite;
+    filter:drop-shadow(0 0 6px rgba(237,230,216,.35))}
+  @keyframes starbreath{
+    0%,100%{opacity:.82;transform:scale(1)}
+    50%    {opacity:1;  transform:scale(1.06)}}
+  @keyframes starflash{
+    0%,88%  {filter:drop-shadow(0 0 6px rgba(237,230,216,.32))}
+    89%     {filter:drop-shadow(0 0 22px rgba(255,252,244,.95)) brightness(2.1)}
+    90.5%   {filter:drop-shadow(0 0 4px rgba(237,230,216,.25)) brightness(1)}
+    92%     {filter:drop-shadow(0 0 30px rgba(255,252,244,1)) brightness(2.6)}
+    94%     {filter:drop-shadow(0 0 10px rgba(237,230,216,.5)) brightness(1.25)}
+    100%    {filter:drop-shadow(0 0 6px rgba(237,230,216,.32))}}
+  /* leuchtender hof hinter dem stern, pulsiert im gleichen takt */
+  .top .brand::before{content:"";position:absolute;left:50%;top:50%;width:66px;height:66px;
+    transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle,rgba(237,230,216,.30),rgba(237,230,216,0) 68%);
+    animation:starhalo 4.6s ease-in-out infinite}
+  @keyframes starhalo{
+    0%,100%{opacity:.35;transform:translate(-50%,-50%) scale(.9)}
+    50%    {opacity:.85;transform:translate(-50%,-50%) scale(1.18)}}
   .burger{width:34px;height:14px;position:relative;cursor:pointer;background:none;border:0;padding:0}
   .burger span{position:absolute;left:0;right:0;height:1.5px;background:var(--bone);transition:transform .6s cubic-bezier(.16,.72,.29,1),opacity .4s}
   .burger span:nth-child(1){top:0}.burger span:nth-child(2){bottom:0}
@@ -161,7 +211,7 @@
 
   .rise{opacity:0;transform:translateY(14px);transition:opacity 1.6s cubic-bezier(.16,.72,.29,1),transform 1.6s cubic-bezier(.16,.72,.29,1)}
   .rise.in{opacity:1;transform:none}
-  @media(prefers-reduced-motion:reduce){.rise{opacity:1;transform:none}.grain,.float img{animation:none}.pimg video{display:none}}
+  @media(prefers-reduced-motion:reduce){.rise{opacity:1;transform:none}.grain,.float img,.top .brand img,.top .brand::before{animation:none}.pimg video{display:none}}
 
   /* ------------------------------------------------------------------
      BREITBILD: die drei motive sind 9:16. randlos auf 100vh heisst auf
@@ -193,7 +243,14 @@
   }
 </style>
 </head>
-<body>
+<body class="gated">
+
+<!-- INTRO-VORHANG: stern leuchtet, klick oeffnet die seite -->
+<div class="gate" id="gate" role="button" tabindex="0" aria-label="eintreten">
+  <button class="gate-star" type="button" tabindex="-1" aria-hidden="true"><img alt="" /></button>
+  <div class="gate-hint">ber&uuml;hren</div>
+</div>
+
 
 <div class="grain"></div>
 <div class="viewport"></div>
@@ -408,6 +465,39 @@
   const kick=()=>{ if(!muted) startSound(); };
   ['pointerdown','keydown','touchstart'].forEach(ev=>addEventListener(ev,kick,{once:true,passive:true}));
   addEventListener('scroll',kick,{once:true,passive:true});
+
+  /* ---------- INTRO-VORHANG ---------- */
+  (function(){
+    const gate=document.getElementById('gate');
+    if(!gate) return;
+    // stern nicht doppelt einbetten - wir leihen die quelle vom logo oben links
+    const brand=document.querySelector('.top .brand img');
+    const star=gate.querySelector('img');
+    if(brand&&star) star.src=brand.currentSrc||brand.src;
+
+    let seen=false;
+    try{ seen=sessionStorage.getItem('amx_intro')==='1'; }catch(e){}
+    if(seen){ gate.remove(); document.body.classList.remove('gated'); return; }
+
+    let used=false;
+    function open(){
+      if(used) return; used=true;
+      gate.classList.add('flash');                 // blitz
+      setTimeout(function(){
+        gate.classList.remove('flash');
+        gate.classList.add('open');                // vorhang auf
+        document.body.classList.remove('gated');
+        try{ sessionStorage.setItem('amx_intro','1'); }catch(e){}
+        setTimeout(function(){ if(gate.parentNode) gate.remove(); },1300);
+      },180);
+    }
+    gate.addEventListener('click',open);
+    gate.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '||e.key==='Spacebar'){ e.preventDefault(); open(); }
+    });
+    gate.focus({preventScroll:true});
+  })();
 </script>
+<script src="consent.js" defer></script>
 </body>
 </html>
