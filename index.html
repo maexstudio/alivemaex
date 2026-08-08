@@ -69,6 +69,15 @@
   .plate--haut .subline input::placeholder{opacity:.72}
   .plate--haut .subline button{text-shadow:none}
 
+
+  /* NAHT-STICKER: klammert die harte kante zwischen bildplatte und katalog.
+     liegt im katalog, nicht in der platte - die schneidet ueberstehendes ab. */
+  .index{position:relative}
+  .seam{position:absolute;left:50%;top:0;transform:translate(-50%,-54%);z-index:8;pointer-events:none}
+  .seam img{width:clamp(54px,6.5vw,92px);height:auto;display:block;
+    filter:drop-shadow(0 8px 30px rgba(0,0,0,.6))}
+  @media(max-width:640px){.seam img{width:46px}}
+
   /* ---------------- INTRO-VORHANG ---------------- */
   body.gated{overflow:hidden}
   .gate{position:fixed;inset:0;z-index:90;background:#08080a;cursor:pointer;
@@ -343,6 +352,7 @@
 
 <!-- RELEASES -->
 <section class="index" id="index">
+  <div class="seam" aria-hidden="true"><img class="wob" alt="" /></div>
   <div class="eyebrow rise">the catalogue</div>
   <div class="rise" id="catalog"></div>
 </section>
@@ -528,6 +538,13 @@
     v.src=wide?v.dataset.wide:v.dataset.narrow;
     v.load();
     var p=v.play(); if(p&&p.catch) p.catch(function(){});
+  })();
+
+
+  /* naht-sticker bekommt den stern vom logo */
+  (function(){
+    var b=document.querySelector('.top .brand img'), t=document.querySelector('.seam img');
+    if(b&&t) t.src=b.currentSrc||b.src;
   })();
 
   /* ---------- INTRO-VORHANG ---------- */
