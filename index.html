@@ -57,10 +57,13 @@
   /* platte */
   .plate{position:relative;height:100vh;height:100svh;overflow:hidden}
   .pimg{position:absolute;inset:0;will-change:transform}
-  .pimg img{position:absolute;left:0;right:0;top:-9%;height:118%;width:100%;object-fit:cover;display:block}
+  .pimg img,.pimg video{position:absolute;left:0;right:0;top:-9%;height:118%;width:100%;object-fit:cover;display:block}
+  .pimg video{z-index:1}
   .float img{animation:levit 7s ease-in-out infinite}
   @keyframes levit{0%,100%{transform:translateY(-11px)}50%{transform:translateY(11px)}}
-  .scrim{position:absolute;left:0;right:0;bottom:0;height:32%;background:rgba(6,6,7,.18);pointer-events:none;z-index:2}
+  /* verlauf statt flachem rechteck - sonst läuft eine harte kante quer durchs bild */
+  .scrim{position:absolute;left:0;right:0;bottom:0;height:46%;pointer-events:none;z-index:2;
+    background:linear-gradient(to top,rgba(6,6,7,.34),rgba(6,6,7,.10) 52%,rgba(6,6,7,0))}
 
   .caption{position:absolute;left:var(--m);bottom:clamp(40px,7vh,74px);z-index:5;max-width:36ch}
 
@@ -73,14 +76,7 @@
   /* himmel ist hell - scrim wandert nach oben, sonst trägt die typo nicht */
   .plate--hero .scrim{top:0;bottom:auto;height:64%;
     background:linear-gradient(to bottom,rgba(6,6,7,.36),rgba(6,6,7,.12) 58%,rgba(6,6,7,0))}
-  /* querformat: dort ist vom himmel kaum was im bild - modul bleibt unten */
-  @media (min-aspect-ratio:1/1){
-    .plate--hero .caption{top:auto;bottom:clamp(40px,7vh,74px);right:auto;max-width:44ch}
-    .plate--hero .line{font-size:clamp(1.4rem,3.4vw,2.4rem)}
-    .plate--hero .cnum{font-size:clamp(1.5rem,3.6vw,2.5rem)}
-    .plate--hero .scrim{top:auto;bottom:0;height:38%;
-      background:linear-gradient(to top,rgba(6,6,7,.30),rgba(6,6,7,0))}
-  }
+
   .kicker{font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;opacity:.8;margin-bottom:16px}
   .line{font-size:clamp(1.2rem,2.9vw,2rem);letter-spacing:.03em;text-transform:uppercase;line-height:1.28}
   .meta{margin-top:20px;font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
@@ -165,7 +161,36 @@
 
   .rise{opacity:0;transform:translateY(14px);transition:opacity 1.6s cubic-bezier(.16,.72,.29,1),transform 1.6s cubic-bezier(.16,.72,.29,1)}
   .rise.in{opacity:1;transform:none}
-  @media(prefers-reduced-motion:reduce){.rise{opacity:1;transform:none}.grain,.float img{animation:none}}
+  @media(prefers-reduced-motion:reduce){.rise{opacity:1;transform:none}.grain,.float img{animation:none}.pimg video{display:none}}
+
+  /* ------------------------------------------------------------------
+     BREITBILD: die drei motive sind 9:16. randlos auf 100vh heisst auf
+     einem breiten monitor, dass oben und unten alles wegfaellt und nur
+     ein mittelstreifen bleibt. also: platte ganz zeigen, zentriert auf
+     dunklem grund - wie ein cover im rahmen.
+     ------------------------------------------------------------------ */
+  @media (min-aspect-ratio:1/1){
+    .plate{background:#08080a}
+    .pimg{transform:none!important}          /* parallax braucht ueberstand, den contain nicht hat */
+    .pimg img,.pimg video{top:0;height:100%;width:100%;object-fit:contain;object-position:center}
+    .float img{animation:none}
+
+    /* scrim nur unter die platte legen, nicht ueber die dunklen raender */
+    .scrim{left:50%;transform:translateX(-50%);width:min(100%,56vh);height:40%}
+
+    /* hero-modul mittig unter das motiv, sonst haengt es auf dem schwarzen rand */
+    .plate--hero .caption{top:auto;bottom:clamp(30px,5.5vh,62px);left:50%;right:auto;
+      transform:translateX(-50%);width:min(92vw,56vh);max-width:none;text-align:center}
+    .plate--hero .count{justify-content:center}
+    .plate--hero .line{font-size:clamp(1.4rem,3.2vw,2.3rem)}
+    .plate--hero .cnum{font-size:clamp(1.5rem,3.4vw,2.4rem)}
+    .plate--hero .scrim{top:auto;bottom:0;height:40%;
+      background:linear-gradient(to top,rgba(6,6,7,.32),rgba(6,6,7,0))}
+
+    /* sticker an die platte ruecken statt frei auf schwarz */
+    .sticker{left:calc(50% - 25vh)!important}
+    .fragment{left:50%;transform:translateX(-50%);width:min(92vw,56vh);max-width:none;text-align:center}
+  }
 </style>
 </head>
 <body>
@@ -188,7 +213,10 @@
 
 <!-- HERO -->
 <section class="plate plate--hero">
-  <div class="pimg"><img src="ith-1.jpg" alt="" /></div>
+  <div class="pimg">
+    <img src="ith-1.jpg" alt="" />
+    <video src="ith-1.mp4" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+  </div>
   <div class="scrim"></div>
   <div class="caption">
     <div class="kicker rise">alivemaex</div>
