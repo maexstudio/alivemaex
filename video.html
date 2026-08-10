@@ -51,6 +51,29 @@
     padding:16px 4px 0;font-size:.54rem;letter-spacing:.18em;text-transform:uppercase}
   .film-t{opacity:.9}.film-n{opacity:.45}
   .film iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:var(--r);display:block}
+
+  .cap,.rel-head,.film-btn,.subline button,.social a,.burger{
+    -webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  .cap:active,.subline button:active{transform:scale(.96);transition:transform .08s ease-out}
+  .film-btn:active .film-play{transform:translate(-50%,-50%) scale(.93);transition:transform .08s ease-out}
+  .social a:active{transform:translateY(0) scale(.9);transition:transform .08s ease-out}
+  .burger:active{opacity:.6;transition:opacity .08s ease-out}
+  .menu{transform-origin:calc(100% - var(--m)) 34px;transform:scale(1.03);
+    transition:opacity .62s cubic-bezier(.16,.72,.29,1),transform .62s cubic-bezier(.16,.72,.29,1)}
+  body.menu-open .menu{transform:scale(1)}
+  .top::before{content:"";position:absolute;inset:0 0 auto 0;height:150%;z-index:-1;pointer-events:none;
+    background:linear-gradient(to bottom,rgba(6,6,7,.42),rgba(6,6,7,0))}
+  @media(prefers-reduced-transparency:reduce){
+    .film-play,.amx-cc{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(8,8,10,.92)}
+  }
+  @media(prefers-contrast:more){
+    .cap{border-color:var(--bone)}
+    .top::before{background:rgba(6,6,7,.72)}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .menu{transform:none;transition:opacity .2s ease}
+    .cap:active,.subline button:active{transform:none}
+  }
 </style>
 <style>
   :root{

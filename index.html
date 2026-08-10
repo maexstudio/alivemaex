@@ -58,6 +58,42 @@
      eigene hoehe statt bildschirmhoehe - das bild traegt sich selbst. */
   .hall{background:var(--ink);line-height:0}
   .hall img{width:100%;height:clamp(260px,58vh,620px);object-fit:cover;object-position:50% 46%;display:block}
+
+  /* ================= HAPTIK & MATERIAL =================
+     Nach Apples "Designing Fluid Interfaces": Rueckmeldung gehoert auf den
+     Druck, nicht auf das Loslassen. Kurz, klein, sofort. */
+  .cap,.rel-head,.film-btn,.subline button,.social a,.sound,.burger,.gate-star{
+    -webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  .cap:active,.subline button:active,.sound:active{transform:scale(.96);transition:transform .08s ease-out}
+  .rel-head:active{transform:scale(.995);transition:transform .08s ease-out}
+  .film-btn:active .film-play{transform:translate(-50%,-50%) scale(.93);transition:transform .08s ease-out}
+  .social a:active{transform:translateY(0) scale(.9);transition:transform .08s ease-out}
+  .burger:active{opacity:.6;transition:opacity .08s ease-out}
+
+  /* Menue kommt aus dem Burger, nicht aus dem Nichts - gleicher Weg zurueck */
+  .menu{transform-origin:calc(100% - var(--m)) 34px;transform:scale(1.03);
+    transition:opacity .62s cubic-bezier(.16,.72,.29,1),transform .62s cubic-bezier(.16,.72,.29,1),visibility .62s}
+  body.menu-open .menu{transform:scale(1)}
+
+  /* Scroll-Kante: die Leiste schwebt ueber hellen Motiven. Ein weicher
+     Verlauf statt einer Linie, damit Stern und Burger immer tragen. */
+  .top::before{content:"";position:absolute;inset:0 0 auto 0;height:150%;z-index:-1;pointer-events:none;
+    background:linear-gradient(to bottom,rgba(6,6,7,.42),rgba(6,6,7,0))}
+
+  /* Materialien zuruecknehmen, wenn das System es verlangt */
+  @media(prefers-reduced-transparency:reduce){
+    .film-play,.subline,.sound,.amx-cc{backdrop-filter:none;-webkit-backdrop-filter:none;
+      background:rgba(8,8,10,.92)}
+  }
+  @media(prefers-contrast:more){
+    .cap,.sound,.subline{border-color:var(--bone)}
+    .film-n,.clab,.kicker,.meta{opacity:1}
+    .top::before{background:rgba(6,6,7,.72)}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .menu{transform:none;transition:opacity .2s ease}
+    .cap:active,.subline button:active,.sound:active,.rel-head:active{transform:none}
+  }
 </style>
 <style>
   /* ITHAKA (1973 griechische fotos) × NOLAN×RAMS × SPACE AGE
@@ -589,7 +625,16 @@
     if(open) return;
     rel.classList.add('open'); h.querySelector('.ind').textContent='×';
     if(rel.dataset.spotify && !rel.dataset.resolved){ await resolve(rel); }
-    body.style.maxHeight=body.querySelector('.rel-inner').scrollHeight+'px';
+    const inner=body.querySelector('.rel-inner');
+    const fit=()=>{ if(rel.classList.contains('open')) body.style.maxHeight=inner.scrollHeight+'px'; };
+    fit();
+    // cover laedt spaeter nach - dann nochmal messen, sonst ist die klappe zu kurz
+    inner.querySelectorAll('img').forEach(im=>{ if(!im.complete) im.addEventListener('load',fit,{once:true}); });
+    if(!cat.dataset.refit){ cat.dataset.refit='1'; addEventListener('resize',()=>{
+      cat.querySelectorAll('.rel.open').forEach(r=>{
+        const b=r.querySelector('.rel-body'); b.style.maxHeight=b.querySelector('.rel-inner').scrollHeight+'px';
+      });
+    },{passive:true}); }
   }));
 
   const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }),{threshold:.2});
