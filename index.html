@@ -100,6 +100,22 @@
     .menu{transform:none;transition:opacity .2s ease}
     .cap:active,.subline button:active,.sound:active,.rel-head:active{transform:none}
   }
+
+  /* Katalog auf schmalen Schirmen: "betonwuestengrau" ist ein einziges wort
+     und kann nicht umbrechen. also schrift und abstaende zurueck, damit
+     jahr und plus ihren platz behalten statt an den rand gedrueckt zu werden. */
+  @media(max-width:640px){
+    .rel-head{gap:10px;padding:17px 18px}
+    .rel-head .t{gap:10px;font-size:clamp(.7rem,3.5vw,.95rem);letter-spacing:.02em;line-height:1.25}
+    .rel-head .t::before{width:5px;height:5px}
+    .rel-head .y{font-size:.48rem;letter-spacing:.1em}
+    .rel-head .ind{width:14px;font-size:.9rem}
+    .rel{border-radius:18px}
+  }
+  @media(max-width:380px){
+    .rel-head .t{font-size:.66rem}
+    .rel-head .y{display:none}   /* auf sehr schmalen geraeten weicht das jahr */
+  }
 </style>
 <style>
   /* ITHAKA (1973 griechische fotos) × NOLAN×RAMS × SPACE AGE
@@ -305,7 +321,7 @@
   .rel{border:1px solid rgba(237,230,216,.2);border-radius:22px;margin-bottom:12px;overflow:hidden;transition:border-color .5s}
   .rel.open,.rel:hover{border-color:rgba(237,230,216,.55)}
   .rel-head{width:100%;display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:clamp(16px,4vw,50px);padding:20px 26px;background:none;border:0;cursor:pointer;font-family:var(--face);color:var(--bone);text-align:left}
-  .rel-head .t{display:flex;align-items:center;gap:14px;font-size:clamp(.8rem,1.9vw,1.15rem);letter-spacing:.04em;text-transform:uppercase}
+  .rel-head .t{display:flex;align-items:center;gap:14px;min-width:0;font-size:clamp(.8rem,1.9vw,1.15rem);letter-spacing:.04em;text-transform:uppercase;overflow-wrap:anywhere}
   .rel-head .t::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5;flex:0 0 auto;transition:opacity .5s}
   .rel.open .rel-head .t::before{opacity:1}
   .rel-head .y{font-size:.56rem;letter-spacing:.14em;opacity:.5}
