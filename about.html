@@ -3,24 +3,45 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ALIVEMAEX — About · Press</title>
+<title>ALIVEMAEX — Biografie, Presse &amp; Booking</title>
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" href="/icon-light.png" media="(prefers-color-scheme: light)" />
 <link rel="icon" type="image/png" href="/icon-dark.png" media="(prefers-color-scheme: dark)" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="canonical" href="https://alivemaex.com/about" />
-<meta name="description" content="ALIVEMAEX: the world, the sound, and everything press & bookers need. press kit und hi-res fotos auf anfrage." />
+<meta name="description" content="ALIVEMAEX — Produzent und Sänger aus Berlin, Urheber des Genres New Electronic Wave. Biografie, Presse-Kit, hi-res Fotos und Booking." />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="ALIVEMAEX" />
 <meta property="og:locale" content="de_DE" />
-<meta property="og:title" content="ALIVEMAEX — About · Press" />
-<meta property="og:description" content="ALIVEMAEX: the world, the sound, and everything press & bookers need. press kit und hi-res fotos auf anfrage." />
+<meta property="og:title" content="ALIVEMAEX — Biografie, Presse & Booking" />
+<meta property="og:description" content="ALIVEMAEX — Produzent und Sänger aus Berlin, Urheber des Genres New Electronic Wave. Biografie, Presse-Kit, hi-res Fotos und Booking." />
 <meta property="og:image" content="https://alivemaex.com/ith-1.jpg" />
 <meta property="og:image:width" content="1500" />
 <meta property="og:image:height" content="2688" />
 <meta property="og:url" content="https://alivemaex.com/about" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="theme-color" content="#0A0A0B" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"ProfilePage",
+"url":"https://alivemaex.com/about",
+"name":"ALIVEMAEX — Biografie, Presse & Booking",
+"inLanguage":"de",
+"mainEntity":{"@type":"MusicGroup","@id":"https://alivemaex.com/#artist",
+"name":"ALIVEMAEX","url":"https://alivemaex.com/","email":"info@alivemaex.com",
+"image":"https://alivemaex.com/ith-2.jpg",
+"genre":["New Electronic Wave","Electronic","Alternative Electronic"],
+"description":"ALIVEMAEX ist Produzent und Sänger aus Berlin und der Urheber des Genres New Electronic Wave: nahe Stimmen, warme Maschinen, schwere Drums und gebrochene Echos. Musik über Distanz, Sehnsucht und die Momente, in denen Menschen einander fast hereinlassen. Liebe über Angst.",
+"address":{"@type":"PostalAddress","addressLocality":"Berlin","addressCountry":"DE"},
+"sameAs":["https://open.spotify.com/artist/0aiBlkcHQ2Nqta7K7JBS3d",
+"https://www.instagram.com/alivemaex",
+"https://www.youtube.com/@ALIVEMAEX",
+"https://soundcloud.com/alivemaex",
+"https://www.tiktok.com/@alivemaex",
+"https://alivemaex.bandcamp.com/",
+"https://www.beatport.com/artist/alivemaex/806302",
+"https://ra.co/dj/alivemaex",
+"https://www.last.fm/music/alivemaex"]}}
+</script>
 <style>
   /* schrift liegt auf unserem server - vorher google fonts, das war
      bei jedem aufruf eine IP an einen dritten */
@@ -104,6 +125,23 @@
   .cap:hover .led{background:var(--ink)}
   .caprow{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
 
+  /* presse: bio-fassungen und foto-downloads */
+  .bio{margin-top:26px}
+  .bio+.bio{margin-top:30px}
+  .bio .lbl{font-family:var(--face);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;
+    opacity:.5;margin-bottom:10px}
+  .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+  @media(max-width:520px){.shots{grid-template-columns:repeat(2,1fr)}}
+  .shot{display:block;position:relative;border-radius:14px;overflow:hidden;line-height:0;
+    border:1px solid rgba(237,230,216,.22);transition:border-color .5s}
+  .shot img{width:100%;height:150px;object-fit:cover;display:block;
+    filter:grayscale(.15);transition:transform 1.2s cubic-bezier(.16,.72,.29,1),filter .6s}
+  .shot:hover{border-color:var(--bone)}
+  .shot:hover img{transform:scale(1.04);filter:none}
+  .shot .dl{position:absolute;left:0;right:0;bottom:0;padding:9px 11px;
+    font-family:var(--face);font-size:.44rem;letter-spacing:.16em;text-transform:uppercase;
+    background:linear-gradient(to top,rgba(6,6,7,.86),rgba(6,6,7,0));line-height:1.5}
+
   footer{padding:56px var(--m);display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;border-top:1px solid rgba(237,230,216,.16)}
   footer .f{font-family:var(--face);font-size:.54rem;letter-spacing:.14em;text-transform:uppercase;opacity:.45;line-height:2.1}
 
@@ -144,7 +182,7 @@
 
 <!-- BILD-KOPF -->
 <section class="head">
-  <div class="pimg"><img src="ith-3.jpg" alt="" /></div>
+  <div class="pimg"><img src="ith-3.jpg" alt="ALIVEMAEX mit Widderkopf-Maske und Ruder vor roter Wand" /></div>
   <div class="scrim"></div>
   <h1 class="title">about</h1>
 </section>
@@ -176,11 +214,66 @@
         This world is open. Come in. Stay a while.</p>
       </div>
 
-      <div class="block rise">
-        <div class="h">press</div>
+      <div class="block rise" id="presse">
+        <div class="h">press kit</div>
+        <p class="p">Frei verwendbar für redaktionelle Zwecke. Fotos bitte mit Credit.</p>
+
+        <div class="bio">
+          <div class="lbl">kurzbiografie — deutsch</div>
+          <p class="p">ALIVEMAEX ist Produzent und Sänger aus Berlin und der Urheber von New
+          Electronic Wave. Nahe Stimmen, warme Maschinen, schwere Drums, gebrochene Echos. Musik
+          über Distanz, Sehnsucht und die Momente, in denen Menschen einander fast hereinlassen.
+          <strong>Liebe über Angst.</strong></p>
+        </div>
+
+        <div class="bio">
+          <div class="lbl">short bio — english</div>
+          <p class="p">ALIVEMAEX is a producer and singer from Berlin, and the originator of New
+          Electronic Wave. Close vocals, warm machines, heavy drums, broken echoes. Music about
+          distance, desire and the moments in which people almost let each other in.
+          <strong>Liebe über Angst.</strong></p>
+        </div>
+
+        <div class="bio">
+          <div class="lbl">lange fassung — deutsch</div>
+          <p class="p">Der Weg hierher ging über den Dancefloor. Über Jahre spielte ALIVEMAEX in
+          Berliner Clubs, in der Rote Sonne in München, im Santeria Toscana in Mailand, auf
+          SonneMondSterne und bei Verknipt im OST. Releases auf Darkart und Voxnox, dazu das eigene
+          Label enneatrax. Der Club hat ihm das Handwerk beigebracht: wie viel Gewicht eine Drum
+          braucht, wie lange man einen Raum offen halten kann, bevor er kippt.</p>
+          <p class="p">Was daraus geworden ist, ist keine Abkehr, sondern eine Verlagerung.
+          Dieselbe Maschine, näher am Mikrofon. Die Stimme steht jetzt vorne. Aus Tracks sind Songs
+          geworden — über Distanz, über Sehnsucht, über die Momente, in denen Menschen einander
+          fast hereinlassen und es dann doch nicht tun.</p>
+          <p class="p">Alles entsteht von Hand und allein: geschrieben, aufgenommen, produziert,
+          gemischt und gemastert im eigenen Raum. Frühere Platten gingen noch durch fremde
+          Mastering-Hände, heute passiert jeder Schritt bei ihm.</p>
+          <p class="p"><strong>boys never bleed</strong> erscheint am 14. August 2026.</p>
+        </div>
+
+        <div class="bio">
+          <div class="lbl">pressefotos — klicken zum laden</div>
+          <div class="shots">
+            <a class="shot" href="/presse/ALIVEMAEX-01-maske.jpg" download>
+              <img src="/presse/ALIVEMAEX-01-maske-s.jpg" loading="lazy"
+                   alt="ALIVEMAEX — Porträt mit weißer Widderkopf-Maske vor roter Wand" />
+              <span class="dl">01 · maske</span>
+            </a>
+            <a class="shot" href="/presse/ALIVEMAEX-02-dach.jpg" download>
+              <img src="/presse/ALIVEMAEX-02-dach-s.jpg" loading="lazy"
+                   alt="ALIVEMAEX maskiert auf einem Berliner Parkdeck bei Mondlicht" />
+              <span class="dl">02 · dach</span>
+            </a>
+            <a class="shot" href="/presse/ALIVEMAEX-03-ballsaal.jpg" download>
+              <img src="/presse/ALIVEMAEX-03-ballsaal-s.jpg" loading="lazy"
+                   alt="ALIVEMAEX am Mikrofon mit Synthesizern in einem alten Ballsaal in Berlin" />
+              <span class="dl">03 · ballsaal</span>
+            </a>
+          </div>
+        </div>
+
         <div class="caprow">
-          <a class="cap" href="mailto:info@alivemaex.com?subject=Press%20kit%20request"><span class="led"></span>request press kit</a>
-          <a class="cap" href="mailto:info@alivemaex.com?subject=Hi-res%20photos"><span class="led"></span>hi-res photos</a>
+          <a class="cap" href="mailto:info@alivemaex.com?subject=Presse%20ALIVEMAEX"><span class="led"></span>presse anfragen</a>
         </div>
       </div>
 

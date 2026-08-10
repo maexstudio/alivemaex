@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://alivemaex.com/</loc><changefreq>weekly</changefreq></url>
-  <url><loc>https://alivemaex.com/about</loc><changefreq>weekly</changefreq></url>
-  <url><loc>https://alivemaex.com/video</loc><changefreq>weekly</changefreq></url>
-  <url><loc>https://alivemaex.com/kontakt</loc><changefreq>weekly</changefreq></url>
+  <url><loc>https://alivemaex.com/</loc><lastmod>2026-08-10</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://alivemaex.com/about</loc><lastmod>2026-08-10</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://alivemaex.com/video</loc><lastmod>2026-08-10</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://alivemaex.com/kontakt</loc><lastmod>2026-08-10</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
 </urlset>
