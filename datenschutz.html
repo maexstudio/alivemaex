@@ -27,9 +27,15 @@
   .film-btn:active .film-play{transform:translate(-50%,-50%) scale(.93);transition:transform .08s ease-out}
   .social a:active{transform:translateY(0) scale(.9);transition:transform .08s ease-out}
   .burger:active{opacity:.6;transition:opacity .08s ease-out}
-  .menu{transform-origin:calc(100% - var(--m)) 34px;transform:scale(1.03);
-    transition:opacity .62s cubic-bezier(.16,.72,.29,1),transform .62s cubic-bezier(.16,.72,.29,1)}
-  body.menu-open .menu{transform:scale(1)}
+  /* kein skalieren mehr: mit ursprung oben rechts driftete die schrift
+     beim schliessen sichtbar nach links unten. das menue blendet jetzt
+     nur, ohne die zeilen zu verschieben. */
+  .menu{transform:none;transition:opacity .5s cubic-bezier(.16,.72,.29,1)}
+  /* zeilen steigen beim oeffnen, beim schliessen gehen sie NICHT zurueck -
+     die ruecksetzung passiert erst, wenn sie schon unsichtbar sind. */
+  .menu a{transition:opacity .26s ease,transform 0s linear .26s}
+  body.menu-open .menu a{
+    transition:opacity .7s cubic-bezier(.16,.72,.29,1),transform .7s cubic-bezier(.16,.72,.29,1)}
   .top::before{content:"";position:absolute;inset:0 0 auto 0;height:150%;z-index:-1;pointer-events:none;
     background:linear-gradient(to bottom,rgba(6,6,7,.42),rgba(6,6,7,0))}
   @media(prefers-reduced-transparency:reduce){
