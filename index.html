@@ -119,29 +119,44 @@
 
   .out-now{opacity:1;letter-spacing:.22em}
 
-  /* HOER-WEGE als ausklapper am knopf. entsteht dort, wo geklickt wurde,
-     und verschwindet auf demselben weg. */
-  .listen{position:relative;display:inline-block;margin-top:26px}
-  .listen .cap{margin-top:0;cursor:pointer;font-family:var(--face)}
-  .svcs{position:absolute;left:0;top:calc(100% + 12px);z-index:20;min-width:210px;
-    display:flex;flex-direction:column;gap:2px;padding:9px;
-    border-radius:20px;border:1px solid rgba(237,230,216,.3);
-    background:rgba(8,8,10,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-    box-shadow:0 22px 60px rgba(0,0,0,.55);
-    transform-origin:26px -12px;transform:scale(.94);opacity:0;visibility:hidden;
-    transition:opacity .26s cubic-bezier(.16,.72,.29,1),transform .3s cubic-bezier(.16,.72,.29,1),visibility .3s}
-  .listen.open .svcs{opacity:1;visibility:visible;transform:scale(1)}
-  .svcs .svc{display:flex;align-items:center;gap:11px;padding:12px 15px;border-radius:13px;
-    font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;color:var(--bone);
-    transition:background .3s,color .3s}
-  .svcs .svc .led{width:5px;height:5px;border-radius:50%;background:var(--bone);
-    flex:0 0 auto;opacity:.55;transition:background .3s,opacity .3s}
-  .svcs .svc:hover{background:var(--bone);color:var(--ink)}
-  .svcs .svc:hover .led{background:var(--ink);opacity:1}
-  .svcs .svc:active{transform:scale(.97);transition:transform .08s ease-out}
-  @media(max-width:640px){ .svcs{min-width:190px} }
-  @media(prefers-reduced-transparency:reduce){ .svcs{backdrop-filter:none;background:rgba(8,8,10,.98)} }
-  @media(prefers-reduced-motion:reduce){ .svcs{transform:none;transition:opacity .18s ease,visibility .18s} }
+
+  /* HOER-FENSTER. liegt am ende des koerpers, damit keine platte mit
+     overflow:hidden es beschneidet - genau daran ist der ausklapper gescheitert. */
+  .lm{position:fixed;inset:0;z-index:95;display:grid;place-items:center;padding:22px}
+  .lm[hidden]{display:none}
+  .lm-scrim{position:absolute;inset:0;background:rgba(4,4,5,.72);
+    backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    opacity:0;transition:opacity .34s ease}
+  .lm-box{position:relative;width:min(94vw,392px);padding:30px 26px 22px;
+    border-radius:26px;border:1px solid rgba(237,230,216,.26);background:#0c0c0e;
+    box-shadow:0 34px 90px rgba(0,0,0,.7);text-align:center;
+    opacity:0;transform:scale(.93) translateY(14px);
+    transition:opacity .3s cubic-bezier(.16,.72,.29,1),transform .42s cubic-bezier(.16,.72,.29,1)}
+  .lm.in .lm-scrim{opacity:1}
+  .lm.in .lm-box{opacity:1;transform:none}
+  .lm-x{position:absolute;top:12px;right:16px;background:none;border:0;cursor:pointer;
+    color:var(--bone);opacity:.45;font-size:1.5rem;line-height:1;padding:6px;transition:opacity .3s}
+  .lm-x:hover{opacity:1}
+  .lm-cover{width:112px;height:112px;object-fit:cover;border-radius:16px;margin:0 auto 18px;
+    display:block;border:1px solid rgba(237,230,216,.2)}
+  .lm-k{font-size:.5rem;letter-spacing:.24em;text-transform:uppercase;opacity:.5;margin-bottom:8px}
+  .lm-t{font-family:var(--face);font-size:.86rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px}
+  .lm-list{display:flex;flex-direction:column;gap:7px}
+  .lm-list .svc{display:flex;align-items:center;justify-content:center;gap:11px;
+    padding:14px 18px;border-radius:999px;border:1px solid rgba(237,230,216,.42);
+    font-size:.52rem;letter-spacing:.19em;text-transform:uppercase;color:var(--bone);
+    transition:background .35s,color .35s,border-color .35s}
+  .lm-list .svc .led{width:5px;height:5px;border-radius:50%;background:var(--bone);
+    flex:0 0 auto;opacity:.6;transition:background .35s,opacity .35s}
+  .lm-list .svc:hover{background:var(--bone);color:var(--ink);border-color:var(--bone)}
+  .lm-list .svc:hover .led{background:var(--ink);opacity:1}
+  .lm-list .svc:active{transform:scale(.97);transition:transform .08s ease-out}
+  body.lm-open{overflow:hidden}
+  @media(prefers-reduced-transparency:reduce){.lm-scrim{backdrop-filter:none;background:rgba(4,4,5,.94)}}
+  @media(prefers-reduced-motion:reduce){
+    .lm-box{transform:none;transition:opacity .18s ease}
+    .lm-scrim{transition:opacity .18s ease}
+  }
 
 </style>
 <style>
@@ -526,18 +541,9 @@
     <div class="kicker rise">alivemaex</div>
     <div class="line rise">boys never bleed</div>
     <div class="meta rise out-now">out now</div>
-    <div class="listen rise" id="listen">
-      <button class="cap" type="button" id="listen-btn" aria-expanded="false" aria-controls="listen-menu">
-        <span class="led"></span>listen
-      </button>
-      <div class="svcs" id="listen-menu" role="menu" aria-labelledby="listen-btn">
-        <a class="svc" role="menuitem" href="https://open.spotify.com/album/1gdzzanOQw8b0aO6wMvihj" target="_blank" rel="noopener" data-ev="spotify"><span class="led"></span>spotify</a>
-        <a class="svc" role="menuitem" href="https://music.apple.com/de/album/6791152122" target="_blank" rel="noopener" data-ev="apple"><span class="led"></span>apple music</a>
-        <a class="svc" role="menuitem" href="https://www.youtube.com/playlist?list=OLAK5uy_ntBfAZw9ErvRxPE4p9piQqj8yUPquB7Mw" target="_blank" rel="noopener" data-ev="youtube"><span class="led"></span>youtube</a>
-        <a class="svc" role="menuitem" href="https://tidal.com/album/543289828" target="_blank" rel="noopener" data-ev="tidal"><span class="led"></span>tidal</a>
-        <a class="svc" role="menuitem" href="https://www.deezer.com/album/1029722522" target="_blank" rel="noopener" data-ev="deezer"><span class="led"></span>deezer</a>
-        <a class="svc" role="menuitem" href="https://music.amazon.com/albums/B0H8YVY9W5" target="_blank" rel="noopener" data-ev="amazon"><span class="led"></span>amazon</a>
-      </div>
+    <button class="cap rise" type="button" id="listen-btn" aria-haspopup="dialog" aria-expanded="false">
+      <span class="led"></span>listen
+    </button>
     </div>
   </div>
 </section>
@@ -855,18 +861,27 @@
   });
 
 
-  /* ausklapper: auf, zu, und zu bei klick nach draussen oder Escape */
+
+  /* hoer-fenster: oeffnen, schliessen, fokus zurueck */
   (function(){
-    var box=document.getElementById('listen'), btn=document.getElementById('listen-btn');
-    if(!box||!btn) return;
-    function set(open){
-      box.classList.toggle('open',open);
-      btn.setAttribute('aria-expanded',open?'true':'false');
+    var btn=document.getElementById('listen-btn'), lm=document.getElementById('lm');
+    if(!btn||!lm) return;
+    function open(){
+      lm.hidden=false; document.body.classList.add('lm-open');
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ lm.classList.add('in'); }); });
+      btn.setAttribute('aria-expanded','true');
+      var first=lm.querySelector('.svc'); if(first) first.focus({preventScroll:true});
     }
-    btn.addEventListener('click',function(e){ e.stopPropagation(); set(!box.classList.contains('open')); });
-    document.addEventListener('click',function(e){ if(!box.contains(e.target)) set(false); });
-    addEventListener('keydown',function(e){ if(e.key==='Escape') set(false); });
-    box.querySelectorAll('.svc').forEach(function(a){ a.addEventListener('click',function(){ set(false); }); });
+    function close(){
+      lm.classList.remove('in'); document.body.classList.remove('lm-open');
+      btn.setAttribute('aria-expanded','false');
+      setTimeout(function(){ lm.hidden=true; },360);
+      btn.focus({preventScroll:true});
+    }
+    btn.addEventListener('click',open);
+    lm.addEventListener('click',function(e){ if(e.target.hasAttribute('data-close')) close(); });
+    lm.querySelectorAll('.svc').forEach(function(a){ a.addEventListener('click',close); });
+    addEventListener('keydown',function(e){ if(e.key==='Escape'&&!lm.hidden) close(); });
   })();
 
   /* ---------- INTRO-VORHANG ---------- */
@@ -904,6 +919,28 @@
     auto=setTimeout(open,10000);
   })();
 </script>
+
+<!-- HOER-WEGE: eigenes fenster, damit keine sektion es abschneidet -->
+<div class="lm" id="lm" role="dialog" aria-modal="true" aria-labelledby="lm-t" hidden>
+  <div class="lm-scrim" data-close></div>
+  <div class="lm-box" role="document">
+    <button class="lm-x" type="button" aria-label="schliessen" data-close>&times;</button>
+    <img class="lm-cover" src="assets/web/cover-bnb.jpg" alt="" />
+    <div class="lm-head">
+      <div class="lm-k">alivemaex</div>
+      <div class="lm-t" id="lm-t">boys never bleed</div>
+    </div>
+    <div class="lm-list">
+      <a class="svc" href="https://open.spotify.com/album/1gdzzanOQw8b0aO6wMvihj" target="_blank" rel="noopener" data-ev="spotify"><span class="led"></span>spotify</a>
+      <a class="svc" href="https://music.apple.com/de/album/6791152122" target="_blank" rel="noopener" data-ev="apple"><span class="led"></span>apple music</a>
+      <a class="svc" href="https://www.youtube.com/playlist?list=OLAK5uy_ntBfAZw9ErvRxPE4p9piQqj8yUPquB7Mw" target="_blank" rel="noopener" data-ev="youtube"><span class="led"></span>youtube</a>
+      <a class="svc" href="https://tidal.com/album/543289828" target="_blank" rel="noopener" data-ev="tidal"><span class="led"></span>tidal</a>
+      <a class="svc" href="https://www.deezer.com/album/1029722522" target="_blank" rel="noopener" data-ev="deezer"><span class="led"></span>deezer</a>
+      <a class="svc" href="https://music.amazon.com/albums/B0H8YVY9W5" target="_blank" rel="noopener" data-ev="amazon"><span class="led"></span>amazon</a>
+    </div>
+  </div>
+</div>
+
 <script src="consent.js" defer></script>
 </body>
 </html>
