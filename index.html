@@ -9,12 +9,12 @@
 <link rel="icon" type="image/png" href="/icon-dark.png" media="(prefers-color-scheme: dark)" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="canonical" href="https://alivemaex.com/" />
-<meta name="description" content="ALIVEMAEX — Produzent und Sänger aus Berlin. boys never bleed, out 14. August 2026. Liebe über Angst." />
+<meta name="description" content="ALIVEMAEX — Produzent und Sänger aus Berlin. boys never bleed ist draußen. Liebe über Angst." />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="ALIVEMAEX" />
 <meta property="og:locale" content="de_DE" />
 <meta property="og:title" content="ALIVEMAEX — New Electronic Wave" />
-<meta property="og:description" content="ALIVEMAEX — Produzent und Sänger aus Berlin. boys never bleed, out 14. August 2026. Liebe über Angst." />
+<meta property="og:description" content="ALIVEMAEX — Produzent und Sänger aus Berlin. boys never bleed ist draußen. Liebe über Angst." />
 <meta property="og:image" content="https://alivemaex.com/og.jpg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
@@ -116,6 +116,13 @@
     .rel-head .t{font-size:.66rem}
     .rel-head .y{display:none}   /* auf sehr schmalen geraeten weicht das jahr */
   }
+
+  .out-now{opacity:1;letter-spacing:.22em}
+  .svcs{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:22px;
+    font-size:.52rem;letter-spacing:.17em;text-transform:uppercase}
+  .svcs a{opacity:.62;padding:4px 0;transition:opacity .35s}
+  .svcs a:hover{opacity:1}
+  .svcs a:active{opacity:.4;transition:opacity .08s}
 </style>
 <style>
   /* ITHAKA (1973 griechische fotos) × NOLAN×RAMS × SPACE AGE
@@ -481,7 +488,7 @@
   <a href="#index">releases</a>
   <a href="about">about</a>
   <a href="video">video</a>
-  <a href="https://cys.ffm.to/boys-never-bleed" target="_blank" rel="noopener">pre-save</a>
+  <a href="https://cys.ffm.to/boys-never-bleed" target="_blank" rel="noopener">listen</a>
   <a href="kontakt">contact</a>
   <div class="mfoot">liebe über angst</div>
 </nav>
@@ -498,14 +505,16 @@
   <div class="caption">
     <div class="kicker rise">alivemaex</div>
     <div class="line rise">boys never bleed</div>
-    <div class="meta rise">out august 14, 2026</div>
-    <div class="count rise" id="count" aria-label="countdown">
-      <div class="cc"><div class="cnum" id="cd-d">00</div><div class="clab">days</div></div>
-      <div class="cc"><div class="cnum" id="cd-h">00</div><div class="clab">hrs</div></div>
-      <div class="cc"><div class="cnum" id="cd-m">00</div><div class="clab">min</div></div>
-      <div class="cc"><div class="cnum" id="cd-s">00</div><div class="clab">sec</div></div>
+    <div class="meta rise out-now">out now</div>
+    <a class="cap rise" href="https://cys.ffm.to/boys-never-bleed" target="_blank" rel="noopener" data-ev="listen"><span class="led"></span>listen</a>
+    <div class="svcs rise">
+      <a href="https://open.spotify.com/album/1gdzzanOQw8b0aO6wMvihj" target="_blank" rel="noopener" data-ev="spotify">spotify</a>
+      <a href="https://music.apple.com/de/album/6791152122" target="_blank" rel="noopener" data-ev="apple">apple music</a>
+      <a href="https://tidal.com/album/543289828" target="_blank" rel="noopener" data-ev="tidal">tidal</a>
+      <a href="https://www.deezer.com/album/1029722522" target="_blank" rel="noopener" data-ev="deezer">deezer</a>
+      <a href="https://music.amazon.com/albums/B0H8YVY9W5" target="_blank" rel="noopener" data-ev="amazon">amazon</a>
+      <a href="https://www.youtube.com/playlist?list=OLAK5uy_ntBfAZw9ErvRxPE4p9piQqj8yUPquB7Mw" target="_blank" rel="noopener" data-ev="youtube">youtube</a>
     </div>
-    <a class="cap rise" href="https://cys.ffm.to/boys-never-bleed" target="_blank" rel="noopener"><span class="led"></span>pre-save</a>
   </div>
 </section>
 
@@ -591,18 +600,7 @@
 <script src="/tone.js"></script>
 <script>
   /* countdown → 14. august 2026 */
-  (function(){
-    const T=new Date('2026-08-14T00:00:00').getTime();
-    const E={d:'cd-d',h:'cd-h',m:'cd-m',s:'cd-s'},N={};
-    for(const k in E)N[k]=document.getElementById(E[k]);
-    const p=n=>String(n).padStart(2,'0');
-    function tick(){
-      let x=T-Date.now(); if(x<0)x=0;
-      const d=Math.floor(x/864e5),h=Math.floor(x%864e5/36e5),m=Math.floor(x%36e5/6e4),s=Math.floor(x%6e4/1e3);
-      if(N.d)N.d.textContent=p(d); if(N.h)N.h.textContent=p(h); if(N.m)N.m.textContent=p(m); if(N.s)N.s.textContent=p(s);
-    }
-    tick(); setInterval(tick,1000);
-  })();
+  /* countdown entfernt - der titel ist draussen */
   const b=document.getElementById('burger');
   b.addEventListener('click',()=>document.body.classList.toggle('menu-open'));
   document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>document.body.classList.remove('menu-open')));
@@ -822,6 +820,14 @@
       btn.replaceWith(fr);
       var n=f.querySelector('.film-n'); if(n) n.textContent='youtube l\u00e4uft';
       if(window.amxTrack) amxTrack('ViewContent',{content_name:f.dataset.title||'video'});
+    });
+  });
+
+
+  /* release: klicks auf hoer-wege melden */
+  document.querySelectorAll('[data-ev]').forEach(function(a){
+    a.addEventListener('click',function(){
+      if(window.amxTrack) amxTrack('ViewContent',{content_name:'boys never bleed',content_category:a.dataset.ev});
     });
   });
 
