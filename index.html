@@ -118,22 +118,30 @@
   }
 
   .out-now{opacity:1;letter-spacing:.22em}
-  /* HOER-WEGE: kapseln wie der pre-save-knopf, nur kleiner. kein umweg
-     ueber einen smartlink - jeder geht direkt zu seinem dienst. */
-  .svcs{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
-  .svcs .svc{position:relative;display:inline-flex;align-items:center;gap:10px;
+
+  /* HOER-WEGE als ausklapper am knopf. entsteht dort, wo geklickt wurde,
+     und verschwindet auf demselben weg. */
+  .listen{position:relative;display:inline-block;margin-top:26px}
+  .listen .cap{margin-top:0;cursor:pointer;font-family:var(--face)}
+  .svcs{position:absolute;left:0;top:calc(100% + 12px);z-index:20;min-width:210px;
+    display:flex;flex-direction:column;gap:2px;padding:9px;
+    border-radius:20px;border:1px solid rgba(237,230,216,.3);
+    background:rgba(8,8,10,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    box-shadow:0 22px 60px rgba(0,0,0,.55);
+    transform-origin:26px -12px;transform:scale(.94);opacity:0;visibility:hidden;
+    transition:opacity .26s cubic-bezier(.16,.72,.29,1),transform .3s cubic-bezier(.16,.72,.29,1),visibility .3s}
+  .listen.open .svcs{opacity:1;visibility:visible;transform:scale(1)}
+  .svcs .svc{display:flex;align-items:center;gap:11px;padding:12px 15px;border-radius:13px;
     font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;color:var(--bone);
-    padding:12px 20px;border-radius:999px;border:1px solid rgba(237,230,216,.6);
-    background:transparent;transition:background .45s,color .45s,border-color .45s}
+    transition:background .3s,color .3s}
   .svcs .svc .led{width:5px;height:5px;border-radius:50%;background:var(--bone);
-    flex:0 0 auto;transition:background .45s}
-  .svcs .svc:hover{background:var(--bone);color:var(--ink);border-color:var(--bone)}
-  .svcs .svc:hover .led{background:var(--ink)}
-  .svcs .svc:active{transform:scale(.96);transition:transform .08s ease-out}
-  @media(max-width:640px){
-    .svcs{gap:8px}
-    .svcs .svc{padding:11px 16px;font-size:.48rem;letter-spacing:.14em}
-  }
+    flex:0 0 auto;opacity:.55;transition:background .3s,opacity .3s}
+  .svcs .svc:hover{background:var(--bone);color:var(--ink)}
+  .svcs .svc:hover .led{background:var(--ink);opacity:1}
+  .svcs .svc:active{transform:scale(.97);transition:transform .08s ease-out}
+  @media(max-width:640px){ .svcs{min-width:190px} }
+  @media(prefers-reduced-transparency:reduce){ .svcs{backdrop-filter:none;background:rgba(8,8,10,.98)} }
+  @media(prefers-reduced-motion:reduce){ .svcs{transform:none;transition:opacity .18s ease,visibility .18s} }
 
 </style>
 <style>
@@ -518,13 +526,18 @@
     <div class="kicker rise">alivemaex</div>
     <div class="line rise">boys never bleed</div>
     <div class="meta rise out-now">out now</div>
-    <div class="svcs rise" id="listen">
-      <a class="svc" href="https://open.spotify.com/album/1gdzzanOQw8b0aO6wMvihj" target="_blank" rel="noopener" data-ev="spotify"><span class="led"></span>spotify</a>
-      <a class="svc" href="https://music.apple.com/de/album/6791152122" target="_blank" rel="noopener" data-ev="apple"><span class="led"></span>apple music</a>
-      <a class="svc" href="https://www.youtube.com/playlist?list=OLAK5uy_ntBfAZw9ErvRxPE4p9piQqj8yUPquB7Mw" target="_blank" rel="noopener" data-ev="youtube"><span class="led"></span>youtube</a>
-      <a class="svc" href="https://tidal.com/album/543289828" target="_blank" rel="noopener" data-ev="tidal"><span class="led"></span>tidal</a>
-      <a class="svc" href="https://www.deezer.com/album/1029722522" target="_blank" rel="noopener" data-ev="deezer"><span class="led"></span>deezer</a>
-      <a class="svc" href="https://music.amazon.com/albums/B0H8YVY9W5" target="_blank" rel="noopener" data-ev="amazon"><span class="led"></span>amazon</a>
+    <div class="listen rise" id="listen">
+      <button class="cap" type="button" id="listen-btn" aria-expanded="false" aria-controls="listen-menu">
+        <span class="led"></span>listen
+      </button>
+      <div class="svcs" id="listen-menu" role="menu" aria-labelledby="listen-btn">
+        <a class="svc" role="menuitem" href="https://open.spotify.com/album/1gdzzanOQw8b0aO6wMvihj" target="_blank" rel="noopener" data-ev="spotify"><span class="led"></span>spotify</a>
+        <a class="svc" role="menuitem" href="https://music.apple.com/de/album/6791152122" target="_blank" rel="noopener" data-ev="apple"><span class="led"></span>apple music</a>
+        <a class="svc" role="menuitem" href="https://www.youtube.com/playlist?list=OLAK5uy_ntBfAZw9ErvRxPE4p9piQqj8yUPquB7Mw" target="_blank" rel="noopener" data-ev="youtube"><span class="led"></span>youtube</a>
+        <a class="svc" role="menuitem" href="https://tidal.com/album/543289828" target="_blank" rel="noopener" data-ev="tidal"><span class="led"></span>tidal</a>
+        <a class="svc" role="menuitem" href="https://www.deezer.com/album/1029722522" target="_blank" rel="noopener" data-ev="deezer"><span class="led"></span>deezer</a>
+        <a class="svc" role="menuitem" href="https://music.amazon.com/albums/B0H8YVY9W5" target="_blank" rel="noopener" data-ev="amazon"><span class="led"></span>amazon</a>
+      </div>
     </div>
   </div>
 </section>
@@ -840,6 +853,21 @@
       if(window.amxTrack) amxTrack('ViewContent',{content_name:'boys never bleed',content_category:a.dataset.ev});
     });
   });
+
+
+  /* ausklapper: auf, zu, und zu bei klick nach draussen oder Escape */
+  (function(){
+    var box=document.getElementById('listen'), btn=document.getElementById('listen-btn');
+    if(!box||!btn) return;
+    function set(open){
+      box.classList.toggle('open',open);
+      btn.setAttribute('aria-expanded',open?'true':'false');
+    }
+    btn.addEventListener('click',function(e){ e.stopPropagation(); set(!box.classList.contains('open')); });
+    document.addEventListener('click',function(e){ if(!box.contains(e.target)) set(false); });
+    addEventListener('keydown',function(e){ if(e.key==='Escape') set(false); });
+    box.querySelectorAll('.svc').forEach(function(a){ a.addEventListener('click',function(){ set(false); }); });
+  })();
 
   /* ---------- INTRO-VORHANG ---------- */
   (function(){
