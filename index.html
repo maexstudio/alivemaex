@@ -627,6 +627,27 @@
 
 <button class="sound" id="sound" aria-label="ton an/aus" title="ton"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect class="cup" x="2.5" y="13" width="4.5" height="7" rx="1.6"/><rect class="cup" x="17" y="13" width="4.5" height="7" rx="1.6"/><line class="slash" x1="3" y1="21.5" x2="21" y2="3.5"/></svg></button>
 
+<!-- HOER-WEGE: eigenes fenster, damit keine sektion es abschneidet -->
+<div class="lm" id="lm" role="dialog" aria-modal="true" aria-labelledby="lm-t" hidden>
+  <div class="lm-scrim" data-close></div>
+  <div class="lm-box" role="document">
+    <button class="lm-x" type="button" aria-label="schliessen" data-close>&times;</button>
+    <img class="lm-cover" src="assets/web/cover-bnb.jpg" alt="" />
+    <div class="lm-head">
+      <div class="lm-k">alivemaex</div>
+      <div class="lm-t" id="lm-t">boys never bleed</div>
+    </div>
+    <div class="lm-list">
+      <a class="svc" href="https://open.spotify.com/album/1gdzzanOQw8b0aO6wMvihj" target="_blank" rel="noopener" data-ev="spotify"><span class="led"></span>spotify</a>
+      <a class="svc" href="https://music.apple.com/de/album/6791152122" target="_blank" rel="noopener" data-ev="apple"><span class="led"></span>apple music</a>
+      <a class="svc" href="https://www.youtube.com/playlist?list=OLAK5uy_ntBfAZw9ErvRxPE4p9piQqj8yUPquB7Mw" target="_blank" rel="noopener" data-ev="youtube"><span class="led"></span>youtube</a>
+      <a class="svc" href="https://tidal.com/album/543289828" target="_blank" rel="noopener" data-ev="tidal"><span class="led"></span>tidal</a>
+      <a class="svc" href="https://www.deezer.com/album/1029722522" target="_blank" rel="noopener" data-ev="deezer"><span class="led"></span>deezer</a>
+      <a class="svc" href="https://music.amazon.com/albums/B0H8YVY9W5" target="_blank" rel="noopener" data-ev="amazon"><span class="led"></span>amazon</a>
+    </div>
+  </div>
+</div>
+
 <script src="/tone.js"></script>
 <script>
   /* countdown → 14. august 2026 */
@@ -710,73 +731,74 @@
     const sub=new Tone.Synth({oscillator:{type:'sine'},envelope:{attack:4,decay:2,sustain:0.8,release:9},volume:-19}).connect(filt);
     const lfo=new Tone.LFO({frequency:0.028,min:520,max:1250}).connect(filt.frequency); lfo.start();
     /* ---- HARMONIK ----
-       vorher liefen vier akkorde stur im kreis, dadurch war nach zwei
-       minuten alles gehoert. jetzt ein groesserer vorrat, ein gewichteter
-       weg von akkord zu akkord (nie zweimal derselbe), und alle paar
-       runden ein wechsel der tonart. gleiche stimmung, nie dieselbe folge. */
+       Drei Welten, jede EINE echte Tonart. Benachbarte Welten teilen sich
+       Akkorde - der Wechsel laeuft nur ueber so einen gemeinsamen Akkord,
+       dadurch ist die Modulation weich statt abrupt.
+       Die Glockentoene kommen aus den Toenen des laufenden Akkords, nicht
+       aus einer festen Skala. So kann nichts danebenliegen, egal wie die
+       Folge verlaeuft. */
     const CH={
-      Em9 :{root:'E1', up:['E3','G3','B3','D4','F#4']},
+      Em9:{root:'E1',up:['E3','G3','B3','D4','F#4']},
       Cadd9:{root:'C1',up:['C3','G3','D4','E4','G4']},
-      Am9 :{root:'A1', up:['A2','E3','G3','B3','C4']},
-      Gadd9:{root:'G1',up:['G2','D3','B3','A4','D4']},
+      Am9:{root:'A1',up:['A2','E3','G3','B3','C4']},
+      Gadd9:{root:'G1',up:['G2','D3','B3','A3','D4']},
       Dsus2:{root:'D1',up:['D3','A3','E4','F#4','A4']},
-      Bm11:{root:'B0', up:['B2','D3','F#3','A3','E4']},
+      Bm11:{root:'B0',up:['B2','D3','F#3','A3','E4']},
       Fmaj7:{root:'F1',up:['F2','C3','A3','E4','G4']},
-      Cm9 :{root:'C1', up:['C3','Eb3','G3','Bb3','D4']},
-      Abmaj7:{root:'Ab0',up:['Ab2','C3','Eb3','G3','Bb3']}
+      Dm9:{root:'D1',up:['D3','A3','C4','F4','E4']},
+      G6:{root:'G1',up:['G2','D3','B3','E4','A4']},
+      Gm9:{root:'G1',up:['G2','D3','Bb3','F4','A4']},
+      Bbmaj7:{root:'Bb0',up:['Bb2','F3','D4','A4','C4']},
+      Csus2:{root:'C1',up:['C3','G3','D4','A3','G4']}
     };
-    /* zwei welten: hell-melancholisch und dunkler. der wechsel dazwischen
-       passiert selten und traegt die lange linie. */
     const WELT=[
-      {n:['Em9','Cadd9','Am9','Gadd9','Dsus2','Bm11'],
-       scale:['E4','G4','A4','B4','D5','E5','G5','F#5']},
-      {n:['Am9','Fmaj7','Cm9','Abmaj7','Em9','Bm11'],
-       scale:['A4','C5','D5','E5','G5','A5','Bb4','Eb5']}
+      {n:['Em9','Cadd9','Am9','Gadd9','Dsus2','Bm11']},   /* e-moll  */
+      {n:['Am9','Fmaj7','Dm9','Cadd9','Em9','G6']},       /* a-moll  */
+      {n:['Dm9','Bbmaj7','Gm9','Fmaj7','Am9','Csus2']}    /* d-moll  */
     ];
-    let w=Math.random()<0.5?0:1;
-    let names=WELT[w].n, scale=WELT[w].scale;
+    let w=Math.floor(Math.random()*WELT.length);
+    let names=WELT[w].n;
     let cur=names[Math.floor(Math.random()*names.length)];
     let seit=0;
 
     function naechster(){
-      // gewichtet: nachbarn im vorrat sind wahrscheinlicher als sprünge,
-      // und derselbe akkord kommt nie zweimal hintereinander
       const k=names.indexOf(cur), kand=[];
       names.forEach((n,idx)=>{
         if(n===cur) return;
         const d=Math.min(Math.abs(idx-k),names.length-Math.abs(idx-k));
         kand.push({n:n,g:d===1?5:(d===2?3:1)});
       });
-      const summe=kand.reduce((a,b)=>a+b.g,0);
-      let r=Math.random()*summe;
+      let r=Math.random()*kand.reduce((a,b)=>a+b.g,0);
       for(const x of kand){ r-=x.g; if(r<=0) return x.n; }
       return kand[0].n;
+    }
+    /* nur ueber einen akkord wechseln, den beide welten kennen */
+    function weltWechsel(){
+      const ziele=[(w+1)%WELT.length,(w+WELT.length-1)%WELT.length];
+      const z=ziele[Math.floor(Math.random()*ziele.length)];
+      if(WELT[z].n.indexOf(cur)<0) return false;   // kein gemeinsamer akkord: bleiben
+      w=z; names=WELT[w].n; return true;
+    }
+    /* glockenton aus dem laufenden akkord, eine oktave hoeher */
+    function hoch(note){
+      const m=note.match(/^([A-G][#b]?)(\d)$/); if(!m) return note;
+      return m[1]+(parseInt(m[2],10)+1);
     }
 
     Tone.Transport.bpm.value=52;
     Tone.Transport.scheduleRepeat((t)=>{
       const c=CH[cur];
       sub.triggerAttackRelease(c.root,'2m',t);
-      /* nicht immer alle toene: mal vier, mal fuenf, mal ohne die spitze.
-         das allein macht denselben akkord zweimal unterschiedlich. */
       const n=c.up.length, wieviel=Math.random()<0.35?n-1:n;
       const lage=c.up.slice(0,wieviel);
       pad.triggerAttackRelease(lage,'2m',t);
       if(Math.random()<0.62) air.triggerAttackRelease(lage.slice(2),'2m',t+0.25+Math.random()*0.5);
-      // sparsamer glocken-ton, gegen den takt, mit wanderndem einsatz
       if(Math.random()<0.5){
-        const note=scale[Math.floor(Math.random()*scale.length)];
-        bell.triggerAttackRelease(note,'2n',t+Tone.Time('2n').toSeconds()*(0.7+Math.random()*0.7));
+        const q=c.up[2+Math.floor(Math.random()*(c.up.length-2))];
+        bell.triggerAttackRelease(hoch(q),'2n',t+Tone.Time('2n').toSeconds()*(0.7+Math.random()*0.7));
       }
       seit++;
-      // alle 7 bis 12 runden die welt wechseln - selten genug, um nicht zu stoeren
-      if(seit>6+Math.floor(Math.random()*6)){
-        seit=0;
-        if(Math.random()<0.45){
-          w=1-w; names=WELT[w].n; scale=WELT[w].scale;
-          if(names.indexOf(cur)<0) cur=names[Math.floor(Math.random()*names.length)];
-        }
-      }
+      if(seit>6+Math.floor(Math.random()*6)){ if(Math.random()<0.5 && weltWechsel()) seit=0; else seit=0; }
       cur=naechster();
     },'2m');
     return {master};
@@ -970,27 +992,6 @@
     auto=setTimeout(open,10000);
   })();
 </script>
-
-<!-- HOER-WEGE: eigenes fenster, damit keine sektion es abschneidet -->
-<div class="lm" id="lm" role="dialog" aria-modal="true" aria-labelledby="lm-t" hidden>
-  <div class="lm-scrim" data-close></div>
-  <div class="lm-box" role="document">
-    <button class="lm-x" type="button" aria-label="schliessen" data-close>&times;</button>
-    <img class="lm-cover" src="assets/web/cover-bnb.jpg" alt="" />
-    <div class="lm-head">
-      <div class="lm-k">alivemaex</div>
-      <div class="lm-t" id="lm-t">boys never bleed</div>
-    </div>
-    <div class="lm-list">
-      <a class="svc" href="https://open.spotify.com/album/1gdzzanOQw8b0aO6wMvihj" target="_blank" rel="noopener" data-ev="spotify"><span class="led"></span>spotify</a>
-      <a class="svc" href="https://music.apple.com/de/album/6791152122" target="_blank" rel="noopener" data-ev="apple"><span class="led"></span>apple music</a>
-      <a class="svc" href="https://www.youtube.com/playlist?list=OLAK5uy_ntBfAZw9ErvRxPE4p9piQqj8yUPquB7Mw" target="_blank" rel="noopener" data-ev="youtube"><span class="led"></span>youtube</a>
-      <a class="svc" href="https://tidal.com/album/543289828" target="_blank" rel="noopener" data-ev="tidal"><span class="led"></span>tidal</a>
-      <a class="svc" href="https://www.deezer.com/album/1029722522" target="_blank" rel="noopener" data-ev="deezer"><span class="led"></span>deezer</a>
-      <a class="svc" href="https://music.amazon.com/albums/B0H8YVY9W5" target="_blank" rel="noopener" data-ev="amazon"><span class="led"></span>amazon</a>
-    </div>
-  </div>
-</div>
 
 <script src="consent.js" defer></script>
 </body>
