@@ -118,11 +118,23 @@
   }
 
   .out-now{opacity:1;letter-spacing:.22em}
-  .svcs{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:22px;
-    font-size:.52rem;letter-spacing:.17em;text-transform:uppercase}
-  .svcs a{opacity:.62;padding:4px 0;transition:opacity .35s}
-  .svcs a:hover{opacity:1}
-  .svcs a:active{opacity:.4;transition:opacity .08s}
+  /* HOER-WEGE: kapseln wie der pre-save-knopf, nur kleiner. kein umweg
+     ueber einen smartlink - jeder geht direkt zu seinem dienst. */
+  .svcs{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .svcs .svc{position:relative;display:inline-flex;align-items:center;gap:10px;
+    font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;color:var(--bone);
+    padding:12px 20px;border-radius:999px;border:1px solid rgba(237,230,216,.6);
+    background:transparent;transition:background .45s,color .45s,border-color .45s}
+  .svcs .svc .led{width:5px;height:5px;border-radius:50%;background:var(--bone);
+    flex:0 0 auto;transition:background .45s}
+  .svcs .svc:hover{background:var(--bone);color:var(--ink);border-color:var(--bone)}
+  .svcs .svc:hover .led{background:var(--ink)}
+  .svcs .svc:active{transform:scale(.96);transition:transform .08s ease-out}
+  @media(max-width:640px){
+    .svcs{gap:8px}
+    .svcs .svc{padding:11px 16px;font-size:.48rem;letter-spacing:.14em}
+  }
+
 </style>
 <style>
   /* ITHAKA (1973 griechische fotos) × NOLAN×RAMS × SPACE AGE
@@ -458,7 +470,7 @@
 "genre":"New Electronic Wave",
 "image":"https://alivemaex.com/ith-2.jpg",
 "inLanguage":"de",
-"url":"https://cys.ffm.to/boys-never-bleed"},
+"url":"https://open.spotify.com/album/1gdzzanOQw8b0aO6wMvihj"},
 {"@type":"WebSite","@id":"https://alivemaex.com/#website",
 "url":"https://alivemaex.com/","name":"ALIVEMAEX",
 "inLanguage":"de","publisher":{"@id":"https://alivemaex.com/#artist"}}
@@ -488,7 +500,7 @@
   <a href="#index">releases</a>
   <a href="about">about</a>
   <a href="video">video</a>
-  <a href="https://cys.ffm.to/boys-never-bleed" target="_blank" rel="noopener">listen</a>
+  <a href="#listen">listen</a>
   <a href="kontakt">contact</a>
   <div class="mfoot">liebe über angst</div>
 </nav>
@@ -506,14 +518,13 @@
     <div class="kicker rise">alivemaex</div>
     <div class="line rise">boys never bleed</div>
     <div class="meta rise out-now">out now</div>
-    <a class="cap rise" href="https://cys.ffm.to/boys-never-bleed" target="_blank" rel="noopener" data-ev="listen"><span class="led"></span>listen</a>
-    <div class="svcs rise">
-      <a href="https://open.spotify.com/album/1gdzzanOQw8b0aO6wMvihj" target="_blank" rel="noopener" data-ev="spotify">spotify</a>
-      <a href="https://music.apple.com/de/album/6791152122" target="_blank" rel="noopener" data-ev="apple">apple music</a>
-      <a href="https://tidal.com/album/543289828" target="_blank" rel="noopener" data-ev="tidal">tidal</a>
-      <a href="https://www.deezer.com/album/1029722522" target="_blank" rel="noopener" data-ev="deezer">deezer</a>
-      <a href="https://music.amazon.com/albums/B0H8YVY9W5" target="_blank" rel="noopener" data-ev="amazon">amazon</a>
-      <a href="https://www.youtube.com/playlist?list=OLAK5uy_ntBfAZw9ErvRxPE4p9piQqj8yUPquB7Mw" target="_blank" rel="noopener" data-ev="youtube">youtube</a>
+    <div class="svcs rise" id="listen">
+      <a class="svc" href="https://open.spotify.com/album/1gdzzanOQw8b0aO6wMvihj" target="_blank" rel="noopener" data-ev="spotify"><span class="led"></span>spotify</a>
+      <a class="svc" href="https://music.apple.com/de/album/6791152122" target="_blank" rel="noopener" data-ev="apple"><span class="led"></span>apple music</a>
+      <a class="svc" href="https://www.youtube.com/playlist?list=OLAK5uy_ntBfAZw9ErvRxPE4p9piQqj8yUPquB7Mw" target="_blank" rel="noopener" data-ev="youtube"><span class="led"></span>youtube</a>
+      <a class="svc" href="https://tidal.com/album/543289828" target="_blank" rel="noopener" data-ev="tidal"><span class="led"></span>tidal</a>
+      <a class="svc" href="https://www.deezer.com/album/1029722522" target="_blank" rel="noopener" data-ev="deezer"><span class="led"></span>deezer</a>
+      <a class="svc" href="https://music.amazon.com/albums/B0H8YVY9W5" target="_blank" rel="noopener" data-ev="amazon"><span class="led"></span>amazon</a>
     </div>
   </div>
 </section>
@@ -605,9 +616,8 @@
   b.addEventListener('click',()=>document.body.classList.toggle('menu-open'));
   document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>document.body.classList.remove('menu-open')));
   /* KATALOG — aufklappbar, mit cover + diensten */
-  const SMART='https://cys.ffm.to/boys-never-bleed';
   const REL=[
-    {t:'boys never bleed',y:'2026',cover:'assets/web/cover-bnb.jpg',services:[['spotify',SMART],['apple music',SMART],['tidal',SMART],['deezer',SMART],['amazon',SMART],['soundcloud',SMART]]},
+    {t:'boys never bleed',y:'2026',cover:'assets/web/cover-bnb.jpg',services:[['spotify','https://open.spotify.com/album/1gdzzanOQw8b0aO6wMvihj'],['apple music','https://music.apple.com/de/album/6791152122'],['youtube','https://www.youtube.com/playlist?list=OLAK5uy_ntBfAZw9ErvRxPE4p9piQqj8yUPquB7Mw'],['tidal','https://tidal.com/album/543289828'],['deezer','https://www.deezer.com/album/1029722522'],['amazon','https://music.amazon.com/albums/B0H8YVY9W5']]},
     {t:'never the same',y:'2025',cover:'https://i.scdn.co/image/ab67616d0000b273854402ba7938f3e7b088d719',services:[['spotify','https://open.spotify.com/album/5qL9vhStf41vYH2zvFYCzu'],['tidal','https://listen.tidal.com/album/466580819'],['amazon','https://music.amazon.com/albums/B0FVYDTDDY']]},
     {t:'herz rast',y:'2025',cover:'https://i.scdn.co/image/ab67616d0000b2738cd408b6678ff1278b75d24b',services:[['spotify','https://open.spotify.com/album/5KpB5d7gyNJkHqXS8Ey9h1'],['tidal','https://listen.tidal.com/album/459489026']]},
     {t:'betonwüstengrau',y:'2025',cover:'https://i.scdn.co/image/ab67616d0000b2737180861b2f03cb3af73fc18f',services:[['spotify','https://open.spotify.com/album/6lFcxZ2FgCguVVCg1ShYwg'],['tidal','https://listen.tidal.com/album/422569308']]},
