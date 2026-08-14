@@ -709,24 +709,75 @@
     const bell=new Tone.Synth({oscillator:{type:'sine'},envelope:{attack:0.03,decay:2,sustain:0,release:5},volume:-27}).connect(reverb);
     const sub=new Tone.Synth({oscillator:{type:'sine'},envelope:{attack:4,decay:2,sustain:0.8,release:9},volume:-19}).connect(filt);
     const lfo=new Tone.LFO({frequency:0.028,min:520,max:1250}).connect(filt.frequency); lfo.start();
-    // Em9 · Cadd9 · Am9 · G(add9) — melancholisch, ALIVEMAEX-harmonik
-    const chords=[
-      {root:'E1',up:['E3','G3','B3','D4','F#4']},
-      {root:'C1',up:['C3','G3','D4','E4','G4']},
-      {root:'A1',up:['A2','E3','G3','B3','C4']},
-      {root:'G1',up:['G2','D3','B3','A4','D4']},
+    /* ---- HARMONIK ----
+       vorher liefen vier akkorde stur im kreis, dadurch war nach zwei
+       minuten alles gehoert. jetzt ein groesserer vorrat, ein gewichteter
+       weg von akkord zu akkord (nie zweimal derselbe), und alle paar
+       runden ein wechsel der tonart. gleiche stimmung, nie dieselbe folge. */
+    const CH={
+      Em9 :{root:'E1', up:['E3','G3','B3','D4','F#4']},
+      Cadd9:{root:'C1',up:['C3','G3','D4','E4','G4']},
+      Am9 :{root:'A1', up:['A2','E3','G3','B3','C4']},
+      Gadd9:{root:'G1',up:['G2','D3','B3','A4','D4']},
+      Dsus2:{root:'D1',up:['D3','A3','E4','F#4','A4']},
+      Bm11:{root:'B0', up:['B2','D3','F#3','A3','E4']},
+      Fmaj7:{root:'F1',up:['F2','C3','A3','E4','G4']},
+      Cm9 :{root:'C1', up:['C3','Eb3','G3','Bb3','D4']},
+      Abmaj7:{root:'Ab0',up:['Ab2','C3','Eb3','G3','Bb3']}
+    };
+    /* zwei welten: hell-melancholisch und dunkler. der wechsel dazwischen
+       passiert selten und traegt die lange linie. */
+    const WELT=[
+      {n:['Em9','Cadd9','Am9','Gadd9','Dsus2','Bm11'],
+       scale:['E4','G4','A4','B4','D5','E5','G5','F#5']},
+      {n:['Am9','Fmaj7','Cm9','Abmaj7','Em9','Bm11'],
+       scale:['A4','C5','D5','E5','G5','A5','Bb4','Eb5']}
     ];
-    const scale=['E4','G4','A4','B4','D5','E5','G5','F#5'];
-    let i=Math.floor(Math.random()*chords.length);
+    let w=Math.random()<0.5?0:1;
+    let names=WELT[w].n, scale=WELT[w].scale;
+    let cur=names[Math.floor(Math.random()*names.length)];
+    let seit=0;
+
+    function naechster(){
+      // gewichtet: nachbarn im vorrat sind wahrscheinlicher als sprünge,
+      // und derselbe akkord kommt nie zweimal hintereinander
+      const k=names.indexOf(cur), kand=[];
+      names.forEach((n,idx)=>{
+        if(n===cur) return;
+        const d=Math.min(Math.abs(idx-k),names.length-Math.abs(idx-k));
+        kand.push({n:n,g:d===1?5:(d===2?3:1)});
+      });
+      const summe=kand.reduce((a,b)=>a+b.g,0);
+      let r=Math.random()*summe;
+      for(const x of kand){ r-=x.g; if(r<=0) return x.n; }
+      return kand[0].n;
+    }
+
     Tone.Transport.bpm.value=52;
     Tone.Transport.scheduleRepeat((t)=>{
-      const c=chords[i%chords.length];
+      const c=CH[cur];
       sub.triggerAttackRelease(c.root,'2m',t);
-      pad.triggerAttackRelease(c.up,'2m',t);
-      if(Math.random()<0.7) air.triggerAttackRelease(c.up.slice(2),'2m',t+0.4);
-      // sparsamer glocken-ton, gegen den takt
-      if(Math.random()<0.55){ const n=scale[Math.floor(Math.random()*scale.length)]; bell.triggerAttackRelease(n,'2n',t+Tone.Time('2n').toSeconds()); }
-      i++;
+      /* nicht immer alle toene: mal vier, mal fuenf, mal ohne die spitze.
+         das allein macht denselben akkord zweimal unterschiedlich. */
+      const n=c.up.length, wieviel=Math.random()<0.35?n-1:n;
+      const lage=c.up.slice(0,wieviel);
+      pad.triggerAttackRelease(lage,'2m',t);
+      if(Math.random()<0.62) air.triggerAttackRelease(lage.slice(2),'2m',t+0.25+Math.random()*0.5);
+      // sparsamer glocken-ton, gegen den takt, mit wanderndem einsatz
+      if(Math.random()<0.5){
+        const note=scale[Math.floor(Math.random()*scale.length)];
+        bell.triggerAttackRelease(note,'2n',t+Tone.Time('2n').toSeconds()*(0.7+Math.random()*0.7));
+      }
+      seit++;
+      // alle 7 bis 12 runden die welt wechseln - selten genug, um nicht zu stoeren
+      if(seit>6+Math.floor(Math.random()*6)){
+        seit=0;
+        if(Math.random()<0.45){
+          w=1-w; names=WELT[w].n; scale=WELT[w].scale;
+          if(names.indexOf(cur)<0) cur=names[Math.floor(Math.random()*names.length)];
+        }
+      }
+      cur=naechster();
     },'2m');
     return {master};
   }
