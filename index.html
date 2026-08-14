@@ -307,6 +307,9 @@
      unsichtbar, solange das video eine chance hat zu starten. */
   .pimg--1 img{opacity:0;transition:opacity .45s ease}
   .pimg--1 img.show,.pimg--1.still img{opacity:1}
+  /* iOS malt bei blockiertem autoplay einen play-knopf ueber das
+     video - auch wenn es durchsichtig ist. also ganz rausnehmen. */
+  .pimg--1.still video{display:none!important}
   .float img{animation:levit 7s ease-in-out infinite}
   @keyframes levit{0%,100%{transform:translateY(-11px)}50%{transform:translateY(11px)}}
   /* verlauf statt flachem rechteck - sonst läuft eine harte kante quer durchs bild */
@@ -840,7 +843,13 @@
     if(!v) return;
     // datensparmodus und bewegungsarm: standbild genuegt
     var box=v.parentNode, img=box.querySelector('img');
-    var fallback=function(){ box.classList.add('still'); };
+    var fallback=function(){
+      box.classList.add('still');
+      // nicht nur unsichtbar: raus aus dem layout, sonst bleibt der
+      // systemeigene play-knopf von iOS stehen
+      v.style.display='none';
+      try{ v.pause(); }catch(e){}
+    };
 
     // datensparmodus und bewegungsarm: standbild genuegt
     var save=navigator.connection&&navigator.connection.saveData;
@@ -863,7 +872,10 @@
     var wide=matchMedia('(min-aspect-ratio:1/1)').matches;
     v.src=wide?v.dataset.wide:v.dataset.narrow;
     v.load();
-    var p=v.play(); if(p&&p.catch) p.catch(function(){ fallback(); });
+    var p=v.play();
+    if(p&&p.catch) p.catch(function(){ done=true; clearTimeout(timer); fallback(); });
+    // stromsparmodus & co melden sich manchmal erst beim ersten frame
+    v.addEventListener('suspend',function(){ if(!done&&v.readyState<3){ /* abwarten, der timer greift */ } });
   })();
 
 
